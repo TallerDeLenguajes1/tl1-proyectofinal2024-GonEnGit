@@ -1,16 +1,33 @@
 ﻿
-using System.Reflection;
 using EspacioPersonajes;
+using EspacioDialogos;
 
-personaje[] arreglo = new personaje[10];
 
-for (int i = 0; i < 10; i++)
+// variables
+List<personaje> listaDePersonajes = new List<personaje>();
+
+// aquí tenes una salida creativa, duplicá las clases en el arreglo y no necesitas contarlas
+string[] clases = { "Guerrero", "Mago", "Arquero", "Bárbaro", "Ladrón", "Guerrero", "Mago", "Arquero", "Bárbaro", "Ladrón",};
+
+
+// desde acá la intro 
+/*
+string fraseIntro = dialogosIntro.Intro();
+
+Console.Write("\nNarrador: ");
+foreach (var item in fraseIntro)
 {
-    arreglo[i] = new personaje("SuNombre");
+    Console.Write(item);
+    //Thread.Sleep(150);
 }
+*/
 
-foreach (var item in arreglo)
+// generar los 9 enemigos
+for (int i = 1; i < 10; i++)
 {
-    Console.WriteLine(item.Generales.Nombre);
-    Console.WriteLine(item.Generales.Apodo);
+    listaDePersonajes.Add(new personaje(clases[i]));
+}
+foreach (var item in listaDePersonajes)
+{
+    Console.WriteLine(item.ToString());
 }
