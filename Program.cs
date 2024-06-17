@@ -1,6 +1,7 @@
 ﻿
 using EspacioPersonajes;
 using EspacioDialogos;
+using Microsoft.VisualBasic;
 
 
 // variables
@@ -10,7 +11,8 @@ List<personaje> listaDePersonajes = new List<personaje>();
 string[] clases = { "Guerrero", "Mago", "Arquero", "Bárbaro", "Ladrón", "Guerrero", "Mago", "Arquero", "Bárbaro", "Ladrón",};
 
 
-// desde acá la intro 
+// desde acá la intro
+
 /*
 string fraseIntro = dialogosIntro.Intro();
 
@@ -20,7 +22,8 @@ foreach (var item in fraseIntro)
     Console.Write(item);
     //Thread.Sleep(150);
 }
-*/
+
+fin de la intro */
 
 // generar los 9 enemigos
 for (int i = 1; i < 10; i++)
@@ -29,5 +32,5 @@ for (int i = 1; i < 10; i++)
 }
 foreach (var item in listaDePersonajes)
 {
-    Console.WriteLine(item.ToString());
+    Console.WriteLine(item.devolverDatos());
 }

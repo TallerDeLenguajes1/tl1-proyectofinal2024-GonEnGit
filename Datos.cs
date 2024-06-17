@@ -1,7 +1,4 @@
 
-
-using Microsoft.VisualBasic;
-
 namespace  EspacioPersonajes;
 
 public class datos
