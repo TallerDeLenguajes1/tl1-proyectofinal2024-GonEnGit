@@ -15,13 +15,19 @@ public class personaje
         int indiceApodos = new Random().Next(1,3);
 
         datosGenerales.GenerarDatos(claseElegida);
-        //Estadisticas.GenerarEstadisticas(claseElegida);
+        Estadisticas.GenerarEstadisticas(claseElegida);
     }
 
     public string devolverDatos()
     {
         return $"Nombre: {datosGenerales.Nombre} | Apodo: {datosGenerales.Apodo}" +
                 $"| Clase: {datosGenerales.Clase} | Raza: {datosGenerales.Raza} " +
-                $"| Nacimiento: {datosGenerales.Apodo} | Edad: {datosGenerales.Edad}";
+                $"| Nacimiento: {datosGenerales.Nacimiento} | Edad: {datosGenerales.Edad}";
+    }
+
+    public string DevolverEstadisticas()
+    {
+        return $"Salud: {Estadisticas.Salud} || Armadura: {Estadisticas.Armadura} || Fuerza: {Estadisticas.Fuerza} || " +
+        $"Destreza: {Estadisticas.Destreza} || Velocidad: {Estadisticas.Velocidad}";
     }
 }
