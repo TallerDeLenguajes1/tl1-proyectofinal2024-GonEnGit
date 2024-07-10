@@ -1,33 +1,109 @@
 ﻿
 // un visualizador de json mucho mejor: https://jsonviewer.stack.hu/
 
-using EspacioPersonajes;
-using EspacioDialogos;
 using Microsoft.VisualBasic;
+using System.Runtime.InteropServices;
+
+using EspacioTextos;
+using EspacioPersonajes;
 
 
 // variables
+bool Aux = true;
+bool pruebaOpciones = false;
+int opcion = 0;
+int contadorHistoria = 0;
+string entradaDeUsuario;
+string linea;
+string[] texto;
 List<personaje> listaDePersonajes = new List<personaje>();
 
 // aquí tenes una salida creativa, duplicá las clases en el arreglo y no necesitas contarlas
 string[] clases = { "Guerrero", "Monje", "Arquero", "Luchador", "Ladrón", "Guerrero", "Monje", "Arquero", "Luchador", "Ladrón",};
 
 
-// desde acá la intro
-
-/*
-string fraseIntro = dialogosIntro.Intro();
+/*--- Desde acá la intro ---*/
+linea = Textos.Intro();
+texto = linea.Split(';');
 
 Console.Write("\nNarrador: ");
-foreach (var item in fraseIntro)
+foreach (var renglon in texto)
 {
-    Console.Write(item);
-    //Thread.Sleep(150);
+    foreach (var letra in renglon)
+    {
+        Console.Write(letra);
+        Thread.Sleep(0);        // cambiar 0 por 150
+    }
+}
+contadorHistoria += 1;
+Console.Write("\n");
+Thread.Sleep(1500);         // son milisegundos, 2s es mucho
+
+/*--- FIN de la intro ---*/
+
+/*--- Menú y control de opcion ---*/
+
+// imprime el Menú
+linea = Textos.Menu();
+texto = linea.Split(';');
+foreach (var renglon in texto)
+{
+    Console.WriteLine(renglon);
+}
+// controla que se ingrese lo correcto
+while (!pruebaOpciones || opcion <= 0 || opcion >= 4)
+{
+    pruebaOpciones = int.TryParse(Console.ReadLine(), out opcion);
+    if (pruebaOpciones == false || opcion <= 0 || opcion >= 4)
+    {
+        Console.WriteLine("Ingrese un numero valido.");
+    }
+}
+// inicia el juego segun la opcion
+if (opcion == 1)
+{
+    /* acá tenes que inicializar el juego */
+}
+else if (opcion == 2)
+{
+    /* cargas los datos desde un Json y contas los enemigos en HP = 0 */
+    /* usa el contadorHistoria para esto */
+}
+else
+{
+    /* usas jugador.HP = 0 para cortar el juego */
 }
 
-fin de la intro */
+/*--- FIN del menpu y control de opcion ---*/
+
+/*--- Desde aquí funciona el juego en si ---*/
+
+while (/* HP jugador != 0 */Aux)
+{
+// este switch controla los dialogos antes de cada duelo
+    switch (contadorHistoria)
+    {
+        case 1:
+            Console.WriteLine("primera historia antes");
+            break;
+    }
+
+    // if? for?
+
+// este switch es provisorio, pones mas dialogos?
+    switch (contadorHistoria)
+    {
+        case 1:
+            Console.WriteLine("primera historia despues");
+            break;
+    }
+
+    Aux = false;
+}
+
 
 // generar los 9 enemigos
+/*
 for (int i = 0; i < 10; i++)
 {
     listaDePersonajes.Add(new personaje(clases[i]));
@@ -37,7 +113,7 @@ foreach (var item in listaDePersonajes)
     Console.WriteLine(item.devolverDatos());
     Console.WriteLine(item.DevolverEstadisticas());
 }
-
+*/
 
 // las partidas las vas a guardar en un json, como una lista
 // podes usar el HP como bandera para ir haciendo los duelos
