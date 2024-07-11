@@ -16,10 +16,7 @@ int contadorHistoria = 0;
 string entradaDeUsuario;
 string linea;
 string[] texto;
-List<personaje> listaDePersonajes = new List<personaje>();
-
-// aquí tenes una salida creativa, duplicá las clases en el arreglo y no necesitas contarlas
-string[] clases = { "Guerrero", "Monje", "Arquero", "Luchador", "Ladrón", "Guerrero", "Monje", "Arquero", "Luchador", "Ladrón",};
+List<personaje> listaPersonajes = new List<personaje>();
 
 
 /*--- Desde acá la intro ---*/
@@ -62,7 +59,16 @@ while (!pruebaOpciones || opcion <= 0 || opcion >= 4)
 // inicia el juego segun la opcion
 if (opcion == 1)
 {
-    /* acá tenes que inicializar el juego */
+    listaPersonajes = personaje.FabricaDePersonajes(listaPersonajes);
+    foreach (var iter in listaPersonajes)
+    {
+        linea = Textos.Tarjetas(iter);
+        texto = linea.Split(";");
+        foreach (string frase in texto)
+        {
+            Console.WriteLine(frase);
+        }
+    }
 }
 else if (opcion == 2)
 {

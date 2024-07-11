@@ -13,6 +13,7 @@ public class datos
     private string apodo;
     private string nacimiento;
     private int edad;
+    private int id;
 
     public string Clase { get => clase; set => clase = value; }
     public string Nombre { get => nombre; set => nombre = value; }
@@ -20,11 +21,15 @@ public class datos
     public string Apodo { get => apodo; set => apodo = value; }
     public string Nacimiento { get => nacimiento; set => nacimiento = value; }
     public int Edad { get => edad; set => edad = value; }
+    public int Id { get => id; set => id = value; }
 
-    public void GenerarDatos(string claseElegida)
+    public void GenerarDatos(string claseElegida, int id)
     {
     // semilla para los aleatorios
         var rand = new Random();
+
+    // guardas el id
+        Id = id;
 
     // la clase se genera en Program.cs para poder contarlas
         Clase = claseElegida;
