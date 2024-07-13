@@ -3,6 +3,10 @@ namespace  EspacioPersonajes;
 
 public class datos
 {
+    // cuando tengas los nombres y apodos finales
+    // cada uno tiene que llevar una serie de espacios antes y/o despues
+    // para poder armar las tarjetas, no te olvides eso ----------------
+
     string[] nombresPosibles = {"Moe", "Larry", "Curly", "Moe", "Larry", "Curly", "Moe", "Larry", "Curly", "Moe", "Larry", "Curly",};
     string[] apodosPosibles = {"apodo1", "apodo2", " apodo3", "apodo11", "apodo52", " apodo34", "apodo81", "apodo29", " apodo32", "apodo31", "apodo21",};
     string[] razasPosibles = {"Humano", "Enano", "Elfo", "Orco",};
