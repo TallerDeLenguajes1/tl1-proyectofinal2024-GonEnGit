@@ -5,11 +5,12 @@ namespace  EspacioPersonajes;
 
 public class personaje
 {
-    private int contador = 0;
+    private bool vencido = false;
     private datos generales = new datos();
     private characteristicas estadisticas = new characteristicas();
 
-    public datos datosGenerales { get => generales; set => generales = value; }
+    public bool Vencido { get => vencido; set => vencido = value; }
+    public datos DatosGenerales { get => generales; set => generales = value; }
     public characteristicas Estadisticas { get => estadisticas; set => estadisticas = value; }
 
     public static List<personaje> FabricaDePersonajes(List<personaje> lista)
@@ -27,7 +28,7 @@ public class personaje
             // sumar 
             personaje instancia = new personaje();
 
-            instancia.datosGenerales.GenerarDatos(Clases[contador], id);
+            instancia.DatosGenerales.GenerarDatos(Clases[contador], id);
             instancia.Estadisticas.GenerarEstadisticas(Clases[contador]);
             id += 1;
             contador += 1;
@@ -44,8 +45,8 @@ public class personaje
 
     public string DevolverDatos()
     {
-        return  $"{datosGenerales.Id};{datosGenerales.Nombre};{datosGenerales.Apodo};{datosGenerales.Clase};" +
-                $"{datosGenerales.Raza};{datosGenerales.Nacimiento};{datosGenerales.Edad}";
+        return  $"{DatosGenerales.Id};{DatosGenerales.Nombre};{DatosGenerales.Apodo};{DatosGenerales.Clase};" +
+                $"{DatosGenerales.Raza};{DatosGenerales.Nacimiento};{DatosGenerales.Edad}";
     }
 
     public string DevolverEstadisticas()
@@ -56,11 +57,12 @@ public class personaje
 
     public static List<personaje> MezclarLista(List<personaje> listaFinal, int[] orden, List<personaje> listaTemp)
     {
-        personaje auxiliar;
+        // count devuelve cuanto la cantidad de personajes
+        // el indice va a ser .Count - 1
         for (int indice = 0; indice < listaTemp.Count; indice++)
         {
-            auxiliar = listaTemp[orden[indice]];
-            listaTemp.RemoveAt(indice);
+            personaje auxiliar = listaTemp[orden[indice]];
+            auxiliar.DatosGenerales.Id = indice + 2;
             listaFinal.Add(auxiliar);
         }
 
