@@ -14,21 +14,19 @@ using EspacioPersonajes;
 bool gameOver = false;
 bool pruebaOpciones = false;
 int numeroAleatorio;
-int contadorHistoria = 1;
+int ctrlDeFlujo;
+int iniciativaJugador;
+int iniciativaEnemigo;
 int entradaDeUsuario = 0;
-
-// por la carga de partida estos 2 tendrian que ser metodos... como? personaje?
-// instancias un duelo de clase separada y usas eso?
-int cantEnemigosVivos;
-int enemigoActivo;
+string linea;
 
 int[] orden = new int[9];
-string linea;
 string[] texto;
+string[] textoEnemigo;
 Random rnd = new Random();
-personaje auxiliar;
-duelo controlDuelo = new duelo();
-List<personaje> listaPersonajes = new List<personaje>();
+Personaje auxiliar;
+Duelo controlDuelo = new Duelo();
+List<Personaje> listaPersonajes = new List<Personaje>();
 
 
 
@@ -45,7 +43,6 @@ foreach (var renglon in texto)
         Thread.Sleep(0);        // cambiar 0 por 150
     }
 }
-contadorHistoria += 1;
 Console.Write("\n");
 Thread.Sleep(1500);         // son milisegundos, 2s es mucho
 Console.WriteLine("");
@@ -92,11 +89,11 @@ Console.WriteLine("");
 if (entradaDeUsuario == 1)
 {
     // declaras listas provisorias para liberarlas despues
-    List<personaje> listaPersTemp = new List<personaje>();
+    List<Personaje> listaPersTemp = new List<Personaje>();
     List<string[]> tarjetasAMostrar = new List<string[]>();
 
     // inicializas variables
-    listaPersTemp = personaje.FabricaDePersonajes(listaPersTemp);
+    listaPersTemp = Personaje.FabricaDePersonajes(listaPersTemp);
 
 /*--- esta parte se supone que sea otra historia ---*/ // ------------------------------------------------
     // historia
@@ -173,17 +170,7 @@ if (entradaDeUsuario == 1)
         } while (orden.Contains(numeroAleatorio));
         orden[indice] = numeroAleatorio;
     }
-    listaPersonajes = personaje.MezclarLista(listaPersonajes, orden, listaPersTemp);
-
-    foreach (var item in listaPersonajes)
-    {
-        linea = Textos.Tarjetas(item);
-        texto = linea.Split(";");
-        foreach (string str in texto)
-        {
-            Console.WriteLine(str);
-        }
-    }
+    listaPersonajes = Personaje.MezclarLista(listaPersonajes, orden, listaPersTemp);
     /*--- Fin de seleccion de personaje ---*/
 
     // si limpias la lista y no hay mas referencias
@@ -207,8 +194,6 @@ else
 
 
 /*--- Desde aquí funciona el juego en si ---*/
-
-
     // while( jugador.hp != 0 && gameOver == false)
     //  while( cantidadEnemigosVivos != 0 )         // un metodo que cuente un bool en personaje?
     //    do
@@ -217,11 +202,14 @@ else
     // contadores y bools
 while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
 {
-    cantEnemigosVivos = controlDuelo.ContarEnemigosActivos(listaPersonajes); // esto quiza no sirva, otra manera?
-    while (cantEnemigosVivos != 0)
+    // si contas los enemigos con HP en 0
+    // podes usar la misma variable para 
+    // la historia, el enemigo activo e incluso el fin del juego
+    ctrlDeFlujo = controlDuelo.ContarEnemigosActivos(listaPersonajes); // esto quiza no sirva, otra manera?
+    while (ctrlDeFlujo != 9)
     {
     // este switch controla los dialogos antes de cada duelo
-        switch (contadorHistoria)
+        switch (ctrlDeFlujo)
         {
             case 1:
                 Console.WriteLine("primera historia antes");
@@ -230,13 +218,41 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
     
         do
         {
-            
-        } while (listaPersonajes[0].Estadisticas.Salud != 0 && listaPersonajes[enemigoActivo].Estadisticas.Salud != 0);
+            linea = Textos.Tarjetas(listaPersonajes[0]);
+            texto = linea.Split(";");
+            linea = Textos.Tarjetas(listaPersonajes[ctrlDeFlujo]);
+            textoEnemigo = linea.Split(";");
+            for (int indice = 0; indice < 12; indice++)
+            {
+                if (indice != 3)
+                {
+                    Console.WriteLine(texto[indice] + " " + textoEnemigo[indice]);
+                }
+            }
+
+            iniciativaJugador = (int)controlDuelo.CalcularIniciativa(listaPersonajes[0]);
+            iniciativaEnemigo = (int)controlDuelo.CalcularIniciativa(listaPersonajes[ctrlDeFlujo]);
+
+            if (iniciativaJugador > iniciativaEnemigo)
+            {
+                //primer turno jugador
+                //segundo turno enemigo
+            }
+            else
+            {
+                //priemr turno enemigo
+                //segundo turno jugador
+            }
+
+        // para pruebas
+            listaPersonajes[0].Estadisticas.Salud = 0;
+            ctrlDeFlujo = 9;
+        } while (listaPersonajes[0].Estadisticas.Salud != 0 && listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0);
 
     // este switch es provisorio, pones mas dialogos?
-        switch (contadorHistoria)
+        switch (ctrlDeFlujo)
         {
-            case 1:
+            case 9:
                 Console.WriteLine("primera historia despues");
                 break;
         }

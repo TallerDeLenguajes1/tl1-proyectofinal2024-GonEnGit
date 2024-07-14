@@ -24,7 +24,7 @@ public static class Textos
                 "            Elija una opción:         ";
     }
 
-    public static string Tarjetas(personaje instancia)
+    public static string Tarjetas(Personaje instancia)
     {
         string lineaDatos = instancia.DevolverDatos();
         string lineaEstadisticas = instancia.DevolverEstadisticas();
@@ -32,6 +32,7 @@ public static class Textos
         string[] Datos = lineaDatos.Split(";");
         string[] Estadisticas = lineaEstadisticas.Split(";");
 
+    // esto es para que todas las edades tengan 3 caractere
         if (Datos[6].Length < 3)
         {
             Datos[6] = " " + Datos[6];

@@ -2,18 +2,30 @@ namespace EspacioDuelos;
 
 using EspacioPersonajes;
 
-public class duelo
+public class Duelo
 {
-    public int ContarEnemigosActivos(List<personaje> lista)
+    public int ContarEnemigosActivos(List<Personaje> lista)
     {
-        int contador = 0;
-        foreach (personaje instancia in lista)
+        int contador = 1;   // no en 0, tenes que tener en cuenta el jugador
+        if (lista[0].Estadisticas.Salud == 0)
         {
-            if (instancia.DatosGenerales.Activo == true)
+            contador = -1;
+        }
+        else
+        {
+            foreach (Personaje instancia in lista)
             {
-                contador += 1;
+                if (instancia.Estadisticas.Salud == 0)
+                {
+                    contador += 1;
+                }
             }
         }
         return contador;
+    }
+
+    public double CalcularIniciativa(Personaje pers)
+    {
+        return pers.Estadisticas.Velocidad * 0.5 + 2;   // esta ecuacion cambiala, es cualquier cosa
     }
 }

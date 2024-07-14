@@ -3,17 +3,17 @@ using System.Runtime.CompilerServices;
 
 namespace  EspacioPersonajes;
 
-public class personaje
+public class Personaje
 {
     private bool vencido = false;
-    private datos generales = new datos();
-    private characteristicas estadisticas = new characteristicas();
+    private Datos generales = new Datos();
+    private Caracteristicas estadisticas = new Caracteristicas();
 
     public bool Vencido { get => vencido; set => vencido = value; }
-    public datos DatosGenerales { get => generales; set => generales = value; }
-    public characteristicas Estadisticas { get => estadisticas; set => estadisticas = value; }
+    public Datos DatosGenerales { get => generales; set => generales = value; }
+    public Caracteristicas Estadisticas { get => estadisticas; set => estadisticas = value; }
 
-    public static List<personaje> FabricaDePersonajes(List<personaje> lista)
+    public static List<Personaje> FabricaDePersonajes(List<Personaje> lista)
     {
     // por como armaste los metodos para generar los datos
     // si o si tenes que elegir las clases y mandarlas
@@ -26,7 +26,7 @@ public class personaje
             // elegir una clase con random, iniciar ocntador en 0, recorrer la lista
             // por cada coincidencia entre la clase randomizada y las que ya estan en la lista
             // sumar 
-            personaje instancia = new personaje();
+            Personaje instancia = new Personaje();
 
             instancia.DatosGenerales.GenerarDatos(Clases[contador], id);
             instancia.Estadisticas.GenerarEstadisticas(Clases[contador]);
@@ -55,13 +55,13 @@ public class personaje
                 $"{Estadisticas.Destreza};{Estadisticas.Velocidad}";
     }
 
-    public static List<personaje> MezclarLista(List<personaje> listaFinal, int[] orden, List<personaje> listaTemp)
+    public static List<Personaje> MezclarLista(List<Personaje> listaFinal, int[] orden, List<Personaje> listaTemp)
     {
         // count devuelve cuanto la cantidad de personajes
         // el indice va a ser .Count - 1
         for (int indice = 0; indice < listaTemp.Count; indice++)
         {
-            personaje auxiliar = listaTemp[orden[indice]];
+            Personaje auxiliar = listaTemp[orden[indice]];
             auxiliar.DatosGenerales.Id = indice + 2;
             listaFinal.Add(auxiliar);
         }

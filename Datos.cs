@@ -1,7 +1,7 @@
 
 namespace  EspacioPersonajes;
 
-public class datos
+public class Datos
 {
     // cuando tengas los nombres y apodos finales
     // cada uno tiene que llevar una serie de espacios antes y/o despues
@@ -18,7 +18,6 @@ public class datos
     private string nacimiento;
     private int edad;
     private int id;
-    private bool activo;
 
     public string Clase { get => clase; set => clase = value; }
     public string Nombre { get => nombre; set => nombre = value; }
@@ -27,7 +26,6 @@ public class datos
     public string Nacimiento { get => nacimiento; set => nacimiento = value; }
     public int Edad { get => edad; set => edad = value; }
     public int Id { get => id; set => id = value; }
-    public bool Activo { get => activo; set => activo = value; }
 
     public void GenerarDatos(string claseElegida, int id)
     {
@@ -47,7 +45,6 @@ public class datos
         Apodo = apodosPosibles[indiceApodos];
         int indiceRaza = rand.Next(0, 4);
         Raza = razasPosibles[indiceRaza];
-        Activo = true;
 
     // los nacimientos van a ser un lio, supongamos que el juego
     // se hace en algun calendario en el año 750

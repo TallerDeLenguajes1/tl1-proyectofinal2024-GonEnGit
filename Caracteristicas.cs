@@ -1,6 +1,6 @@
 namespace  EspacioPersonajes;
 
-public class characteristicas
+public class Caracteristicas
 {
     private int nivel;
     private int salud;
