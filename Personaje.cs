@@ -5,15 +5,13 @@ namespace  EspacioPersonajes;
 
 public class Personaje
 {
-    private bool vencido = false;
     private Datos generales = new Datos();
     private Caracteristicas estadisticas = new Caracteristicas();
 
-    public bool Vencido { get => vencido; set => vencido = value; }
     public Datos DatosGenerales { get => generales; set => generales = value; }
     public Caracteristicas Estadisticas { get => estadisticas; set => estadisticas = value; }
 
-    public string DevolverDatos()
+    public string DevolverDatos()       // podrias sacar estos dos metodos de acá?
     {
         return  $"{DatosGenerales.Id};{DatosGenerales.Nombre};{DatosGenerales.Apodo};{DatosGenerales.Clase};" +
                 $"{DatosGenerales.Raza};{DatosGenerales.Nacimiento};{DatosGenerales.Edad}";
@@ -23,5 +21,10 @@ public class Personaje
     {
         return  $"{Estadisticas.Salud};{Estadisticas.Armadura};{Estadisticas.Fuerza};" +
                 $"{Estadisticas.Destreza};{Estadisticas.Velocidad}";
+    }
+
+    public void RecibirDanio(Personaje pers, int danio)
+    {
+        pers.estadisticas.Salud -= danio;
     }
 }

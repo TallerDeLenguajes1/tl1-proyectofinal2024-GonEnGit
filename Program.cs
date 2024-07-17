@@ -8,16 +8,20 @@ using System.Runtime.InteropServices;
 using EspacioTextos;
 using EspacioDuelos;
 using EspacioPersonajes;
+using System.Net.Http.Headers;
 
 
 // variables
 bool gameOver = false;
 bool pruebaOpciones = false;
+int entradaDeUsuario = 0;
 int numeroAleatorio;
 int ctrlDeFlujo;
 int iniciativaJugador;
 int iniciativaEnemigo;
-int entradaDeUsuario = 0;
+int decisionEnemigo;
+int danio;
+int decisionCombinada;
 string linea;
 
 int[] orden = new int[9];
@@ -218,6 +222,9 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
         }
     
     // desarrollo de los duelos
+        iniciativaJugador = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[0]);
+        iniciativaEnemigo = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[ctrlDeFlujo]);
+
         do
         {
             linea = Textos.Tarjetas(listaPersonajes[0]);
@@ -232,20 +239,28 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                 }
             }
 
-            iniciativaJugador = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[0]);
-            iniciativaEnemigo = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[ctrlDeFlujo]);
+        // calculos
+            decisionEnemigo = HerramientaDuelos.AccionEnemigo();
 
-            if (iniciativaJugador > iniciativaEnemigo)
+        // switch en if o if en switch?
+            if (iniciativaJugador >= iniciativaEnemigo)
             {
-                //primer turno jugador
-                Console.WriteLine("gano jugador");
-                //segundo turno enemigo
+            // primer turno jugador, segundo turno enemigo
+                Console.WriteLine($"{listaPersonajes[0].DatosGenerales.Nombre} mueve primero! Elige una accion:");
+                Console.Write("1.Atacar 2.Defender 3.Esperar: ");
+                pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+                if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 4) // jugador defiende por defecto
+                {
+                    entradaDeUsuario = 2;
+                }
+
             }
             else
             {
-                //priemr turno enemigo
-                Console.WriteLine("gano enemigo");
-                //segundo turno jugador
+                //primer turno enemigo, segundo turno jugador
+                // para este caso todas las partes del switch tendrian que ser al revez
+                decisionCombinada = decisionEnemigo + (entradaDeUsuario *10);
+                
             }
 
         // para pruebas

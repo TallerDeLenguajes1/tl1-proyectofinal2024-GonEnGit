@@ -11,21 +11,21 @@ public class Datos
     string[] apodosPosibles = {"apodo1", "apodo2", " apodo3", "apodo11", "apodo52", " apodo34", "apodo81", "apodo29", " apodo32", "apodo31", "apodo21",};
     string[] razasPosibles = {"Humano", "Enano", "Elfo", "Orco",};
 
+    private int id;
+    private int edad;
     private string clase;
     private string nombre;
     private string raza;
     private string apodo;
     private string nacimiento;
-    private int edad;
-    private int id;
 
+    public int Id { get => id; set => id = value; }
+    public int Edad { get => edad; set => edad = value; }
     public string Clase { get => clase; set => clase = value; }
     public string Nombre { get => nombre; set => nombre = value; }
     public string Raza { get => raza; set => raza = value; }
     public string Apodo { get => apodo; set => apodo = value; }
     public string Nacimiento { get => nacimiento; set => nacimiento = value; }
-    public int Edad { get => edad; set => edad = value; }
-    public int Id { get => id; set => id = value; }
 
     public void GenerarDatos(string claseElegida, int id)
     {
