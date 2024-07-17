@@ -25,7 +25,8 @@ string[] texto;
 string[] textoEnemigo;
 Random rnd = new Random();
 Personaje auxiliar;
-Duelo controlDuelo = new Duelo();
+Duelo HerramientaDuelos = new Duelo();
+FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
 List<Personaje> listaPersonajes = new List<Personaje>();
 
 
@@ -93,7 +94,7 @@ if (entradaDeUsuario == 1)
     List<string[]> tarjetasAMostrar = new List<string[]>();
 
     // inicializas variables
-    listaPersTemp = Personaje.FabricaDePersonajes(listaPersTemp);
+    listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);
 
 /*--- esta parte se supone que sea otra historia ---*/ // ------------------------------------------------
     // historia
@@ -170,7 +171,7 @@ if (entradaDeUsuario == 1)
         } while (orden.Contains(numeroAleatorio));
         orden[indice] = numeroAleatorio;
     }
-    listaPersonajes = Personaje.MezclarLista(listaPersonajes, orden, listaPersTemp);
+    listaPersonajes = HerramientaFabrica.MezclarLista(listaPersonajes, orden, listaPersTemp);
     /*--- Fin de seleccion de personaje ---*/
 
     // si limpias la lista y no hay mas referencias
@@ -186,7 +187,7 @@ else if (entradaDeUsuario == 2)
 }
 else
 {
-    /* usas jugador.HP = 0 para cortar el juego */
+    /* usas gameOver para cerrar el juego*/
 }
 
 /*--- FIN del control de opcion ---*/
@@ -205,7 +206,7 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
     // si contas los enemigos con HP en 0
     // podes usar la misma variable para 
     // la historia, el enemigo activo e incluso el fin del juego
-    ctrlDeFlujo = controlDuelo.ContarEnemigosActivos(listaPersonajes); // esto quiza no sirva, otra manera?
+    ctrlDeFlujo = HerramientaDuelos.ContarEnemigosActivos(listaPersonajes); // esto quiza no sirva, otra manera?
     while (ctrlDeFlujo != 9)
     {
     // este switch controla los dialogos antes de cada duelo
@@ -216,6 +217,7 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                 break;
         }
     
+    // desarrollo de los duelos
         do
         {
             linea = Textos.Tarjetas(listaPersonajes[0]);
@@ -230,17 +232,19 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                 }
             }
 
-            iniciativaJugador = (int)controlDuelo.CalcularIniciativa(listaPersonajes[0]);
-            iniciativaEnemigo = (int)controlDuelo.CalcularIniciativa(listaPersonajes[ctrlDeFlujo]);
+            iniciativaJugador = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[0]);
+            iniciativaEnemigo = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[ctrlDeFlujo]);
 
             if (iniciativaJugador > iniciativaEnemigo)
             {
                 //primer turno jugador
+                Console.WriteLine("gano jugador");
                 //segundo turno enemigo
             }
             else
             {
                 //priemr turno enemigo
+                Console.WriteLine("gano enemigo");
                 //segundo turno jugador
             }
 
