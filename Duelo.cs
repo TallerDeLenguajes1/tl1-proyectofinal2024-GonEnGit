@@ -9,6 +9,27 @@ public class Duelo
 {
     private Random rnd = new Random();
 
+    public string CheatCode(Personaje jugador, Personaje enemigo, string codigo)
+    {
+        string respuesta;
+        if (codigo.Trim() == "8855464621")
+        {
+            jugador.GodMode();
+            respuesta = "GodMode activo";
+        }
+        else if (codigo.Trim() == "1264645588")
+        {
+            enemigo.GodMode();
+            respuesta = "GodMode activo";
+        }
+        else
+        {
+            respuesta = "Dev: Enserio pensabas que podias usar esto?";
+        }
+
+        return respuesta;
+    }
+
     public int ContarEnemigosActivos(List<Personaje> lista)
     {
         int contador = 1;   // no en 0, tenes que tener en cuenta el jugador
@@ -84,25 +105,23 @@ public class Duelo
         }
     }
 
-    // suplanta AtaqueEspera
-    public int CalcDanioAtaqueAtaque(Personaje atacante, Personaje objetivo)
+// devolves el daño para mostrarlo
+// y usas un metodo de personje para cambiar la vida
+    public int CalcularDanio(Personaje atacante, Personaje objetivo, bool objetivoDefiende)
     {
         bool citricoAtacante = DecidirCritico(atacante);
         int ataqueAtacante = CalcularAtaque(atacante, citricoAtacante);
         int defensaObjetivo = CalcularDefensa(objetivo);
-        int danio = (ataqueAtacante * 10) - (defensaObjetivo / 10);
+        int danio;
 
-        objetivo.Estadisticas.Salud -= danio;
-
-        return danio;
-    }
-
-    public int CalcDanioAtaqueDefensa(Personaje atacante, Personaje objetivo)
-    {
-        bool citricoAtacante = DecidirCritico(atacante);
-        int ataqueAtacante = CalcularAtaque(atacante, citricoAtacante);
-        int defensaObjetivo = CalcularDefensa(objetivo);
-        int danio = (ataqueAtacante * 10) - ((defensaObjetivo / 10) + 25);
+        if (objetivoDefiende)
+        {
+            danio = (ataqueAtacante * 10) - ((defensaObjetivo / 10) + 25);
+        }
+        else
+        {
+            danio = (ataqueAtacante * 10) - (defensaObjetivo / 10);
+        }
 
         objetivo.Estadisticas.Salud -= danio;
 
@@ -111,12 +130,14 @@ public class Duelo
 }
 
 // combinaciones posibles de acciones
-    // jugador ataca, enemigo ataca         - 11
-    // jugador ataca, enemigo defiende      - 12
-    // jugador ataca, enemigo espera        - 13
-    // jugador defiende, enemigo ataca      - 21
+    // jugador ataca, enemigo ataca         - 11 - CalcDanioAtaqueSinDefensa
+    // jugador ataca, enemigo defiende      - 12 - CalcDanioAtaqueConDefensa
+    // jugador ataca, enemigo espera        - 13 - CalcDanioAtaqueSinDefensa
+
+    // jugador defiende, enemigo ataca      - 21 - CalcDanioAtaqueConDefensa
+    // jugador espera, enemigo ataca        - 31 - CalcDanioAtaqueSinDefensa
+
     // jugador defiende, enemigo defiende   - 22 - no pasa nada
     // jugador defiende, enemigo espera     - 23 - no pasa nada
-    // jugador espera, enemigo ataca        - 31
     // jugador espera, enemigo defiende     - 32 - no pasa nada
     // jugador espera, enemigo espera       - 33 - no pasa nada

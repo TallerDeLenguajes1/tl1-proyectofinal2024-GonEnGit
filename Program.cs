@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using EspacioTextos;
 using EspacioDuelos;
 using EspacioPersonajes;
-using System.Net.Http.Headers;
 
 
 // variables
@@ -21,8 +20,9 @@ int iniciativaJugador;
 int iniciativaEnemigo;
 int decisionEnemigo;
 int danio;
-int decisionCombinada;
 string linea;
+string nomJugador;
+string nomEnemigo;
 
 int[] orden = new int[9];
 string[] texto;
@@ -176,6 +176,13 @@ if (entradaDeUsuario == 1)
         orden[indice] = numeroAleatorio;
     }
     listaPersonajes = HerramientaFabrica.MezclarLista(listaPersonajes, orden, listaPersTemp);
+
+    // cheat code para las pruebas
+    Console.WriteLine("Ingresa el ataque de tu personaje:");
+    linea = Console.ReadLine();
+    linea = HerramientaDuelos.CheatCode(listaPersonajes[0], listaPersonajes[1], linea);
+    Console.WriteLine(linea);
+
     /*--- Fin de seleccion de personaje ---*/
 
     // si limpias la lista y no hay mas referencias
@@ -222,9 +229,22 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
         }
     
     // desarrollo de los duelos
+
+        // anuncion primer movimiento
+        nomJugador = Textos.DevolverNombre(listaPersonajes[0]);
+        nomEnemigo = Textos.DevolverNombre(listaPersonajes[ctrlDeFlujo]);
         iniciativaJugador = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[0]);
         iniciativaEnemigo = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[ctrlDeFlujo]);
+        if (iniciativaJugador >= iniciativaEnemigo)
+        {
+            Console.WriteLine($"{nomJugador} es mas rapido!");
+        }
+        else
+        {
+            Console.WriteLine($"{nomEnemigo} es mas rapido!");
+        }
 
+        // bucle del duelo
         do
         {
             linea = Textos.Tarjetas(listaPersonajes[0]);
@@ -239,14 +259,88 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                 }
             }
 
-        // calculos
-            decisionEnemigo = HerramientaDuelos.AccionEnemigo();
-
-        // switch en if o if en switch?
             if (iniciativaJugador >= iniciativaEnemigo)
             {
             // primer turno jugador, segundo turno enemigo
-                Console.WriteLine($"{listaPersonajes[0].DatosGenerales.Nombre} mueve primero! Elige una accion:");
+
+                // decisiones
+                Console.WriteLine("Elige una acción:");
+                Console.Write("1.Atacar 2.Defender 3.Esperar: ");
+                pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+                if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 4) // jugador defiende por defecto
+                {
+                    entradaDeUsuario = 2;
+                }
+                decisionEnemigo = HerramientaDuelos.AccionEnemigo();
+
+                // combate
+                if (entradaDeUsuario == 1)
+                {
+                    if (decisionEnemigo == 2)   // 12 - jugador ataca, enemigo defiende
+                    {
+                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true);
+                        Console.WriteLine($"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!");
+                        Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                    }
+                    else                        // 11 y 13 - jugador ataca, enemigo ataca o espera
+                    {
+                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false);
+                        Console.WriteLine($"{nomJugador} atacó primero!");
+                        Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                        if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0)
+                        {
+                            Console.WriteLine($"{nomEnemigo} puede seguir peleando y decidio atacar tambien!");
+                            Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{nomEnemigo} está evaluando la situción...");
+                        }
+                    }
+                }
+                else
+                {
+                    if (decisionEnemigo == 1)
+                    {
+                        if (entradaDeUsuario == 2)  // 21 - enemigo ataca, jugador defiende
+                        {
+                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true);
+                            Console.WriteLine($"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!");
+                            Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                        }
+                        else                        // 31 - enemigo ataca, jugador espera
+                        {
+                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false);
+                            Console.WriteLine($"{nomEnemigo} ataca pero no se que esta haciendo {nomJugador}...");
+                            Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                        }
+                    }
+                    else    // 22, 23, 32, 33 - no pasa nada
+                    {
+                        Console.WriteLine("Narrador: ... Nadie está haciendo nada...");
+                        Console.WriteLine("Dev: quizá son metapods...?");
+                    }
+                }
+            }
+            else
+            {
+            //primer turno enemigo, segundo turno jugador
+                // decisiones
+                decisionEnemigo = HerramientaDuelos.AccionEnemigo();
+                Console.WriteLine($"{nomEnemigo} es mas rapido!");
+                switch (decisionEnemigo)
+                {
+                    case 1:
+                        linea = "atacar";
+                        break;
+                    case 2:
+                        linea = "defender";
+                        break;
+                    case 3:
+                        linea = "esperar";
+                        break;
+                }
+                Console.WriteLine($"{nomEnemigo} va a {linea}! Elige una accion:");
                 Console.Write("1.Atacar 2.Defender 3.Esperar: ");
                 pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
                 if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 4) // jugador defiende por defecto
@@ -254,18 +348,63 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                     entradaDeUsuario = 2;
                 }
 
-            }
-            else
-            {
-                //primer turno enemigo, segundo turno jugador
-                // para este caso todas las partes del switch tendrian que ser al revez
-                decisionCombinada = decisionEnemigo + (entradaDeUsuario *10);
-                
+                if (decisionEnemigo == 1)
+                {
+                    if (decisionEnemigo == 2)   // 12 - enemigo ataca, jugador defiende
+                    {
+                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true);
+                        Console.WriteLine($"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!");
+                        Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                    }
+                    else                        // 11 y 13 - enemigo ataca, jugador ataca o espera
+                    {
+                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false);
+                        Console.WriteLine($"{nomEnemigo} atacó primero!");
+                        Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                        if (listaPersonajes[0].Estadisticas.Salud != 0)
+                        {
+                            Console.WriteLine($"{nomJugador} puede seguir peleando y decidio atacar tambien!");
+                            Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{nomJugador} está esperando...");  /* esperar podria recuperar hp o algo */
+                        }
+                    }
+                }
+                else
+                {
+                    if (entradaDeUsuario == 1)
+                    {
+                        if (decisionEnemigo == 2)  // 21 - jugador ataca, enemigo defiende
+                        {
+                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true);
+                            Console.WriteLine($"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!");
+                            Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                        }
+                        else                        // 31 - jugador ataca, enemigo espera
+                        {
+                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false);
+                            Console.WriteLine($"{nomJugador} ataca pero no se que esta haciendo {nomEnemigo}...");
+                            Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                        }
+                    }
+                    else    // 22, 23, 32, 33 - no pasa nada
+                    {
+                        Console.WriteLine("Narrador: ... Nadie está haciendo nada...");
+                        Console.WriteLine("Dev: quizá son metapods...?");
+                    }
+                }
             }
 
-        // para pruebas
-            listaPersonajes[0].Estadisticas.Salud = 0;
-            ctrlDeFlujo = 9;
+        /* --------------------------------hay un error en los daños controlá--------------------------------- */
+
+        /* --------------------------------------- para pruebas --------------------------------------- */
+            //listaPersonajes[0].Estadisticas.Salud = 0;
+            //ctrlDeFlujo = 9;
+            //gameOver = true;
+        /* ------------------------------------------ borrar ------------------------------------------ */
+
         } while (listaPersonajes[0].Estadisticas.Salud != 0 && listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0);
 
     // este switch es provisorio, pones mas dialogos?
@@ -276,8 +415,13 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                 break;
         }
     }
-    // esta variable tendria que estar en un if
-    gameOver = true;
+    // controla si el juego termina
+    if (listaPersonajes[0].Estadisticas.Salud == 0 || ctrlDeFlujo == 9)
+    {
+        gameOver = true;
+    }
+
+    // lo unico que falta es dar opciones para guardar partida
 }
 
 

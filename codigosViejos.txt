@@ -1,4 +1,6 @@
 
+/* Primer intento del sistema de duelos */
+
 decisionCombinada = entradaDeUsuario + (decisionEnemigo * 10);
 switch (decisionCombinada)
 {
@@ -27,7 +29,7 @@ switch (decisionCombinada)
             // estos dialogos a otra parte...?
             Console.WriteLine("Narrador: uff eso debió doler...");
             Console.WriteLine("Dev: hice esto muy dificil?");
-            Console.WriteLine("Narrador: ...probablemente sea el jugador...");
+            Console.WriteLine("Narrador: ... segun el historial diria malas decisiones...");
         }
         break;
 
@@ -55,4 +57,41 @@ switch (decisionCombinada)
     default:    // casos 22, 23, 32, 33 - no pasa nada
         Console.WriteLine("Narrador: nadie está haciendo nada... se olvidaron de la pelea?");
         break;
+}
+
+
+/-----------------------------------/
+
+decisionCombinada = decisionEnemigo + (entradaDeUsuario * 10);
+
+if (decisionCombinada == 12 || decisionCombinada == 21)
+{
+    if (decisionCombinada == 12)        // jugador ataca, enemigo defiende
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true);
+    }
+    else                                // jugador defiende, enemigo ataca
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true);
+    }
+} 
+else if (decisionCombinada == 11 || decisionCombinada == 13 || decisionCombinada == 31)
+{
+    if (decisionCombinada == 11)        // jugador ataca, enemigo ataca
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false);
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false);
+    }
+    else if (decisionCombinada == 13)   // jugador ataca, enemigo espera
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false);
+    }
+    else                                // jugador espera, enemigo ataca
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false);
+    }
+}
+else
+{
+    
 }

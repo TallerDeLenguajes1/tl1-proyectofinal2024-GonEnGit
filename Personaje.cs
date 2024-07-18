@@ -1,5 +1,6 @@
 
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace  EspacioPersonajes;
 
@@ -23,8 +24,17 @@ public class Personaje
                 $"{Estadisticas.Destreza};{Estadisticas.Velocidad}";
     }
 
-    public void RecibirDanio(Personaje pers, int danio)
+    public void RecibirDanio(int danio)
     {
-        pers.estadisticas.Salud -= danio;
+        Estadisticas.Salud -= danio;
+    }
+
+    public void GodMode()
+    {
+        estadisticas.Salud = 9999;
+        estadisticas.Armadura = 9999;
+        estadisticas.Fuerza = 9999;
+        estadisticas.Destreza = 9999;
+        estadisticas.Velocidad = 9999;
     }
 }

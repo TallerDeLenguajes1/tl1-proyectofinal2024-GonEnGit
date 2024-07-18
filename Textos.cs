@@ -50,4 +50,9 @@ public static class Textos
                 $"|              Velocidad: {Estadisticas[4]}            |;" +
                 "+--------------------------------------+;";
     }
+
+    public static string DevolverNombre(Personaje pers)
+    {
+        return pers.DatosGenerales.Nombre + ',' + pers.DatosGenerales.Apodo;
+    }
 }
