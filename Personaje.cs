@@ -26,7 +26,19 @@ public class Personaje
 
     public void RecibirDanio(int danio)
     {
+        // este if es por el GodMode
+        if (danio <= 0)
+        {
+            danio = 0;
+        }
+
         Estadisticas.Salud -= danio;
+
+        // para evitar Salud negativa y romper el bucle
+        if (Estadisticas.Salud <= 0)
+        {
+            Estadisticas.Salud = 0;
+        }
     }
 
     public void GodMode()

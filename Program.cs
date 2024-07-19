@@ -4,6 +4,7 @@
 using System.Data;
 using Microsoft.VisualBasic;
 using System.Runtime.InteropServices;
+using System.Runtime.ConstrainedExecution;
 
 using EspacioTextos;
 using EspacioDuelos;
@@ -13,6 +14,7 @@ using EspacioPersonajes;
 // variables
 bool gameOver = false;
 bool pruebaOpciones = false;
+bool critico;
 int entradaDeUsuario = 0;
 int numeroAleatorio;
 int ctrlDeFlujo;
@@ -205,31 +207,23 @@ else
 
 
 
-/*--- Desde aquí funciona el juego en si ---*/
-    // while( jugador.hp != 0 && gameOver == false)
-    //  while( cantidadEnemigosVivos != 0 )         // un metodo que cuente un bool en personaje?
-    //    do
-    //      metodos
-    //    while ( jugador.hp && enemigo.hp != 0 )
-    // contadores y bools
-while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
+/*--- desarrollo del juego ---*/
+while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false) // podrias sacar el .Salud != 0?
 {
-    // si contas los enemigos con HP en 0
-    // podes usar la misma variable para 
+    // si contas los enemigos con HP en 0, podes usar la misma variable para 
     // la historia, el enemigo activo e incluso el fin del juego
-    ctrlDeFlujo = HerramientaDuelos.ContarEnemigosActivos(listaPersonajes); // esto quiza no sirva, otra manera?
+    ctrlDeFlujo = HerramientaDuelos.ContarEnemigosActivos(listaPersonajes);
     while (ctrlDeFlujo != 9)
     {
-    // este switch controla los dialogos antes de cada duelo
+        // dialogos antes de los duelos
         switch (ctrlDeFlujo)
         {
             case 1:
                 Console.WriteLine("primera historia antes");
                 break;
         }
-    
-    // desarrollo de los duelos
 
+    // desarrollo de los duelos
         // anuncion primer movimiento
         nomJugador = Textos.DevolverNombre(listaPersonajes[0]);
         nomEnemigo = Textos.DevolverNombre(listaPersonajes[ctrlDeFlujo]);
@@ -259,10 +253,8 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                 }
             }
 
-            if (iniciativaJugador >= iniciativaEnemigo)
+            if (iniciativaJugador >= iniciativaEnemigo) // primer turno jugador, segundo turno enemigo
             {
-            // primer turno jugador, segundo turno enemigo
-
                 // decisiones
                 Console.WriteLine("Elige una acción:");
                 Console.Write("1.Atacar 2.Defender 3.Esperar: ");
@@ -278,53 +270,90 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                 {
                     if (decisionEnemigo == 2)   // 12 - jugador ataca, enemigo defiende
                     {
-                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true);
+                        critico = HerramientaDuelos.DecidirCritico(listaPersonajes[0]);
+                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true, critico);
                         Console.WriteLine($"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!");
+                        if (critico)
+                        {
+                            Console.WriteLine("Aun así fue un golpe critico!");
+                        }
                         Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
                     }
                     else                        // 11 y 13 - jugador ataca, enemigo ataca o espera
                     {
-                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false);
-                        Console.WriteLine($"{nomJugador} atacó primero!");
-                        Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
-                        if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0)
+                        critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
+                        if (critico)
                         {
-                            Console.WriteLine($"{nomEnemigo} puede seguir peleando y decidio atacar tambien!");
-                            Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                            Console.WriteLine($"{nomJugador} atacá con todas sus fuerzas!");
+                            Console.WriteLine($"{nomEnemigo} recibirá daño extra!");
                         }
                         else
                         {
-                            Console.WriteLine($"{nomEnemigo} está evaluando la situción...");
+                            Console.WriteLine($"{nomJugador} ataca!");
+                        }
+                        Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+
+                        // si el enemigo muere se corta el duelo
+                        if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0)
+                        {
+                            if (decisionEnemigo == 2)   // si no muere ataca
+                            {
+                                Console.WriteLine($"{nomEnemigo} puede seguir peleando y decidio atacar tambien!");
+                                Console.WriteLine("Aun así no podra hacer mas daño esta vez...");
+                                Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                            }
+                            else                        // o aclaras que espera
+                            {
+                                Console.WriteLine($"{nomEnemigo} está evaluando la situción... creo?");
+                            }
                         }
                     }
                 }
-                else
+                else    // jugador espera o defiende
                 {
                     if (decisionEnemigo == 1)
                     {
                         if (entradaDeUsuario == 2)  // 21 - enemigo ataca, jugador defiende
                         {
-                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true);
                             Console.WriteLine($"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!");
+                            critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                            if (critico)
+                            {
+                                Console.WriteLine("Aun así fue un golpe critico!");
+                            }
+                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true, critico);
                             Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
                         }
                         else                        // 31 - enemigo ataca, jugador espera
                         {
-                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false);
-                            Console.WriteLine($"{nomEnemigo} ataca pero no se que esta haciendo {nomJugador}...");
+                            Console.WriteLine($"{nomEnemigo} atacá ... y tu estas esperando...?");
+                            critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                            if (critico)
+                            {
+                                Console.WriteLine($"{nomEnemigo} estaba preparando un ataque especial, recibiras mas daño!");
+                            }
+                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, critico);
                             Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
                         }
                     }
                     else    // 22, 23, 32, 33 - no pasa nada
                     {
-                        Console.WriteLine("Narrador: ... Nadie está haciendo nada...");
-                        Console.WriteLine("Dev: quizá son metapods...?");
+                        if (entradaDeUsuario == 2 && decisionEnemigo == 2)
+                        {
+                            Console.WriteLine("Narrador: ... Nadie está haciendo nada...");
+                            Console.WriteLine("Dev: quizá son metapods...?");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Narrador: ...Nadie está haciendo nada...");
+                            Console.WriteLine("Dev: Se aburrieron antes que nosotros");
+                        }
                     }
                 }
             }
-            else
+            else        // primer turno enemigo, segundo turno jugador
             {
-            //primer turno enemigo, segundo turno jugador
                 // decisiones
                 decisionEnemigo = HerramientaDuelos.AccionEnemigo();
                 Console.WriteLine($"{nomEnemigo} es mas rapido!");
@@ -352,78 +381,131 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false)
                 {
                     if (decisionEnemigo == 2)   // 12 - enemigo ataca, jugador defiende
                     {
-                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true);
+                        critico = HerramientaDuelos.DecidirCritico(listaPersonajes[0]);
+                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true, critico);
                         Console.WriteLine($"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!");
+                        if (critico)
+                        {
+                            Console.WriteLine("Aun así fue un golpe critico!");
+                        }
                         Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
                     }
                     else                        // 11 y 13 - enemigo ataca, jugador ataca o espera
                     {
-                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false);
-                        Console.WriteLine($"{nomEnemigo} atacó primero!");
-                        Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
-                        if (listaPersonajes[0].Estadisticas.Salud != 0)
+                        critico = HerramientaDuelos.DecidirCritico(listaPersonajes[0]);
+                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
+                        if (critico)
                         {
-                            Console.WriteLine($"{nomJugador} puede seguir peleando y decidio atacar tambien!");
-                            Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                            Console.WriteLine($"{nomEnemigo} atacá con todas sus fuerzas!");
+                            Console.WriteLine($"{nomJugador} recibirá daño extra!");
                         }
                         else
                         {
-                            Console.WriteLine($"{nomJugador} está esperando...");  /* esperar podria recuperar hp o algo */
+                            Console.WriteLine($"{nomEnemigo} ataca!");
+                        }
+                        Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+
+                        if (listaPersonajes[0].Estadisticas.Salud != 0)
+                        {
+                            if (entradaDeUsuario == 1)
+                            {
+                                Console.WriteLine($"{nomJugador} puede seguir peleando y decidio atacar tambien!");
+                                Console.WriteLine("Aun así no podra hacer mas daño esta vez...");
+                                Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{nomJugador} está esperando...");  /* esperar podria recuperar hp o algo */
+                            }
                         }
                     }
                 }
-                else
+                else    // enemigo defiende o espera
                 {
                     if (entradaDeUsuario == 1)
                     {
                         if (decisionEnemigo == 2)  // 21 - jugador ataca, enemigo defiende
                         {
-                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true);
+                            critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true, critico);
                             Console.WriteLine($"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!");
+                            if (critico)
+                            {
+                                Console.WriteLine("Aun así fue un golpe critico!");
+                            }
                             Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
                         }
                         else                        // 31 - jugador ataca, enemigo espera
                         {
-                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false);
+                            critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, critico);
                             Console.WriteLine($"{nomJugador} ataca pero no se que esta haciendo {nomEnemigo}...");
+                            if (critico)
+                            {
+                                Console.WriteLine("Incluso recibirá un golpe critico!");
+                            }
                             Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
                         }
                     }
                     else    // 22, 23, 32, 33 - no pasa nada
                     {
-                        Console.WriteLine("Narrador: ... Nadie está haciendo nada...");
-                        Console.WriteLine("Dev: quizá son metapods...?");
+                        if (entradaDeUsuario == 2 && decisionEnemigo == 2)
+                        {
+                            Console.WriteLine("Narrador: ... Nadie está haciendo nada...");
+                            Console.WriteLine("Dev: quizá son metapods...?");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Narrador: ... Nadie está haciendo nada...");
+                            Console.WriteLine("Dev: se aburrieron antes que nosotros?");
+                        }
                     }
                 }
             }
 
-        /* --------------------------------hay un error en los daños controlá--------------------------------- */
+        /* faltaria un msj de cuando el enemigo muere o gana */
 
         /* --------------------------------------- para pruebas --------------------------------------- */
             //listaPersonajes[0].Estadisticas.Salud = 0;
             //ctrlDeFlujo = 9;
             //gameOver = true;
-        /* ------------------------------------------ borrar ------------------------------------------ */
+        /* -------------------------------------------------------------------------------------------- */
 
         } while (listaPersonajes[0].Estadisticas.Salud != 0 && listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0);
-
-    // este switch es provisorio, pones mas dialogos?
+        ctrlDeFlujo += 1;
+        // dialogos despues de los duelos, quiza no?
+        // podrias esta arriba, del 8 al 9 en el switch
+        // los dialogos para despues del duelo anterior
+        // se imprimen antes de los dialogos que preceden al duelo siguiente
         switch (ctrlDeFlujo)
         {
             case 9:
                 Console.WriteLine("primera historia despues");
                 break;
         }
-    }
-    // controla si el juego termina
-    if (listaPersonajes[0].Estadisticas.Salud == 0 || ctrlDeFlujo == 9)
-    {
-        gameOver = true;
-    }
 
-    // lo unico que falta es dar opciones para guardar partida
+        // controla si el juego termina
+        if (listaPersonajes[0].Estadisticas.Salud == 0 || ctrlDeFlujo == 9)
+        {
+            gameOver = true;
+        }
+
+        // guardado de partida en json
+        linea = Textos.MenuDeGuardado();
+        texto = linea.Split(";");
+        foreach (string renglon in texto)
+        {
+            Console.WriteLine(renglon);
+        }
+        do
+        {
+            pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+            if (!pruebaOpciones || (entradaDeUsuario <= 0 && entradaDeUsuario >= 4))
+            {
+                Console.WriteLine("Dev: no puedo dejar que pongas cualquier cosa siempre...");
+            }
+        } while (!pruebaOpciones || (entradaDeUsuario <= 0 && entradaDeUsuario >= 4));
+
+        
+    }
 }
-
-
-// las partidas las vas a guardar en un json, como una lista
-// podes usar el HP como bandera para ir haciendo los duelos

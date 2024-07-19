@@ -55,4 +55,16 @@ public static class Textos
     {
         return pers.DatosGenerales.Nombre + ',' + pers.DatosGenerales.Apodo;
     }
+
+    public static string MenuDeGuardado()
+    {
+        return  "├──────────────────────────┤;" +
+                "|    Continuar Partida?    |;" +
+                "├──────────────────────────┤;" +
+                "|  1. Guardar y Continuar  |;" +
+                "|  2. Guardar y Salir      |;" +
+                "|  3. Salir sin Guardar    |;" +
+                "├──────────────────────────┤;" +
+                "   Seleccione una opción: ";
+    }
 }

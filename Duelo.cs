@@ -1,9 +1,10 @@
-namespace EspacioDuelos;
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 using EspacioPersonajes;
+
+namespace EspacioDuelos;
 
 public class Duelo
 {
@@ -107,10 +108,9 @@ public class Duelo
 
 // devolves el daño para mostrarlo
 // y usas un metodo de personje para cambiar la vida
-    public int CalcularDanio(Personaje atacante, Personaje objetivo, bool objetivoDefiende)
+    public int CalcularDanio(Personaje atacante, Personaje objetivo, bool objetivoDefiende, bool critico)
     {
-        bool citricoAtacante = DecidirCritico(atacante);
-        int ataqueAtacante = CalcularAtaque(atacante, citricoAtacante);
+        int ataqueAtacante = CalcularAtaque(atacante, critico);
         int defensaObjetivo = CalcularDefensa(objetivo);
         int danio;
 
@@ -123,7 +123,7 @@ public class Duelo
             danio = (ataqueAtacante * 10) - (defensaObjetivo / 10);
         }
 
-        objetivo.Estadisticas.Salud -= danio;
+        objetivo.RecibirDanio(danio);
 
         return danio;
     }
