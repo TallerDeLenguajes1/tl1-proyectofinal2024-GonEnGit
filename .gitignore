@@ -8,6 +8,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 .vscode
+PartidasGuardadas/
+codigosViejos.txt
 
 # User-specific files
 *.rsuser
