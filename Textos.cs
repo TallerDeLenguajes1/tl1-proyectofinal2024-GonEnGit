@@ -58,13 +58,13 @@ public static class Textos
 
     public static string MenuDeGuardado()
     {
-        return  "├──────────────────────────┤;" +
+        return  "+--------------------------+;" +
                 "|    Continuar Partida?    |;" +
-                "├──────────────────────────┤;" +
+                "+--------------------------+;" +
                 "|  1. Guardar y Continuar  |;" +
                 "|  2. Guardar y Salir      |;" +
                 "|  3. Salir sin Guardar    |;" +
-                "├──────────────────────────┤;" +
+                "+--------------------------+;" +
                 "   Seleccione una opción: ";
     }
 }

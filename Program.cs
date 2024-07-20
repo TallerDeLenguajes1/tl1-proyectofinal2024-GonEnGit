@@ -8,8 +8,8 @@ using System.Runtime.ConstrainedExecution;
 
 using EspacioTextos;
 using EspacioDuelos;
+using EspacioPartida;
 using EspacioPersonajes;
-
 
 // variables
 bool gameOver = false;
@@ -32,6 +32,7 @@ string[] textoEnemigo;
 Random rnd = new Random();
 Personaje auxiliar;
 Duelo HerramientaDuelos = new Duelo();
+Partida HerramientaPartida = new Partida();
 FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
 List<Personaje> listaPersonajes = new List<Personaje>();
 
@@ -51,7 +52,7 @@ foreach (var renglon in texto)
     }
 }
 Console.Write("\n");
-Thread.Sleep(1500);         // son milisegundos, 2s es mucho
+Thread.Sleep(1500);
 Console.WriteLine("");
 
 /*--- FIN de la intro ---*/
@@ -463,7 +464,7 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false) // podri
                 }
             }
 
-        /* faltaria un msj de cuando el enemigo muere o gana */
+        /* ----------- faltaria un msj de cuando el enemigo muere o gana ----------- */
 
         /* --------------------------------------- para pruebas --------------------------------------- */
             //listaPersonajes[0].Estadisticas.Salud = 0;
@@ -473,6 +474,13 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false) // podri
 
         } while (listaPersonajes[0].Estadisticas.Salud != 0 && listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0);
         ctrlDeFlujo += 1;
+
+        // controla si el juego termina ------------ acá tenes un conflicto, lo podes hacer de otra manera?
+        if (listaPersonajes[0].Estadisticas.Salud == 0 || ctrlDeFlujo == 9)
+        {
+            gameOver = true;
+        }
+
         // dialogos despues de los duelos, quiza no?
         // podrias esta arriba, del 8 al 9 en el switch
         // los dialogos para despues del duelo anterior
@@ -484,28 +492,36 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false) // podri
                 break;
         }
 
-        // controla si el juego termina
-        if (listaPersonajes[0].Estadisticas.Salud == 0 || ctrlDeFlujo == 9)
-        {
-            gameOver = true;
-        }
 
         // guardado de partida en json
         linea = Textos.MenuDeGuardado();
         texto = linea.Split(";");
-        foreach (string renglon in texto)
+        for (int indice = 0; indice < texto.Count(); indice++)
         {
-            Console.WriteLine(renglon);
+            if (indice == (texto.Count() - 1))
+            {
+                Console.Write(texto[indice]);
+            }
+            else
+            {
+                Console.WriteLine(texto[indice]);
+            }
         }
         do
         {
             pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
-            if (!pruebaOpciones || (entradaDeUsuario <= 0 && entradaDeUsuario >= 4))
+            if (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= 4)
             {
                 Console.WriteLine("Dev: no puedo dejar que pongas cualquier cosa siempre...");
+                Console.Write("Ingresa un opcion valida: ");
             }
-        } while (!pruebaOpciones || (entradaDeUsuario <= 0 && entradaDeUsuario >= 4));
+        } while (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= 4);
 
-        
+        if (entradaDeUsuario == 1 || entradaDeUsuario == 2)
+        {
+            Console.WriteLine("Ingresa un nombre para la partida: ");
+            linea = Console.ReadLine();
+        }
+        gameOver = HerramientaPartida.EjecutarOpcion(listaPersonajes, linea, entradaDeUsuario);
     }
 }
