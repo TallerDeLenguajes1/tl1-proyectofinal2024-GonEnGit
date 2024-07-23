@@ -1,3 +1,4 @@
+using System.Data;
 using System.Runtime.CompilerServices;
 
 namespace EspacioPersonajes;
@@ -24,7 +25,7 @@ public class FabricaDePersonajes
             foreach (string clase in Clases)
             {
                 Personaje instancia = new Personaje();
-    
+
                 instancia.DatosGenerales.GenerarDatos(clase, id);
                 instancia.Estadisticas.GenerarEstadisticas(clase);
                 id += 1;
@@ -36,13 +37,45 @@ public class FabricaDePersonajes
         return lista;
     }
 
-    public List<Personaje> MezclarLista(List<Personaje> listaFinal, int[] orden, List<Personaje> listaTemp)
+    public int[] GenerarOrdenAleatorio()
     {
-        // count devuelve cuanto la cantidad de personajes
+        int[] ordenGenerado = new int[9];
+        int numeroAleatorio;
+        Random rnd = new Random();
+
+        for (int indice = 0; indice < 9; indice++)     // necesitas el 0 pero inicializa con 0 por defecto
+        {
+            ordenGenerado[indice] = 721;                       // cambias los valores a otra cosa
+        }
+        for (int indice = 0; indice < 9; indice++)     // generas el nuevo ordenGenerado
+        {
+            do
+            {
+                numeroAleatorio = rnd.Next(0, 9);
+            } while (ordenGenerado.Contains(numeroAleatorio));
+            ordenGenerado[indice] = numeroAleatorio;
+        }
+        return ordenGenerado;
+    }
+
+    public List<Personaje> MezclarLista(int eleccion, List<Personaje> listaTemp)
+    {
+        int[] orden = GenerarOrdenAleatorio();
+        Personaje auxiliar;
+        List<Personaje> listaFinal = new List<Personaje>();
+
+        // guardas pj elegido en el lugar 0
+        auxiliar = listaTemp[eleccion];
+        auxiliar.DatosGenerales.Id = 1;     // cambias el id
+        listaFinal.Add(auxiliar);           // guardas el personaje elegido
+        listaTemp.RemoveAt(eleccion);       // lo sacas de la lista Temporal
+
+        // mezclas la lista para que sea aleatoria siempre
+        // count devuelve la cantidad de personajes
         // el indice va a ser .Count - 1
         for (int indice = 0; indice < listaTemp.Count; indice++)
         {
-            Personaje auxiliar = listaTemp[orden[indice]];
+            auxiliar = listaTemp[orden[indice]];
             auxiliar.DatosGenerales.Id = indice + 2;
             listaFinal.Add(auxiliar);
         }

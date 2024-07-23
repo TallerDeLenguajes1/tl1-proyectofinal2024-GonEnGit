@@ -2,8 +2,10 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using System.Reflection.Metadata.Ecma335;
+
 using System.Text.Json;
-using EspacioDuelos;
+using EspacioJson;
 using EspacioPersonajes;
 
 namespace EspacioPartida;
@@ -11,6 +13,7 @@ namespace EspacioPartida;
 public class Partida
 {
     private string nombreCarpeta = "PartidasGuardadas/";
+    private ClaseJson HerramientaJson = new ClaseJson();
 
     public void CrearCarpetas()
     {
@@ -32,60 +35,39 @@ public class Partida
 
         // PartidasGuardadas/nombrePartida/personajes.json
         string rutaPersonajes = rutaFinal + "/personajes.json";
-        string persSerialozados = JsonSerializer.Serialize(lista);
+        string persSerializados = JsonSerializer.Serialize(lista);
 
-        using (FileStream archivo = new FileStream(rutaPersonajes, FileMode.Create))
-        {
-            using (StreamWriter esctritor = new StreamWriter(archivo))
-            {
-                esctritor.WriteLine(persSerialozados);
-                esctritor.Close();
-            }
-        }
+        HerramientaJson.GuardarEnArchivoNuevo(persSerializados, rutaPersonajes);
     }
 
-    public string ObtenerNombresDePartidas(List<Personaje> lista)
+    public string ObtenerNombresDePartidas()
     {
-        string nomConcatenados = "anulado;";    // para anular el espacio 0
+        string nomConcatenados = "vacio;";    // para anular el espacio 0
         if (Directory.Exists(nombreCarpeta))
         {
             string[] partes;
             string[] archivos = Directory.GetDirectories(nombreCarpeta);
-            if (archivos.Length == 0)
+            if (archivos.Length != 0)
             {
-                return "";
-            }
-            else
-            {
-                foreach (string nombre in archivos)
+                foreach (string ruta in archivos)
                 {
-                    partes = nombre.Split("/");
+                    partes = ruta.Split("/");
                     nomConcatenados += partes[partes.Length - 1] + ";";
                 }
-                return nomConcatenados;
             }
         }
-        else
-        {
-            return "";
-        }
+        return nomConcatenados;
     }
 
     public List<Personaje> CargarPartida(string partidaElegida)
     {
         string datosDeArchivo;
         string rutaFinal = nombreCarpeta + partidaElegida + "/personajes.json";
-        List<Personaje> listaCargada = new List<Personaje>();
-
-        using (FileStream archivo = new FileStream(rutaFinal, FileMode.Open))
-        {
-            using (StreamReader lector = new StreamReader(archivo))
-            {
-                datosDeArchivo = lector.ReadToEnd();
-                listaCargada = JsonSerializer.Deserialize<List<Personaje>>(datosDeArchivo);
-                archivo.Close();
-            }
-        }
+        ClaseJson HerramientaJson = new ClaseJson();
+        
+        datosDeArchivo = HerramientaJson.LeerArchivo(rutaFinal);
+        List<Personaje> listaCargada = JsonSerializer.Deserialize<List<Personaje>>(datosDeArchivo);
+        // parece que en C#, '= new List<>' sobra si acto seguido asignas una lista
 
         return listaCargada;
     }

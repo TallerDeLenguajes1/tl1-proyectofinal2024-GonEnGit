@@ -17,7 +17,8 @@ public static class Textos
                 "  |                                 |;" +
                 "  |       1. Nueva Partida          |;" +
                 "  |       2. Cargar Partida         |;" +
-                "  |       3. Salir                  |;" +
+                "  |       3. Ganadores Anteriores   |;" +
+                "  |       4. Salir                  |;" +
                 "  |                                 |;" +
                 "  |  # - #                  # - #   |;" +
                 "  # ------------------------------- #;" +
