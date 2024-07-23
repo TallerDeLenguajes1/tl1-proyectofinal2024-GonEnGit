@@ -5,11 +5,13 @@ using System.Data;
 using Microsoft.VisualBasic;
 using System.Runtime.InteropServices;
 using System.Runtime.ConstrainedExecution;
+using System.Runtime.CompilerServices;
 
 using EspacioTextos;
 using EspacioDuelos;
 using EspacioPartida;
 using EspacioPersonajes;
+using EspacioHistorial;
 
 // variables
 bool gameOver = false;
@@ -22,19 +24,22 @@ int iniciativaJugador;
 int iniciativaEnemigo;
 int decisionEnemigo;
 int danio;
+char continuar;
 string linea;
 string nomJugador;
 string nomEnemigo;
+string nomPartida = "";
 
 int[] orden = new int[9];
 string[] texto;
 string[] textoEnemigo;
 Random rnd = new Random();
 Personaje auxiliar;
+List<Personaje> listaPersonajes = new List<Personaje>();
 Duelo HerramientaDuelos = new Duelo();
 Partida HerramientaPartida = new Partida();
 FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
-List<Personaje> listaPersonajes = new List<Personaje>();
+Historial HerramientaHistorial = new Historial();
 
 
 
@@ -93,127 +98,160 @@ Console.WriteLine("");
 
 /*--- inicio del control de opcion ---*/
 
-// inicia el juego segun la opcion
-if (entradaDeUsuario == 1)
+do
 {
-    // declaras listas provisorias para liberarlas despues
-    List<Personaje> listaPersTemp = new List<Personaje>();
-    List<string[]> tarjetasAMostrar = new List<string[]>();
-
-    // inicializas variables
-    listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);
-
-/*--- esta parte se supone que sea otra historia ---*/ // ------------------------------------------------
-    // historia
-/*--- fin de esta parte de historia---*/
-
-// la consola no puede mostrar las tarjetas una al lado de la otra
-// lo que podes hacer es una matriz, un vector de 5 vectores
-// donde cada uno de los 5 tiene la tarjeta separada linea por linea
-
-    // llenas esa lista con los primeros 5 personajes
-    for (int indice = 0; indice <= 5; indice++)
+    if (entradaDeUsuario == 1)
     {
-        linea = Textos.Tarjetas(listaPersTemp[indice]);
-        texto = linea.Split(";");
-        tarjetasAMostrar.Add(texto);
-    }
-    // si no limpias 'linea' esto es un desastre
-    linea = "";
-    // ahora con esa lista podes concatenar cada linea e imprimirlas
-    for (int indiceLinea = 0; indiceLinea < 12; indiceLinea++)
-    {
-        for (int indiceTarjeta = 0; indiceTarjeta < 3; indiceTarjeta++)
+        // declaras listas provisorias para liberarlas despues
+        List<Personaje> listaPersTemp = new List<Personaje>();
+        List<string[]> tarjetasAMostrar = new List<string[]>();
+    
+        // inicializas variables
+        listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);
+    
+        // crea carpetas
+        Console.Write("Ingresa un nombre para la partida: ");
+        nomPartida = Console.ReadLine();
+        HerramientaPartida.CrearCarpetas();
+    
+    /*--- esta parte se supone que sea otra historia ---*/ // ------------------------------------------------
+        // historia
+    /*--- fin de esta parte de historia---*/
+    
+    // la consola no puede mostrar las tarjetas una al lado de la otra
+    // lo que podes hacer es una matriz, un vector de 5 vectores
+    // donde cada uno de los 5 tiene la tarjeta separada linea por linea
+    
+        // llenas esa lista con los primeros 5 personajes
+        for (int indice = 0; indice <= 5; indice++)
         {
-            linea = linea + "   " + tarjetasAMostrar[indiceTarjeta][indiceLinea];
+            linea = Textos.Tarjetas(listaPersTemp[indice]);
+            texto = linea.Split(";");
+            tarjetasAMostrar.Add(texto);
         }
-        Console.WriteLine(linea);
+        // si no limpias 'linea' esto es un desastre
         linea = "";
-    }
-    // no es lo mas lindo pero tenes que mostrar 5 personajes, 2 quedan abajo
-    for (int indiceLinea = 0; indiceLinea < 12; indiceLinea++)
-    {
-        for (int indiceTarjeta = 3; indiceTarjeta < 5; indiceTarjeta++)
+        // ahora con esa lista podes concatenar cada linea e imprimirlas
+        for (int indiceLinea = 0; indiceLinea < 12; indiceLinea++)
         {
-            if (indiceTarjeta == 3)
+            for (int indiceTarjeta = 0; indiceTarjeta < 3; indiceTarjeta++)
             {
-                linea = "                      ";
-            } 
-            linea = linea + "   " + tarjetasAMostrar[indiceTarjeta][indiceLinea];
+                linea = linea + "   " + tarjetasAMostrar[indiceTarjeta][indiceLinea];
+            }
+            Console.WriteLine(linea);
+            linea = "";
         }
+        // no es lo mas lindo pero tenes que mostrar 5 personajes, 2 quedan abajo
+        for (int indiceLinea = 0; indiceLinea < 12; indiceLinea++)
+        {
+            for (int indiceTarjeta = 3; indiceTarjeta < 5; indiceTarjeta++)
+            {
+                if (indiceTarjeta == 3)
+                {
+                    linea = "                      ";
+                } 
+                linea = linea + "   " + tarjetasAMostrar[indiceTarjeta][indiceLinea];
+            }
+            Console.WriteLine(linea);
+            linea = " ";
+        }
+    
+        /*--- seleccion de personaje ---*/
+        entradaDeUsuario = 0;
+        Console.Write("Elige un personaje: ");
+        while (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 6)
+        {
+            pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+            if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 6)
+            {
+                Console.WriteLine("");
+                Console.Write("Ingrese un numero valido: ");
+            }
+        }
+        entradaDeUsuario -= 1;      // recorda que el orden de la lista no es el mismo que los id
+        Console.WriteLine("");
+    
+        // mezclas la lista para que sea aleatoria siempre
+        listaPersTemp[entradaDeUsuario].DatosGenerales.Id = 1;  // cambias el id
+        auxiliar = listaPersTemp[entradaDeUsuario];
+        listaPersTemp.RemoveAt(entradaDeUsuario);               // lo sacas de la lista Temporal
+        listaPersonajes.Add(auxiliar);   // guardas el personaje elegido
+    
+        for (int indice = 0; indice < 9; indice++)     // necesitas el 0 pero inicializa con 0 por defecto
+        {
+            orden[indice] = 721;                       // cambias los valores a otra cosa
+        }
+        for (int indice = 0; indice < 9; indice++)     // generas el nuevo orden
+        {
+            do
+            {
+                numeroAleatorio = rnd.Next(0, 9);
+            } while (orden.Contains(numeroAleatorio));
+            orden[indice] = numeroAleatorio;
+        }
+        listaPersonajes = HerramientaFabrica.MezclarLista(listaPersonajes, orden, listaPersTemp);
+    
+        // cheat code para las pruebas
+        Console.WriteLine("Ingresa el ataque de tu personaje:");
+        linea = Console.ReadLine();
+        linea = HerramientaDuelos.CheatCode(listaPersonajes[0], listaPersonajes[1], linea);
         Console.WriteLine(linea);
-        linea = " ";
+    
+        /*--- Fin de seleccion de personaje ---*/
+    
+        // si limpias la lista y no hay mas referencias
+        // el garbage collector se encarga solo de liberar la memoria
+        // tambien podrias igualarla a null
+        tarjetasAMostrar.Clear();
+        listaPersTemp.Clear();
     }
-
-    /*--- seleccion de personaje ---*/
-    entradaDeUsuario = 0;
-    Console.Write("Elige un personaje: ");
-    while (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 6)
+    else if (entradaDeUsuario == 2)
     {
-        pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
-        if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 6)
+        linea = HerramientaPartida.ObtenerNombresDePartidas(listaPersonajes);
+        if (linea == "")
         {
-            Console.WriteLine("");
-            Console.Write("Ingrese un numero valido: ");
+            Console.WriteLine("Narrador: No hay partidas guardadas aún.");
+            Console.WriteLine("Dev: así que te vamos a obligar a inicar un juego nuevo!");
+            entradaDeUsuario = 1;
+            linea = "nuevapartida";
+        }
+        else
+        {
+            Console.WriteLine("/* --- Partidas Guardadas --- */\n");
+            texto = linea.Split(";");
+            for (int indice = 1; indice < texto.Length - 1; indice++)
+            {
+                Console.WriteLine($"            {indice}. " + texto[indice]);
+            }
+
+            do
+            {
+                Console.Write("Ingresá el numero de partida: ");
+                pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+                if (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= texto.Length - 1)
+                {
+                    Console.WriteLine("No ingresaste un numero que corresponda a alguna partida.");
+                }
+            } while (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= texto.Length - 1);
+
+            listaPersonajes = HerramientaPartida.CargarPartida(texto[entradaDeUsuario]);
         }
     }
-    entradaDeUsuario -= 1;      // recorda que el orden de la lista no es el mismo que los id
-    Console.WriteLine("");
-
-    // mezclas la lista para que sea aleatoria siempre
-    listaPersTemp[entradaDeUsuario].DatosGenerales.Id = 1;  // cambias el id
-    auxiliar = listaPersTemp[entradaDeUsuario];
-    listaPersTemp.RemoveAt(entradaDeUsuario);               // lo sacas de la lista Temporal
-    listaPersonajes.Add(auxiliar);   // guardas el personaje elegido
-
-    for (int indice = 0; indice < 9; indice++)     // necesitas el 0 pero inicializa con 0 por defecto
+    else
     {
-        orden[indice] = 721;                       // cambias los valores a otra cosa
+        gameOver = true;
     }
-    for (int indice = 0; indice < 9; indice++)     // generas el nuevo orden
-    {
-        do
-        {
-            numeroAleatorio = rnd.Next(0, 9);
-        } while (orden.Contains(numeroAleatorio));
-        orden[indice] = numeroAleatorio;
-    }
-    listaPersonajes = HerramientaFabrica.MezclarLista(listaPersonajes, orden, listaPersTemp);
-
-    // cheat code para las pruebas
-    Console.WriteLine("Ingresa el ataque de tu personaje:");
-    linea = Console.ReadLine();
-    linea = HerramientaDuelos.CheatCode(listaPersonajes[0], listaPersonajes[1], linea);
-    Console.WriteLine(linea);
-
-    /*--- Fin de seleccion de personaje ---*/
-
-    // si limpias la lista y no hay mas referencias
-    // el garbage collector se encarga solo de liberar la memoria
-    // tambien podrias igualarla a null
-    tarjetasAMostrar.Clear();
-    listaPersTemp.Clear();
-}
-else if (entradaDeUsuario == 2)
-{
-    /* cargas los datos desde un Json y contas los enemigos en HP = 0 */
-    /* usa el contadorHistoria para esto */
-}
-else
-{
-    /* usas gameOver para cerrar el juego*/
-}
-
+} while (linea == "nuevapartida");
 /*--- FIN del control de opcion ---*/
 
 
 
 /*--- desarrollo del juego ---*/
-while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false) // podrias sacar el .Salud != 0?
+while (gameOver == false) // podrias sacar el .Salud != 0?
 {
     // si contas los enemigos con HP en 0, podes usar la misma variable para 
     // la historia, el enemigo activo e incluso el fin del juego
-    ctrlDeFlujo = HerramientaDuelos.ContarEnemigosActivos(listaPersonajes);
+    ctrlDeFlujo = HerramientaDuelos.ContarEnemigosVencidos(listaPersonajes);    // probablemente algo esta de mas con ctrDeFlujo
     while (ctrlDeFlujo != 9)
     {
         // dialogos antes de los duelos
@@ -464,8 +502,6 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false) // podri
                 }
             }
 
-        /* ----------- faltaria un msj de cuando el enemigo muere o gana ----------- */
-
         /* --------------------------------------- para pruebas --------------------------------------- */
             //listaPersonajes[0].Estadisticas.Salud = 0;
             //ctrlDeFlujo = 9;
@@ -473,55 +509,99 @@ while (listaPersonajes[0].Estadisticas.Salud != 0 && gameOver == false) // podri
         /* -------------------------------------------------------------------------------------------- */
 
         } while (listaPersonajes[0].Estadisticas.Salud != 0 && listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0);
-        ctrlDeFlujo += 1;
 
-        // controla si el juego termina ------------ acá tenes un conflicto, lo podes hacer de otra manera?
-        if (listaPersonajes[0].Estadisticas.Salud == 0 || ctrlDeFlujo == 9)
+    /*---- terminado el duelo controlas quien perdió y como seguir ----*/
+        if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud == 0)   // si el jugador gana
         {
-            gameOver = true;
-        }
+            Console.WriteLine($"{nomEnemigo} sufrió demasiado daño... ");
+            Console.WriteLine("Dev: habrá que buscar a alguien mas...\n");
+            ctrlDeFlujo += 1;
 
-        // dialogos despues de los duelos, quiza no?
-        // podrias esta arriba, del 8 al 9 en el switch
-        // los dialogos para despues del duelo anterior
-        // se imprimen antes de los dialogos que preceden al duelo siguiente
-        switch (ctrlDeFlujo)
-        {
-            case 9:
-                Console.WriteLine("primera historia despues");
-                break;
-        }
-
-
-        // guardado de partida en json
-        linea = Textos.MenuDeGuardado();
-        texto = linea.Split(";");
-        for (int indice = 0; indice < texto.Count(); indice++)
-        {
-            if (indice == (texto.Count() - 1))
+            if (ctrlDeFlujo != 9)
             {
-                Console.Write(texto[indice]);
+                // guardado de partida en json
+                linea = Textos.MenuDeGuardado();
+                texto = linea.Split(";");
+                for (int indice = 0; indice < texto.Count(); indice++)
+                {
+                    if (indice == (texto.Count() - 1))
+                    {
+                        Console.Write(texto[indice]);
+                    }
+                    else
+                    {
+                        Console.WriteLine(texto[indice]);
+                    }
+                }
+                do
+                {
+                    pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+                    if (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= 4)
+                    {
+                        Console.WriteLine("Dev: no puedo dejar que pongas cualquier cosa siempre...");
+                        Console.Write("Ingresa un opcion valida: ");
+                    }
+                } while (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= 4);
+                gameOver = HerramientaPartida.EjecutarOpcion(listaPersonajes, nomPartida, entradaDeUsuario);
+
+                // dialogos despues de los duelos, quiza no?
+                // podrias esta arriba, del 8 al 9 en el switch
+                // los dialogos para despues del duelo anterior
+                // se imprimen antes de los dialogos que preceden al duelo siguiente
+                switch (ctrlDeFlujo)
+                {
+                    case 9:
+                        Console.WriteLine("primera historia despues");
+                        break;
+                }
+            }
+            else    // esta sería la ultima rama, cuando ganas todos los duelos
+            {
+                Console.WriteLine("Dev: Parece que el jugador pudo ganar todos los duelos...");
+                Console.WriteLine("Narrador: y eso no es bueno?");
+                Console.WriteLine("Dev: si pero ahora hay que cerrar el juego...");
+                Console.Write("Ingresa un nombre para agregar a los ganadores: ");
+                linea = Console.ReadLine();
+                HerramientaHistorial.AgregarAlHistorial(linea);
+                gameOver = true;
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Narrador: {nomJugador} acaba de morir...");
+            Console.WriteLine($"Dev: Supongo que estoy haciendo esto demaciado dificil...");
+
+            do
+            {
+                Console.WriteLine("Dev: queres intentar de nuevo? (S/N) ");
+                pruebaOpciones = char.TryParse(Console.ReadLine(), out continuar);
+                if (pruebaOpciones)
+                {
+                    continuar = char.ToUpper(continuar);
+                    if (continuar != 'S' && continuar != 'N')
+                    {
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Opcion incorrecta.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opcion incorrecta.");
+                }
+            } while (!pruebaOpciones && continuar != 'S' && continuar != 'N');
+
+            if (continuar == 'S')
+            {
+                listaPersonajes[0].Estadisticas.Salud = 100;// esto lo vas a tener que registrar de alguna forma, podrias cargar la ultima partida tambien...
+                gameOver = false;
             }
             else
             {
-                Console.WriteLine(texto[indice]);
+                gameOver = true;
             }
         }
-        do
-        {
-            pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
-            if (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= 4)
-            {
-                Console.WriteLine("Dev: no puedo dejar que pongas cualquier cosa siempre...");
-                Console.Write("Ingresa un opcion valida: ");
-            }
-        } while (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= 4);
-
-        if (entradaDeUsuario == 1 || entradaDeUsuario == 2)
-        {
-            Console.WriteLine("Ingresa un nombre para la partida: ");
-            linea = Console.ReadLine();
-        }
-        gameOver = HerramientaPartida.EjecutarOpcion(listaPersonajes, linea, entradaDeUsuario);
     }
 }

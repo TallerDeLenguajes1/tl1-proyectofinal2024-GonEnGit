@@ -31,7 +31,7 @@ public class Duelo
         return respuesta;
     }
 
-    public int ContarEnemigosActivos(List<Personaje> lista)
+    public int ContarEnemigosVencidos(List<Personaje> lista)
     {
         int contador = 1;   // no en 0, tenes que tener en cuenta el jugador
         if (lista[0].Estadisticas.Salud == 0)
