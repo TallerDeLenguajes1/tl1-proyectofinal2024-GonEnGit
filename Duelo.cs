@@ -21,7 +21,7 @@ public class Duelo
         else if (codigo.Trim() == "1264645588")
         {
             enemigo.GodMode();
-            respuesta = "GodMode activo";
+            respuesta = "Narrador: El enemigo invoca la segunda enmienda!;Dev: Que?;Narrador: tu enemigo ahora tiene un rifle, buena surte!";
         }
         else
         {

@@ -181,7 +181,18 @@ do
             Console.WriteLine("Ingresa el ataque de tu personaje:");
             linea = Console.ReadLine();
             linea = HerramientaDuelos.CheatCode(listaPersonajes[0], listaPersonajes[1], linea);
-            Console.WriteLine(linea);
+            if (linea == "GodMode activo")
+            {
+                Console.WriteLine(linea);
+            }
+            else
+            {
+                texto = linea.Split(";");
+                foreach (string frase in texto)
+                {
+                    Console.WriteLine(frase);
+                }
+            }
             /*--- Fin de seleccion de personaje ---*/
 
             continuar = 'N';
@@ -412,7 +423,6 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
             {
                 // decisiones
                 decisionEnemigo = HerramientaDuelos.AccionEnemigo();
-                Console.WriteLine($"{nomEnemigo} es mas rapido!");
                 switch (decisionEnemigo)
                 {
                     case 1:
