@@ -1,95 +1,10 @@
+
+using System.Runtime.CompilerServices;
 using EspacioCartas;
-using EspacioPersonajes;
 
-namespace EspacioTextos;
-
-public static class Textos
+public class Armador
 {
-    public static string Intro()
-    {
-        return "primera frase por ahora";
-    }
-
-    public static string Menu()
-    {
-        return "  # ------------------------------- #;" +
-                "  |  # - #                  # - #   |;" +
-                "  |         MENU PRINCIPAL          |;" +
-                "  |                                 |;" +
-                "  |       1. Nueva Partida          |;" +
-                "  |       2. Cargar Partida         |;" +
-                "  |       3. Ganadores Anteriores   |;" +
-                "  |       4. Salir                  |;" +
-                "  |                                 |;" +
-                "  |  # - #                  # - #   |;" +
-                "  # ------------------------------- #;" +
-                "            Elija una opción:         ";
-    }
-
-    public static string Tarjetas(Personaje instancia)
-    {
-        string lineaDatos = instancia.DevolverDatos();
-        string lineaEstadisticas = instancia.DevolverEstadisticas();
-
-        string[] Datos = lineaDatos.Split(";");
-        string[] Estadisticas = lineaEstadisticas.Split(";");
-
-    // esto es para que todas las edades tengan 3 caractere
-        if (Datos[6].Length < 3)
-        {
-            Datos[6] = " " + Datos[6];
-        }
-
-        return $"+-{Datos[0]}------------------------------------+;" +
-                $"|         {Datos[1]}, {Datos[2]}                 |;" +
-                $"|       {Datos[3]}, {Datos[4]}                 |;" +
-                $"|           {Datos[6]} años, {Datos[5]}            |;" +
-                "+--------------------------------------+;" +
-                $"|              Salud: {Estadisticas[0]}              |;" +
-                $"|              Armadura: {Estadisticas[1]}             |;" +
-                $"|              Fuerza: {Estadisticas[2]}               |;" +
-                $"|              Destreza: {Estadisticas[3]}             |;" +
-                $"|              Velocidad: {Estadisticas[4]}            |;" +
-                "+--------------------------------------+;";
-    }
-
-    public static string DevolverNombre(Personaje pers)
-    {
-        return pers.DatosGenerales.Nombre + ',' + pers.DatosGenerales.Apodo;
-    }
-
-    public static string MenuDeGuardado()
-    {
-        return  " |                          | ;" +
-                "-+--------------------------+-;" +
-                " |    Continuar Partida?    | ;" +
-                "-+--------------------------+-;" +
-                " |  1. Guardar y Continuar  | ;" +
-                " |  2. Guardar y Salir      | ;" +
-                " |  3. Salir sin Guardar    | ;" +
-                "-+--------------------------+-;" +
-                " |                          | ;" +
-                "    Seleccione una opción: ";
-    }
-
-    public static string TraerReverso()
-    {
-        return  " ------------- ;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                " ------------- ";
-    }
-
-    public static string ArmarCarta(Carta carta)
+    public string ArmarCarta(Card carta)
     {
         string cabeza = " ------------- ;" + "| G          |;" + "|   -------   |;";    // el espacio que falta está a proposito
         string pie ="|   -------   |;" + "|          G |;" + " ------------- ";         // igual en este caso
@@ -98,9 +13,9 @@ public static class Textos
 // los valores que trae la API son todos strings
 // es menos lio compararlos como tales que pasar a int
 // 4 casos "diferentes" los tres nombres y el 10
-        if (carta.valor.Length >= 2)
+        if (carta.value.Length >= 2)
         {
-            switch (carta.valor)
+            switch (carta.value)
             {
                 case "ACE":
                     cartaString = (cabeza  + 
@@ -161,7 +76,7 @@ public static class Textos
         }
         else    // los demas valores tienen un solo digito
         {
-            switch (carta.valor)
+            switch (carta.value)
             {
                 case "2":
                     cartaString = cabeza  + 
@@ -252,12 +167,12 @@ public static class Textos
                                     + pie;
                     break;
             }
-            cartaString = cartaString.Replace("G", "0" + carta.valor);
+            cartaString = cartaString.Replace("G", "0" + carta.value);
         }
 
 // caracteres unicode, estan en UTF8: ♠, ♥, ♦, ♣
 // si cmd no los imprime usas chcp 65001
-        switch (carta.palo)
+        switch (carta.suit)
         {
             case "DIAMONDS":
                 cartaString = cartaString.Replace("X", "♦");
@@ -276,8 +191,52 @@ public static class Textos
         return cartaString;
     }
 
-/*
-    public static string ConcatenarCartas(string primera, string segunda)
+    public string TraerReverso()
+    {
+        return  " ------------- ;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                " ------------- ";
+    }
+
+    public string ConcatenarReverso(string carta)
+    {
+        string[] reverso = {" ------------- ",
+                            "| []  []  []  |",
+                            "|   []  []  []|",
+                            "| []  []  []  |",
+                            "|   []  []  []|",
+                            "| []  []  []  |",
+                            "|   []  []  []|",
+                            "| []  []  []  |",
+                            "|   []  []  []|",
+                            "| []  []  []  |",
+                            "|   []  []  []|",
+                            "| []  []  []  |",
+                            " ------------- "};
+        string[] partesCarta = carta.Split(";");
+        string cartasUnidas = "";
+        string linea;
+
+        for (int i = 0; i < reverso.Length; i++)
+        {
+            linea = partesCarta[i] + " " + reverso[i] + ";";
+            cartasUnidas += linea;
+        }
+
+        return cartasUnidas;       // creo que esto está, falta la aprte donde las mostras y das a elegir
+    }
+
+    public string ConcatenarCartas(string primera, string segunda)
     {
         string[] partesPrimera = primera.Split(";");
         string[] partesSegunda = segunda.Split(";");
@@ -293,5 +252,4 @@ public static class Textos
 
         return cartasUnidas;
     }
-*/
 }

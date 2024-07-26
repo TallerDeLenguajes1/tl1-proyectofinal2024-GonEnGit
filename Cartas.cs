@@ -1,35 +1,25 @@
 
 namespace EspacioCartas;
 
-// lamentablemente, no podes cambiar los nombres de los campos
+// si se pueden remover campos de estas clases,
+// incluso podes remover toda una sub clase
+
 // si podes cambiar los nombres de las clases en si segun parece
 public class Mazo
 {
-    public bool success { get; set; }
-    public string deck_id { get; set; }
-    public int remaining { get; set; }
-    public bool shuffled { get; set; }
+    public string idMAzo { get; set; }
+    public int restantes { get; set; }
 }
 
-public class Card
+public class Carta
 {
-    public string code { get; set; }
-    public string image { get; set; }
-    public Images images { get; set; }
-    public string value { get; set; }
-    public string suit { get; set; }
+    public string valor { get; set; }
+    public string palo { get; set; }
 }
 
-public class Images
+public class Lista
 {
-    public string svg { get; set; }
-    public string png { get; set; }
-}
-
-public class Root
-{
-    public bool success { get; set; }
-    public string deck_id { get; set; }
-    public List<Card> cards { get; set; }
-    public int remaining { get; set; }
+    public string idMAzo { get; set; }
+    public List<Carta> listaCartas { get; set; }
+    public int restantes { get; set; }
 }

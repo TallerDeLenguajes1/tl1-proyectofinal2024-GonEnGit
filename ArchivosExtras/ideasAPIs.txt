@@ -1,0 +1,195 @@
+https://apipheny.io/free-api/#apis-without-key
+https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis/
+
+
+/---- sistema de climas como en pokemón ----/
+
+220 a 223 del primer link
+
+https://openweathermap.org/api --- esta no parece gratuita
+
+https://api.sunrisesunset.io/json?lat=38.907192&lng=-77.036873&timezone=UTC&date=today
+--- datos del amanecer y anochecer, serviria de algo?
+
+darles a los pj un arma con alguna elemento: hielo, fuego, tierra, rayo
+usar una API del clima para tomar 10 climas de alrededor del mundo
+decidir en base a eso el clima de cada duelo y dar un buff o debuff segun el elemento
+
+
+/---- habilidades de D&D ----/
+
+https://www.dnd5eapi.co/
+
+podrias cambiar 'esperar' por 'usar una habilidad' o 'ataque fuerte'
+y traer algunas habilidades de esta API
+
+clases que usa la API ... creo...
+			"name": "Barbarian",
+			"name": "Bard",
+			"name": "Cleric",
+			"name": "Druid",
+			"name": "Fighter",    ---
+			"name": "Monk",       ---
+			"name": "Paladin",    ---
+			"name": "Ranger",     ---
+			"name": "Rogue",      ---
+			"name": "Sorcerer",
+			"name": "Warlock",
+			"name": "Wizard",
+
+
+/---- cambiar la iniciativa por un mazo de cartas ----/
+
+https://deckofcardsapi.com/  --- 92 en el segundo link
+
+encontraste una API que simula un mazo de cartas,
+podrias usarlo de alguna forma para decidir quien mueve primero
+pero entonces removerias la velocidad de los pjs
+
+aquí tenes una idea, trae un mazo y guarda 18 cartas (2 * 9 duelos)
+en un arreglo, para usarlas desde ahí, con esto, desligas al programa de la API
+y no tenes un retrazo cada vez que pedis cartas
+para mostrar las cartas podes usar Replace() con los simbolos y algun caracter que no se use
+
+     -------------  
+    |10           |
+    |   -------   |
+    |  |~     ~|  |      .Replace('X', '♠'), sirve para cambiar algo por los simbolos
+    |  |   ~   |  |      "Picas: ♠", "Corazones: ♥", "Diamantes: ♦", "Tréboles: ♣"
+    |  |~     ~|  |
+    |  |       |  |
+    |  |~     ~|  |      efectivamente C# puede imprimir estos 4 simbolos
+    |  |   ~   |  |      si no se puede en cmd usa primero 'chcp 65001' para cambia a UTF8
+    |  |~     ~|  |
+    |   -------   |
+    |          10 |
+     ------------- 
+
+si las imprimis linea por linea, podes usar Console.ForegroundColor = ConsoleColor.
+para cambiar el nombre de la letra linea por linea
+ 
+https://www.asciiart.eu/miscellaneous/playing-cards --- unas cartas mas chicas y simples
+
+https://imgur.com/AxgaNX3 --- otra version todavia mejor
+
+┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
+│A        │ │2        │ │3        │ │4        │ │5        │
+│         │ │    ♠    │ │    ♠    │ │  ♠   ♠  │ │  ♠   ♠  │
+│    ♠    │ │         │ │    ♠    │ │         │ │    ♠    │
+│         │ │    ♠    │ │    ♠    │ │  ♠   ♠  │ │  ♠   ♠  │
+│        A│ │        2│ │        3│ │        4│ │        5│
+└─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
+┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
+│6        │ │7        │ │8        │ │9        │ │10       │
+│  ♠   ♠  │ │  ♠   ♠  │ │  ♠   ♠  │ │  ♠   ♠  │ │  ♠   ♠  │
+│    ♠    │ │    ♠    │ │  ♠   ♠  │ │  ♠   ♠  │ │  ♠   ♠  │
+│  ♠   ♠  │ │  ♠   ♠  │ │  ♠   ♠  │ │  ♠   ♠  │ │  ♠   ♠  │
+│        6│ │        7│ │        8│ │        9│ │       10│
+└─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
+
+┌─────────┐ ┌─────────┐ ┌─────────┐
+│J        │ │Q        │ │K        │
+│         │ │    ♠    │ │    ♠    │
+│  ♠   ♠  │ │  ♠   ♠  │ │  ♠   ♠  │
+│         │ │    ♠    │ │    ♠    │
+│        J│ │        Q│ │        K│
+└─────────┘ └─────────┘ └─────────┘
+
+
+#-------------#  -------------   -------------   -------------   -------------   ------------- 
+|A            | |2            | |3            | |4            | |5            | |6            |
+|   -------   | |   -------   | |   -------   | |   -------   | |   -------   | |   -------   | 
+|  |       |  | |  |       |  | |  |       |  | |  |X     X|  | |  |X     X|  | |  |X     X|  | 
+|  |       |  | |  |   X   |  | |  |   X   |  | |  |       |  | |  |       |  | |  |       |  |
+|  |       |  | |  |       |  | |  |       |  | |  |       |  | |  |       |  | |  |       |  | 
+|  |   X   |  | |  |       |  | |  |   X   |  | |  |       |  | |  |   X   |  | |  |   X   |  | 
+|  |       |  | |  |       |  | |  |       |  | |  |       |  | |  |       |  | |  |       |  | 
+|  |       |  | |  |   X   |  | |  |   X   |  | |  |       |  | |  |       |  | |  |       |  | 
+|  |       |  | |  |       |  | |  |       |  | |  |X     X|  | |  |X     X|  | |  |X     X|  | 
+|   -------   | |   -------   | |   -------   | |   -------   | |   -------   | |   -------   | 
+|            A| |            2| |            3| |            4| |            5| |            6| 
+#-------------#  -------------   -------------   -------------   -------------   -------------   
+ -------------   -------------   -------------   -------------   -------------   -------------  
+|7            | |8            | |9            | |10           | |J            | |Q            | 
+|   -------   | |   -------   | |   -------   | |   -------   | |   -------   | |   -------   | 
+|  |X     X|  | |  |X     X|  | |  |X     X|  | |  |X     X|  | |  |X      |  | |  |X      |  | 
+|  |   X   |  | |  |   X   |  | |  |       |  | |  |   X   |  | |  |       |  | |  |       |  | 
+|  |       |  | |  |       |  | |  |X     X|  | |  |X     X|  | |  |       |  | |  |       |  | 
+|  |X     X|  | |  |X     X|  | |  |   X   |  | |  |       |  | |  |   J   |  | |  |   Q   |  | 
+|  |       |  | |  |       |  | |  |X     X|  | |  |X     X|  | |  |       |  | |  |       |  | 
+|  |       |  | |  |   X   |  | |  |       |  | |  |   X   |  | |  |       |  | |  |       |  | 
+|  |X     X|  | |  |X     X|  | |  |X     X|  | |  |X     X|  | |  |      X|  | |  |      X|  | 
+|   -------   | |   -------   | |   -------   | |   -------   | |   -------   | |   -------   | 
+|            7| |            8| |            9| |          10 | |            J| |            Q| 
+ -------------   -------------   -------------   -------------   -------------   ------------- 
+ -------------
+|K            |
+|   -------   |
+|  |X      |  |
+|  |       |  |
+|  |       |  |
+|  |   K   |  |
+|  |       |  |
+|  |       |  |
+|  |      X|  |
+|   -------   |
+|            K|
+ ------------- 
+
+reversos:
+
+ -------------
+|/\			/\|
+|\/ ------- \/|
+|  |       |  |
+|  |   *   |  |
+|  |  ***  |  |
+|  | ***** |  |
+|  |  ***  |  |
+|  |   *   |  |
+|  |       |  |
+|/\ ------- /\|
+|\/         \/|
+ ------------- 
+
+ -------------
+|  			  |
+|   -------   |
+|  |   .   |  |
+|  |  /*\  |  |
+|  | /***\ |  |
+|  | ***** |  |
+|  | \***/ |  |
+|  |  \*/  |  |
+|  |   '   |  |
+|   -------   |
+|             |
+ ------------- 
+
+ ------------- 
+|  /\ / \ /\  |
+| /  X   X  \ |
+| \ / \ / \ / |
+|  X   X   X  |
+| / \ / \ / \ |
+|/   X   X   \|
+|\  / \ / \  /|
+|/ /   X   \ \|
+|\/   / \   \/|
+| \  X   X  / |
+|  \/ \ / \/  |
+ ------------- 
+
+ --------------
+| []  []  []   |
+|   []  []  [] |
+| []  []  []   |
+|   []  []  [] |
+| []  []  []   |
+|   []  []  [] |
+| []  []  []   |
+|   []  []  [] |
+| []  []  []   |
+|   []  []  [] |
+| []  []  []   |
+ --------------
