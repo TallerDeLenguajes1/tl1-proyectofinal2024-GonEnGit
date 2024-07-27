@@ -1,6 +1,8 @@
 ﻿
-using EspacioAPI;
-using EspacioCartas;
+// renombraa estos archivos a .cs para que funcionen
+
+using EspacioAPIPrueba;
+using EspacioCartasPrueba;
 
 
 List<Card> cartasAMostrar = new List<Card>();

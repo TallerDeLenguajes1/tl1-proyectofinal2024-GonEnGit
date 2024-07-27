@@ -1,5 +1,6 @@
 namespace  EspacioPersonajes;
 
+
 public class Caracteristicas
 {
     private int nivel;

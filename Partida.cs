@@ -1,3 +1,4 @@
+namespace EspacioPartida;
 
 
 using System;
@@ -8,7 +9,6 @@ using System.Text.Json;
 using EspacioJson;
 using EspacioPersonajes;
 
-namespace EspacioPartida;
 
 public class Partida
 {

@@ -1,5 +1,6 @@
 namespace EspacioAPI;
 
+
 using System.Net.Http;
 using System.Text.Json;
 using EspacioCartas;
@@ -33,9 +34,9 @@ public class API
         HttpResponseMessage respuesta = await cliente.GetAsync(urlCartas);
         respuesta.EnsureSuccessStatusCode();
         string datosObtenidos = await respuesta.Content.ReadAsStringAsync();
-        Lista cartas = JsonSerializer.Deserialize<Lista>(datosObtenidos);
+        ListaCartas cartasRecibidas = JsonSerializer.Deserialize<ListaCartas>(datosObtenidos);
 
-        return cartas.listaCartas;
+        return cartasRecibidas.cards;
     }
 }
 

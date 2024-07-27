@@ -1,5 +1,5 @@
 
-namespace EspacioCartas;
+namespace EspacioCartasPrueba;
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 

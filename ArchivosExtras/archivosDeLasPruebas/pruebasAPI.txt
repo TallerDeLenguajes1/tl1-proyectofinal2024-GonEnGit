@@ -1,11 +1,11 @@
 
-namespace EspacioAPI;
+namespace EspacioAPIPrueba;
 
 using System.Net.Http;
 using System.Net.WebSockets;
 using System.ComponentModel;
 using System.Text.Json;
-using EspacioCartas;
+using EspacioCartasPrueba;
 
 // lamentablemente, la API funciona llamando un mazo de cartas primero y despues cartas de ese mazo
 // osea que necesitas 2 clases, una para el mazo y una para las cartas

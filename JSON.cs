@@ -1,10 +1,12 @@
-
 // https://jsonviewer.stack.hu/
 // https://json2csharp.com/
 
-using System.Diagnostics.Contracts;
 
 namespace EspacioJson;
+
+
+using System.Diagnostics.Contracts;
+
 
 public class ClaseJson
 {

@@ -7,11 +7,23 @@ using System.Runtime.InteropServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.CompilerServices;
 
+using EspacioAPI;
 using EspacioTextos;
 using EspacioDuelos;
 using EspacioPartida;
-using EspacioPersonajes;
 using EspacioHistorial;
+using EspacioPersonajes;
+using EspacioCartas;
+
+// Instancias de clases y herramientas
+Personaje auxiliar;
+Random rnd = new Random();
+Duelo HerramientaDuelos = new Duelo();
+Partida HerramientaPartida = new Partida();
+Historial HerramientaHistorial = new Historial();
+FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
+API HerramientaAPI = new API();
+
 
 // variables
 bool gameOver = false;
@@ -26,25 +38,22 @@ int decisionEnemigo;
 int danio;
 char continuar = 'S';
 string linea;
+string linea2;
 string nomJugador;
 string nomEnemigo;
 string nomPartida = "";
+Mazo nuevoMazo = await API.ObtenerIdMazoAsync();
+ListaCartas cartasNuevas = new ListaCartas();
 
 // Arreglos
 string[] texto;
+string[] texto2;
 string[] textoEnemigo;
 
 // Listas
 List<Historial> historialCargado = new List<Historial>();
 List<Personaje> listaPersonajes = new List<Personaje>();
 
-// Instancias de clases
-Random rnd = new Random();
-Personaje auxiliar;
-Historial HerramientaHistorial = new Historial();
-Duelo HerramientaDuelos = new Duelo();
-Partida HerramientaPartida = new Partida();
-FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
 
 
 
@@ -67,7 +76,6 @@ Thread.Sleep(1500);
 Console.WriteLine("");
 
 /*--- FIN de la intro ---*/
-
 
 
 /*--- Impresion del Menú ---*/
@@ -294,15 +302,92 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
         // anuncion primer movimiento
         nomJugador = Textos.DevolverNombre(listaPersonajes[0]);
         nomEnemigo = Textos.DevolverNombre(listaPersonajes[ctrlDeFlujo]);
-        iniciativaJugador = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[0]);
-        iniciativaEnemigo = (int)HerramientaDuelos.CalcularIniciativa(listaPersonajes[ctrlDeFlujo]);
-        if (iniciativaJugador >= iniciativaEnemigo)
+        cartasNuevas.cards = await API.ObtenerCartasAsync(nuevoMazo.deck_id); // tomas 2 cartas del mazo
+
+// desde ahora cambia la iniciativa, primero mostras 2 cartas
+// una boca arriba y una boca abajo, pedis elegir una y las mostras
+// en base a las cartas decidis quien tiene mayor iniciativa
+        // muestra cartas con reverso
+        linea = Textos.ArmarCarta(cartasNuevas.cards[0]);
+        texto = linea.Split(";");
+        linea2 = Textos.TraerReverso();
+        texto2 = linea2.Split(";");
+        for (int indice = 0; indice < texto2.Length; indice++)
         {
-            Console.WriteLine($"{nomJugador} es mas rapido!");
+            if (cartasNuevas.cards[0].suit == "HEARTS" || cartasNuevas.cards[0].suit == "DIAMONDS")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
+                Console.Write(texto[indice]);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(texto[indice]);
+            }
+            if (cartasNuevas.cards[1].suit == "HEARTS" || cartasNuevas.cards[1].suit == "DIAMONDS")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
+                Console.WriteLine(texto2[indice]);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;      // reemplazas el rojo acá o los duelos?
+                Console.WriteLine(texto2[indice]);
+            }
+        }
+        Console.ForegroundColor = ConsoleColor.White;
+
+    // se elige una carta
+        // falta mensaje y demas
+        Console.WriteLine("Elegir: ");
+        pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+    // estas 2 dependen de la eleccion
+        if (entradaDeUsuario == 1)
+        {
+            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[0]);    // podes usar las clases sin crear una herramienta...
+            iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[1]);
         }
         else
         {
-            Console.WriteLine($"{nomEnemigo} es mas rapido!");
+            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[1]);    // podes usar las clases sin crear una herramienta...
+            iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[0]);
+        }
+
+        linea2 = Textos.ArmarCarta(cartasNuevas.cards[1]);
+        texto2 = linea2.Split(";");
+        for (int indice = 0; indice < texto2.Length; indice++)
+        {
+            if (cartasNuevas.cards[0].suit == "HEARTS" || cartasNuevas.cards[0].suit == "DIAMONDS")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
+                Console.Write(texto[indice]);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(texto[indice]);
+            }
+            if (cartasNuevas.cards[1].suit == "HEARTS" || cartasNuevas.cards[1].suit == "DIAMONDS")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
+                Console.WriteLine(texto2[indice]);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;      // reemplazas el rojo acá o los duelos?
+                Console.WriteLine(texto2[indice]);
+            }
+        }
+        Console.ForegroundColor = ConsoleColor.White;
+
+    // por ultimo anuncia quien va primero
+        if (iniciativaJugador >= iniciativaEnemigo)
+        {
+            Console.WriteLine($"{nomJugador} mueve primero!");
+        }
+        else
+        {
+            Console.WriteLine($"{nomEnemigo} mueve primero!");
         }
 
         // bucle del duelo

@@ -1,7 +1,9 @@
+namespace EspacioPersonajes;
+
+
 using System.Data;
 using System.Runtime.CompilerServices;
 
-namespace EspacioPersonajes;
 
 public class FabricaDePersonajes
 {

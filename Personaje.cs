@@ -1,8 +1,9 @@
+namespace  EspacioPersonajes;
+
 
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
-namespace  EspacioPersonajes;
 
 public class Personaje
 {

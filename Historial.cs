@@ -1,9 +1,13 @@
+namespace EspacioHistorial;
+
+
 using System.Net;
 using System.Security;
 using System.Text.Json;
 
+
 using EspacioJson;
-namespace EspacioHistorial;
+
 
 public class Historial
 {

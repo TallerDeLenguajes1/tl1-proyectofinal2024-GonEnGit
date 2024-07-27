@@ -1,25 +1,28 @@
-
 namespace EspacioCartas;
+
+// esto es confuso... 
 
 // si se pueden remover campos de estas clases,
 // incluso podes remover toda una sub clase
 
-// si podes cambiar los nombres de las clases en si segun parece
+// pero no podes cambiar los nombres de los campos
+// es Deserialize no sabe donde poner los datos
+
 public class Mazo
 {
-    public string idMAzo { get; set; }
-    public int restantes { get; set; }
+    public string deck_id { get; set; }
+    public int remaining { get; set; }
 }
 
 public class Carta
 {
-    public string valor { get; set; }
-    public string palo { get; set; }
+    public string value { get; set; }
+    public string suit { get; set; }
 }
 
-public class Lista
+public class ListaCartas
 {
-    public string idMAzo { get; set; }
-    public List<Carta> listaCartas { get; set; }
-    public int restantes { get; set; }
+    public string deck_id { get; set; }
+    public List<Carta> cards { get; set; }
+    public int remaining { get; set; }
 }

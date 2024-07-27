@@ -1,5 +1,5 @@
-
 namespace  EspacioPersonajes;
+
 
 public class Datos
 {

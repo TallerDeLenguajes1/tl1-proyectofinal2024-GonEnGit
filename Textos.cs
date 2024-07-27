@@ -1,7 +1,9 @@
+namespace EspacioTextos;
+
+
 using EspacioCartas;
 using EspacioPersonajes;
 
-namespace EspacioTextos;
 
 public static class Textos
 {
@@ -98,9 +100,9 @@ public static class Textos
 // los valores que trae la API son todos strings
 // es menos lio compararlos como tales que pasar a int
 // 4 casos "diferentes" los tres nombres y el 10
-        if (carta.valor.Length >= 2)
+        if (carta.value.Length >= 2)
         {
-            switch (carta.valor)
+            switch (carta.value)
             {
                 case "ACE":
                     cartaString = (cabeza  + 
@@ -161,7 +163,7 @@ public static class Textos
         }
         else    // los demas valores tienen un solo digito
         {
-            switch (carta.valor)
+            switch (carta.value)
             {
                 case "2":
                     cartaString = cabeza  + 
@@ -252,12 +254,12 @@ public static class Textos
                                     + pie;
                     break;
             }
-            cartaString = cartaString.Replace("G", "0" + carta.valor);
+            cartaString = cartaString.Replace("G", "0" + carta.value);
         }
 
 // caracteres unicode, estan en UTF8: ♠, ♥, ♦, ♣
 // si cmd no los imprime usas chcp 65001
-        switch (carta.palo)
+        switch (carta.suit)
         {
             case "DIAMONDS":
                 cartaString = cartaString.Replace("X", "♦");

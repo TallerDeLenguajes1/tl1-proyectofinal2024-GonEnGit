@@ -1,6 +1,6 @@
 
 using System.Runtime.CompilerServices;
-using EspacioCartas;
+using EspacioCartasPrueba;
 
 public class Armador
 {

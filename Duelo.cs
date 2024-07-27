@@ -1,10 +1,11 @@
+namespace EspacioDuelos;
+
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
+using EspacioCartas;
 using EspacioPersonajes;
 
-namespace EspacioDuelos;
 
 public class Duelo
 {
@@ -51,9 +52,41 @@ public class Duelo
         return contador;
     }
 
-    public double CalcularIniciativa(Personaje pers)
+// la idea es hacer un calculo segun palo, color y valor
+    // el palo y el color van siempre de a pares, 
+    //osea que podes ignorar el color y usar el palo para el calculo
+    public static int CalcularIniciativa(Carta cartaRecibida)
     {
-        return pers.Estadisticas.Velocidad * 0.5 + 2;   // esta ecuacion cambiala, es cualquier cosa
+        int valorDeCarta;
+
+        switch (cartaRecibida.value)
+        {
+            case "ACE":
+                valorDeCarta = 1;
+                break;
+            case "JACK":
+                valorDeCarta = 11;
+                break;
+            case "QUEEN":
+                valorDeCarta = 12;
+                break;
+            case "KING":
+                valorDeCarta = 13;
+                break;
+            default:
+                valorDeCarta = int.Parse(cartaRecibida.value);
+                break;
+        }
+
+// a estos calculos tambien los tenes que cambiar
+        if (cartaRecibida.suit == "SPADES" || cartaRecibida.suit == "CLUBS") // trebol o pica negra (o azul)
+        {
+            return (int)(valorDeCarta * 1.3) + 5;
+        }
+        else    // diamante o corazon rojo (o amarillo... elegiras despues)
+        {
+            return (int)(valorDeCarta * 3) + 2;
+        }
     }
 
     public int AccionEnemigo()
