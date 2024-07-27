@@ -1,21 +1,19 @@
 namespace  EspacioPersonajes;
 
 
-public class Caracteristicas
+public class Estadisticas
 {
     private int nivel;
     private int salud;
     private int armadura;
     private int fuerza;
     private int destreza;
-    private int velocidad;
 
     public int Nivel { get => nivel; set => nivel = value; }
     public int Salud { get => salud; set => salud = value; }
     public int Armadura { get => armadura; set => armadura = value; }
     public int Fuerza { get => fuerza; set => fuerza = value; }
     public int Destreza { get => destreza; set => destreza = value; }
-    public int Velocidad { get => velocidad; set => velocidad = value; }
 
 // los datos se generan primero, pode usar eso para 
     public void GenerarEstadisticas(string clase)
@@ -28,7 +26,6 @@ public class Caracteristicas
                 Armadura = 4;
                 Fuerza = 2;
                 Destreza = 2;
-                Velocidad = 1;
             break;
 
             case "Monje":
@@ -36,7 +33,6 @@ public class Caracteristicas
                 Armadura = 2;
                 Fuerza = 3;
                 Destreza = 2;
-                Velocidad = 1;
             break;
 
             case "Arquero":
@@ -44,7 +40,6 @@ public class Caracteristicas
                 Armadura = 2;
                 Fuerza = 1;
                 Destreza = 3;
-                Velocidad = 1;
             break;
 
             case "Luchador":
@@ -52,7 +47,6 @@ public class Caracteristicas
                 Armadura = 1;
                 Fuerza = 3;
                 Destreza = 2;
-                Velocidad = 1;
             break;
 
             case "Ladrón":
@@ -60,7 +54,6 @@ public class Caracteristicas
                 Armadura = 1;
                 Fuerza = 3;
                 Destreza = 3;
-                Velocidad = 3;
             break;
         }
     }

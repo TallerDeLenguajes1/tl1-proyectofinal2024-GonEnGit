@@ -1,4 +1,7 @@
-namespace EspacioCartas;
+namespace EspacioAPI;
+
+// lamentablemente, la API funciona llamando un mazo de cartas primero y despues cartas de ese mazo
+// osea que necesitas 2 clases, una para el mazo y una para las cartas
 
 // esto es confuso... 
 

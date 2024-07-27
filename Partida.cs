@@ -1,4 +1,4 @@
-namespace EspacioPartida;
+namespace EspacioArchivos;
 
 
 using System;
@@ -6,14 +6,12 @@ using System.Runtime.CompilerServices;
 using System.Reflection.Metadata.Ecma335;
 
 using System.Text.Json;
-using EspacioJson;
 using EspacioPersonajes;
 
 
 public class Partida
 {
     private string nombreCarpeta = "PartidasGuardadas/";
-    private ClaseJson HerramientaJson = new ClaseJson();
 
     public void CrearCarpetas()
     {
@@ -37,7 +35,7 @@ public class Partida
         string rutaPersonajes = rutaFinal + "/personajes.json";
         string persSerializados = JsonSerializer.Serialize(lista);
 
-        HerramientaJson.GuardarEnArchivoNuevo(persSerializados, rutaPersonajes);
+        ClaseJson.GuardarEnArchivoNuevo(persSerializados, rutaPersonajes);
     }
 
     public string ObtenerNombresDePartidas()
@@ -63,9 +61,8 @@ public class Partida
     {
         string datosDeArchivo;
         string rutaFinal = nombreCarpeta + partidaElegida + "/personajes.json";
-        ClaseJson HerramientaJson = new ClaseJson();
-        
-        datosDeArchivo = HerramientaJson.LeerArchivo(rutaFinal);
+
+        datosDeArchivo = ClaseJson.LeerArchivo(rutaFinal);
         List<Personaje> listaCargada = JsonSerializer.Deserialize<List<Personaje>>(datosDeArchivo);
         // parece que en C#, '= new List<>' sobra si acto seguido asignas una lista
 

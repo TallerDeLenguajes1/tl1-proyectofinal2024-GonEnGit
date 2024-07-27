@@ -1,5 +1,6 @@
 
 despues de ganar un duelo, si pones "Salir sin guardar" aparece el msj de partida guardada igualmente
 
-parece que cuando el enemigo defiende, si su godmode está funcionando almenos, parece que el jugador aun recibe daño
-en este caso almenos, jugador ataca y enemigo defiende, aun asi perdió el jugador
+
+si el enmigo defiende, con godmode, y el jugador ataca, el jugador recibe daño
+---notaste que esto pasa aun sin el godmode

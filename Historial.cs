@@ -1,12 +1,11 @@
-namespace EspacioHistorial;
+namespace EspacioArchivos;
 
 
 using System.Net;
 using System.Security;
+
+
 using System.Text.Json;
-
-
-using EspacioJson;
 
 
 public class Historial
@@ -29,7 +28,6 @@ public class Historial
     {
         string respuesta;
         string datosHistorial;
-        ClaseJson HerramientaJson = new ClaseJson();
         List<Historial> lista = new List<Historial>();
 
         if (!Directory.Exists("Historial/"))
@@ -41,27 +39,26 @@ public class Historial
 
         if (File.Exists(rutaHistorial)) // si existe un historial, lees, añadis y guardas
         {
-            datosHistorial = HerramientaJson.LeerArchivo(rutaHistorial);
+            datosHistorial = ClaseJson.LeerArchivo(rutaHistorial);
             lista = JsonSerializer.Deserialize<List<Historial>>(datosHistorial);
             lista.Add(entrada);
             datosHistorial = JsonSerializer.Serialize(lista);
-            respuesta = HerramientaJson.GuardarEnArchivo(datosHistorial, rutaHistorial);
+            respuesta = ClaseJson.GuardarEnArchivo(datosHistorial, rutaHistorial);
             Console.WriteLine("El historial" + respuesta);
         }
         else    // si no, lo creas añadis y guardas
         {
             lista.Add(entrada);
             datosHistorial = JsonSerializer.Serialize(lista);
-            HerramientaJson.GuardarEnArchivoNuevo(datosHistorial, rutaHistorial);
+            ClaseJson.GuardarEnArchivoNuevo(datosHistorial, rutaHistorial);
         }
     }
 
     public List<Historial> LeerHistorial()
     {
         string datosHistorial;
-        ClaseJson HerramientaJson = new ClaseJson();
 
-        datosHistorial = HerramientaJson.LeerArchivo(rutaHistorial);
+        datosHistorial = ClaseJson.LeerArchivo(rutaHistorial);
         List<Historial> historialCargado = JsonSerializer.Deserialize<List<Historial>>(datosHistorial);
 
         return historialCargado;

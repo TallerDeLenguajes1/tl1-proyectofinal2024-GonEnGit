@@ -2,15 +2,15 @@
 // https://json2csharp.com/
 
 
-namespace EspacioJson;
+namespace EspacioArchivos;
 
 
 using System.Diagnostics.Contracts;
 
 
-public class ClaseJson
+public static class ClaseJson
 {
-    public string LeerArchivo(string rutaArchivo)
+    public static string LeerArchivo(string rutaArchivo)
     {
         string datosDeArchivo;
 
@@ -25,7 +25,7 @@ public class ClaseJson
         return datosDeArchivo;
     }
 
-    public string GuardarEnArchivoNuevo(string datos, string rutaFinal)
+    public static string GuardarEnArchivoNuevo(string datos, string rutaFinal)
     {
         using (FileStream archivo = new FileStream(rutaFinal, FileMode.Create))
         {
@@ -39,7 +39,7 @@ public class ClaseJson
         return "guardado con exito";
     }
 
-    public string GuardarEnArchivo(string datos, string rutaFinal)
+    public static string GuardarEnArchivo(string datos, string rutaFinal)
     {
         using (FileStream archivo = new FileStream(rutaFinal, FileMode.Open))
         {

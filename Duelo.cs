@@ -1,17 +1,17 @@
-namespace EspacioDuelos;
+namespace EspacioJuego;
 
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using EspacioCartas;
+
+
+using EspacioAPI;
 using EspacioPersonajes;
 
 
-public class Duelo
+public static class Duelo
 {
-    private Random rnd = new Random();
-
-    public string CheatCode(Personaje jugador, Personaje enemigo, string codigo)
+    public static string CheatCode(Personaje jugador, Personaje enemigo, string codigo)
     {
         string respuesta;
         if (codigo.Trim() == "8855464621")
@@ -32,7 +32,7 @@ public class Duelo
         return respuesta;
     }
 
-    public int ContarEnemigosVencidos(List<Personaje> lista)
+    public static int ContarEnemigosVencidos(List<Personaje> lista)
     {
         int contador = 1;   // no en 0, tenes que tener en cuenta el jugador
         if (lista[0].Estadisticas.Salud == 0)
@@ -89,8 +89,9 @@ public class Duelo
         }
     }
 
-    public int AccionEnemigo()
+    public static int AccionEnemigo()
     {
+        Random rnd = new Random();
         int numero = rnd.Next(1, 13);
         int accion;
         if (numero == 1 || numero == 11)
@@ -109,12 +110,12 @@ public class Duelo
         return accion;
     }
 
-    public int CalcularDefensa(Personaje pers)
+    public static int CalcularDefensa(Personaje pers)
     {
         return pers.Estadisticas.Armadura + (10 * (pers.Estadisticas.Destreza / 10));
     }
 
-    public int CalcularAtaque(Personaje pers, bool critico)
+    public static int CalcularAtaque(Personaje pers, bool critico)
     {
         if (critico)
         {
@@ -126,8 +127,9 @@ public class Duelo
         }
     }
 
-    public bool DecidirCritico(Personaje pers)
+    public static bool DecidirCritico(Personaje pers)
     {
+        Random rnd = new Random();
         int numero = rnd.Next(0, 100);
         if (numero <= pers.Estadisticas.Destreza * 10)
         {
@@ -141,7 +143,7 @@ public class Duelo
 
 // devolves el daño para mostrarlo
 // y usas un metodo de personje para cambiar la vida
-    public int CalcularDanio(Personaje atacante, Personaje objetivo, bool objetivoDefiende, bool critico)
+    public static int CalcularDanio(Personaje atacante, Personaje objetivo, bool objetivoDefiende, bool critico)
     {
         int ataqueAtacante = CalcularAtaque(atacante, critico);
         int defensaObjetivo = CalcularDefensa(objetivo);

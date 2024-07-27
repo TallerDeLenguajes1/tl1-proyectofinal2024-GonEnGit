@@ -8,10 +8,10 @@ using System.Security.Cryptography.X509Certificates;
 public class Personaje
 {
     private Datos generales = new Datos();
-    private Caracteristicas estadisticas = new Caracteristicas();
+    private Estadisticas estadisticas = new Estadisticas();
 
     public Datos DatosGenerales { get => generales; set => generales = value; }
-    public Caracteristicas Estadisticas { get => estadisticas; set => estadisticas = value; }
+    public Estadisticas Estadisticas { get => estadisticas; set => estadisticas = value; }
 
     public string DevolverDatos()       // podrias sacar estos dos metodos de acá?
     {
@@ -21,8 +21,7 @@ public class Personaje
 
     public string DevolverEstadisticas()
     {
-        return  $"{Estadisticas.Salud};{Estadisticas.Armadura};{Estadisticas.Fuerza};" +
-                $"{Estadisticas.Destreza};{Estadisticas.Velocidad}";
+        return  $"{Estadisticas.Salud};{Estadisticas.Armadura};{Estadisticas.Fuerza};{Estadisticas.Destreza}";
     }
 
     public void RecibirDanio(int danio)
@@ -44,10 +43,9 @@ public class Personaje
 
     public void GodMode()
     {
-        estadisticas.Salud = 9999;
-        estadisticas.Armadura = 9999;
-        estadisticas.Fuerza = 9999;
-        estadisticas.Destreza = 9999;
-        estadisticas.Velocidad = 9999;
+        estadisticas.Salud = 999;
+        estadisticas.Armadura = 999;
+        estadisticas.Fuerza = 999;
+        estadisticas.Destreza = 999;
     }
 }

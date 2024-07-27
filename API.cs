@@ -3,12 +3,9 @@ namespace EspacioAPI;
 
 using System.Net.Http;
 using System.Text.Json;
-using EspacioCartas;
 
-// lamentablemente, la API funciona llamando un mazo de cartas primero y despues cartas de ese mazo
-// osea que necesitas 2 clases, una para el mazo y una para las cartas
 
-public class API
+public static class API
 {
     public static readonly HttpClient cliente = new HttpClient();      // nuevo cliente http
 

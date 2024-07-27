@@ -8,50 +8,35 @@ using System.Runtime.ConstrainedExecution;
 using System.Runtime.CompilerServices;
 
 using EspacioAPI;
-using EspacioTextos;
-using EspacioDuelos;
-using EspacioPartida;
-using EspacioHistorial;
+using EspacioJuego;
+using EspacioArchivos;
 using EspacioPersonajes;
-using EspacioCartas;
 
 // Instancias de clases y herramientas
 Personaje auxiliar;
-Random rnd = new Random();
-Duelo HerramientaDuelos = new Duelo();
 Partida HerramientaPartida = new Partida();
 Historial HerramientaHistorial = new Historial();
 FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
-API HerramientaAPI = new API();
+
 
 
 // variables
-bool gameOver = false;
-bool pruebaOpciones = false;
-bool critico;
-int entradaDeUsuario = 0;
-int numeroAleatorio;
-int ctrlDeFlujo;
-int iniciativaJugador;
-int iniciativaEnemigo;
-int decisionEnemigo;
-int danio;
+bool gameOver = false, pruebaOpciones = false, critico;
+int entradaDeUsuario = 0, numeroAleatorio;
+int iniciativaJugador, iniciativaEnemigo, decisionEnemigo;
+int danio, ctrlDeFlujo;
 char continuar = 'S';
-string linea;
-string linea2;
-string nomJugador;
-string nomEnemigo;
-string nomPartida = "";
+string linea, linea2, cartaIzq, cartaDer;
+string nomJugador, nomEnemigo, nomPartida = "";
 Mazo nuevoMazo = await API.ObtenerIdMazoAsync();
 ListaCartas cartasNuevas = new ListaCartas();
 
 // Arreglos
-string[] texto;
-string[] texto2;
-string[] textoEnemigo;
+string[] texto, texto2, textoEnemigo;
+string[] partesCartaIzq, partesCartaDer;
 
 // Listas
-List<Historial> historialCargado = new List<Historial>();
+List<Historial> historialCargado;
 List<Personaje> listaPersonajes = new List<Personaje>();
 
 
@@ -79,7 +64,7 @@ Console.WriteLine("");
 
 
 /*--- Impresion del Menú ---*/
-linea = Textos.Menu();
+linea = Textos.MenuPrincipal();
 texto = linea.Split(';');
 for (int indice = 0; indice < texto.Length; indice++)
 {
@@ -132,7 +117,7 @@ do
         // la consola no puede mostrar las tarjetas una al lado de la otra
         // lo que podes hacer es una matriz, un vector de 5 vectores
         // donde cada uno de los 5 tiene la tarjeta separada linea por linea
-        
+
             // llenas esa lista con los primeros 5 personajes
             for (int indice = 0; indice <= 5; indice++)
             {
@@ -143,7 +128,7 @@ do
             }
 
             // ahora con esa lista podes concatenar cada linea e imprimirlas
-            for (int indiceLinea = 0; indiceLinea < 12; indiceLinea++)
+            for (int indiceLinea = 0; indiceLinea < texto.Length; indiceLinea++)
             {
                 for (int indiceTarjeta = 0; indiceTarjeta < 3; indiceTarjeta++)
                 {
@@ -153,7 +138,7 @@ do
                 linea = "";
             }
             // no es lo mas lindo pero tenes que mostrar 5 personajes, 2 quedan abajo
-            for (int indiceLinea = 0; indiceLinea < 12; indiceLinea++)
+            for (int indiceLinea = 0; indiceLinea < texto.Length; indiceLinea++)
             {
                 for (int indiceTarjeta = 3; indiceTarjeta < 5; indiceTarjeta++)
                 {
@@ -166,7 +151,7 @@ do
                 Console.WriteLine(linea);
                 linea = " ";
             }
-        
+
             /*--- seleccion de personaje ---*/
             entradaDeUsuario = 0;
             Console.Write("Elige un personaje: ");
@@ -188,7 +173,7 @@ do
             // cheat code para las pruebas
             Console.WriteLine("Ingresa el ataque de tu personaje:");
             linea = Console.ReadLine();
-            linea = HerramientaDuelos.CheatCode(listaPersonajes[0], listaPersonajes[1], linea);
+            linea = Duelo.CheatCode(listaPersonajes[0], listaPersonajes[1], linea);
             if (linea == "GodMode activo")
             {
                 Console.WriteLine(linea);
@@ -201,6 +186,7 @@ do
                     Console.WriteLine(frase);
                 }
             }
+            Console.WriteLine("");
             /*--- Fin de seleccion de personaje ---*/
 
             continuar = 'N';
@@ -281,105 +267,146 @@ do
 /*--- FIN del control de opcion ---*/
 
 
-
 /*--- desarrollo del juego ---*/
 while (gameOver == false) // podrias sacar el .Salud != 0?
 {
     // si contas los enemigos con HP en 0, podes usar la misma variable para 
     // la historia, el enemigo activo e incluso el fin del juego
-    ctrlDeFlujo = HerramientaDuelos.ContarEnemigosVencidos(listaPersonajes);    // probablemente algo esta de mas con ctrDeFlujo
+    ctrlDeFlujo = Duelo.ContarEnemigosVencidos(listaPersonajes);    // probablemente algo esta de mas con ctrDeFlujo
+    nomJugador = Textos.DevolverNombre(listaPersonajes[0]);
+    nomEnemigo = Textos.DevolverNombre(listaPersonajes[ctrlDeFlujo]);
+    cartasNuevas.cards = await API.ObtenerCartasAsync(nuevoMazo.deck_id); // tomas 2 cartas del mazo
     while (ctrlDeFlujo <= 9)
     {
         // dialogos antes de los duelos
         switch (ctrlDeFlujo)
         {
-            case 1:
+            case 2: // esto de las historias lo va a tener que pensar mejor
                 Console.WriteLine("primera historia antes");
                 break;
         }
 
-    // desarrollo de los duelos
-        // anuncion primer movimiento
-        nomJugador = Textos.DevolverNombre(listaPersonajes[0]);
-        nomEnemigo = Textos.DevolverNombre(listaPersonajes[ctrlDeFlujo]);
-        cartasNuevas.cards = await API.ObtenerCartasAsync(nuevoMazo.deck_id); // tomas 2 cartas del mazo
+// si queres poner un tutorial, cuando ctrDeFlujo = 1 tenes que escribir un par de cosas
+// mostrar cartas, seguir explicacion, mostrarlas dadas vuelta y el resultado
 
-// desde ahora cambia la iniciativa, primero mostras 2 cartas
-// una boca arriba y una boca abajo, pedis elegir una y las mostras
-// en base a las cartas decidis quien tiene mayor iniciativa
-        // muestra cartas con reverso
-        linea = Textos.ArmarCarta(cartasNuevas.cards[0]);
-        texto = linea.Split(";");
-        linea2 = Textos.TraerReverso();
-        texto2 = linea2.Split(";");
-        for (int indice = 0; indice < texto2.Length; indice++)
+    // desarrollo de los duelos
+        if (ctrlDeFlujo == 1)   // tutorial antes del 1er duelo
+        {
+            linea = Textos.TutorialCartas();
+            texto = linea.Split(";");
+            for (int indice = 0; indice < 2; indice++)
+            {
+                Console.WriteLine(texto[indice]);
+            }
+        }
+
+// muestra carta con reverso
+        cartaIzq = Textos.ArmarCarta(cartasNuevas.cards[0]);
+        partesCartaIzq = cartaIzq.Split(";");
+        cartaDer = Textos.TraerReverso();
+        partesCartaDer = cartaDer.Split(";");
+        for (int indice = 0; indice < partesCartaDer.Length; indice++)
         {
             if (cartasNuevas.cards[0].suit == "HEARTS" || cartasNuevas.cards[0].suit == "DIAMONDS")
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
-                Console.Write(texto[indice]);
+                Console.Write(partesCartaIzq[indice]);
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(texto[indice]);
+                Console.Write(partesCartaIzq[indice]);
             }
             if (cartasNuevas.cards[1].suit == "HEARTS" || cartasNuevas.cards[1].suit == "DIAMONDS")
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
-                Console.WriteLine(texto2[indice]);
+                Console.WriteLine(partesCartaDer[indice]);
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Blue;      // reemplazas el rojo acá o los duelos?
-                Console.WriteLine(texto2[indice]);
+                Console.WriteLine(partesCartaDer[indice]);
             }
         }
         Console.ForegroundColor = ConsoleColor.White;
 
-    // se elige una carta
-        // falta mensaje y demas
-        Console.WriteLine("Elegir: ");
-        pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+        if (ctrlDeFlujo == 1)
+        {
+            Console.Write("\nPresiona una tecla para continuar.");
+            Console.ReadKey();
+            for (int indice = 2; indice < 5; indice++)
+            {
+                Console.WriteLine(texto[indice]);
+                Thread.Sleep(1000);
+            }
+        }
+// se elige una carta
+        do
+        {
+            if (ctrlDeFlujo == 1)
+            {
+                Console.Write("Elije una carta para continuar (1/2): ");
+            }
+            else
+            {
+                Console.Write("Elije una carta: ");
+            }
+            pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+            if (!pruebaOpciones || entradaDeUsuario != 1 && entradaDeUsuario != 2)
+            {
+                Console.WriteLine("Solo podes elegir entre estas 2 cartas.");
+            }
+        } while (!pruebaOpciones || entradaDeUsuario != 1 && entradaDeUsuario != 2);
+
+// ambas cartas boca arriba
+        cartaDer = Textos.ArmarCarta(cartasNuevas.cards[1]);
+        partesCartaDer = cartaDer.Split(";");
+        Console.WriteLine("");
+        for (int indice = 0; indice < partesCartaDer.Length; indice++)
+        {
+            if (cartasNuevas.cards[0].suit == "HEARTS" || cartasNuevas.cards[0].suit == "DIAMONDS")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
+                Console.Write(partesCartaIzq[indice]);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(partesCartaIzq[indice]);
+            }
+            if (cartasNuevas.cards[1].suit == "HEARTS" || cartasNuevas.cards[1].suit == "DIAMONDS")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
+                Console.WriteLine(partesCartaDer[indice]);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;      // reemplazas el rojo acá o los duelos?
+                Console.WriteLine(partesCartaDer[indice]);
+            }
+        }
+        Console.WriteLine("");
+        Console.ForegroundColor = ConsoleColor.White;
+        if (ctrlDeFlujo == 1)
+        {
+            for (int indice = 5; indice < texto.Length; indice++)
+            {
+                Console.WriteLine(texto[indice]);
+            }
+            Console.Write("\nPresiona una tecla para continuar.");
+            Console.ReadKey();
+        }
     // estas 2 dependen de la eleccion
         if (entradaDeUsuario == 1)
         {
-            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[0]);    // podes usar las clases sin crear una herramienta...
+            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[0]); // como incluis el color, otra variable?
             iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[1]);
         }
         else
         {
-            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[1]);    // podes usar las clases sin crear una herramienta...
+            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[1]); // como incluis el color, otra variable?
             iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[0]);
         }
-
-        linea2 = Textos.ArmarCarta(cartasNuevas.cards[1]);
-        texto2 = linea2.Split(";");
-        for (int indice = 0; indice < texto2.Length; indice++)
-        {
-            if (cartasNuevas.cards[0].suit == "HEARTS" || cartasNuevas.cards[0].suit == "DIAMONDS")
-            {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
-                Console.Write(texto[indice]);
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(texto[indice]);
-            }
-            if (cartasNuevas.cards[1].suit == "HEARTS" || cartasNuevas.cards[1].suit == "DIAMONDS")
-            {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
-                Console.WriteLine(texto2[indice]);
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Blue;      // reemplazas el rojo acá o los duelos?
-                Console.WriteLine(texto2[indice]);
-            }
-        }
-        Console.ForegroundColor = ConsoleColor.White;
-
     // por ultimo anuncia quien va primero
         if (iniciativaJugador >= iniciativaEnemigo)
         {
@@ -395,13 +422,13 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
         {
             linea = Textos.Tarjetas(listaPersonajes[0]);
             texto = linea.Split(";");
-            linea = Textos.Tarjetas(listaPersonajes[ctrlDeFlujo]);
-            textoEnemigo = linea.Split(";");
-            for (int indice = 0; indice < 12; indice++)
+            linea2 = Textos.Tarjetas(listaPersonajes[ctrlDeFlujo]);
+            textoEnemigo = linea2.Split(";");
+            for (int indice = 0; indice < 11; indice++)
             {
                 if (indice != 3)
                 {
-                    Console.WriteLine(texto[indice] + " " + textoEnemigo[indice]);
+                    Console.WriteLine(texto[indice] + " " + textoEnemigo[indice]); // aqui hay un index out of range ahora
                 }
             }
 
@@ -415,15 +442,15 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                 {
                     entradaDeUsuario = 2;
                 }
-                decisionEnemigo = HerramientaDuelos.AccionEnemigo();
+                decisionEnemigo = Duelo.AccionEnemigo();
 
                 // combate
                 if (entradaDeUsuario == 1)
                 {
                     if (decisionEnemigo == 2)   // 12 - jugador ataca, enemigo defiende
                     {
-                        critico = HerramientaDuelos.DecidirCritico(listaPersonajes[0]);
-                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true, critico);
+                        critico = Duelo.DecidirCritico(listaPersonajes[0]);
+                        danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true, critico);
                         Console.WriteLine($"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!");
                         if (critico)
                         {
@@ -433,8 +460,8 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                     }
                     else                        // 11 y 13 - jugador ataca, enemigo ataca o espera
                     {
-                        critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
-                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
+                        critico = Duelo.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                        danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
                         if (critico)
                         {
                             Console.WriteLine($"{nomJugador} atacá con todas sus fuerzas!");
@@ -469,23 +496,23 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                         if (entradaDeUsuario == 2)  // 21 - enemigo ataca, jugador defiende
                         {
                             Console.WriteLine($"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!");
-                            critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                            critico = Duelo.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
                             if (critico)
                             {
                                 Console.WriteLine("Aun así fue un golpe critico!");
                             }
-                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true, critico);
+                            danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true, critico);
                             Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
                         }
                         else                        // 31 - enemigo ataca, jugador espera
                         {
                             Console.WriteLine($"{nomEnemigo} atacá ... y tu estas esperando...?");
-                            critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                            critico = Duelo.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
                             if (critico)
                             {
                                 Console.WriteLine($"{nomEnemigo} estaba preparando un ataque especial, recibiras mas daño!");
                             }
-                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, critico);
+                            danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, critico);
                             Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
                         }
                     }
@@ -507,7 +534,7 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
             else        // primer turno enemigo, segundo turno jugador
             {
                 // decisiones
-                decisionEnemigo = HerramientaDuelos.AccionEnemigo();
+                decisionEnemigo = Duelo.AccionEnemigo();
                 switch (decisionEnemigo)
                 {
                     case 1:
@@ -532,8 +559,8 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                 {
                     if (decisionEnemigo == 2)   // 12 - enemigo ataca, jugador defiende
                     {
-                        critico = HerramientaDuelos.DecidirCritico(listaPersonajes[0]);
-                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true, critico);
+                        critico = Duelo.DecidirCritico(listaPersonajes[0]);
+                        danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true, critico);
                         Console.WriteLine($"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!");
                         if (critico)
                         {
@@ -543,8 +570,8 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                     }
                     else                        // 11 y 13 - enemigo ataca, jugador ataca o espera
                     {
-                        critico = HerramientaDuelos.DecidirCritico(listaPersonajes[0]);
-                        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
+                        critico = Duelo.DecidirCritico(listaPersonajes[0]);
+                        danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
                         if (critico)
                         {
                             Console.WriteLine($"{nomEnemigo} atacá con todas sus fuerzas!");
@@ -577,8 +604,8 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                     {
                         if (decisionEnemigo == 2)  // 21 - jugador ataca, enemigo defiende
                         {
-                            critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
-                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true, critico);
+                            critico = Duelo.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                            danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true, critico);
                             Console.WriteLine($"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!");
                             if (critico)
                             {
@@ -588,8 +615,8 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                         }
                         else                        // 31 - jugador ataca, enemigo espera
                         {
-                            critico = HerramientaDuelos.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
-                            danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, critico);
+                            critico = Duelo.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
+                            danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, critico);
                             Console.WriteLine($"{nomJugador} ataca pero no se que esta haciendo {nomEnemigo}...");
                             if (critico)
                             {
@@ -613,13 +640,6 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                     }
                 }
             }
-
-        /* --------------------------------------- para pruebas --------------------------------------- */
-            //listaPersonajes[0].Estadisticas.Salud = 0;
-            //ctrlDeFlujo = 9;
-            //gameOver = true;
-        /* -------------------------------------------------------------------------------------------- */
-
         } while (listaPersonajes[0].Estadisticas.Salud != 0 && listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0);
 
     /*---- terminado el duelo controlas quien perdió y como seguir ----*/

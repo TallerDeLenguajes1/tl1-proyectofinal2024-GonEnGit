@@ -1,18 +1,13 @@
-namespace EspacioTextos;
+namespace EspacioJuego;
 
 
-using EspacioCartas;
+using EspacioAPI;
 using EspacioPersonajes;
 
 
 public static class Textos
 {
-    public static string Intro()
-    {
-        return "primera frase por ahora";
-    }
-
-    public static string Menu()
+    public static string MenuPrincipal()
     {
         return "  # ------------------------------- #;" +
                 "  |  # - #                  # - #   |;" +
@@ -28,38 +23,6 @@ public static class Textos
                 "            Elija una opción:         ";
     }
 
-    public static string Tarjetas(Personaje instancia)
-    {
-        string lineaDatos = instancia.DevolverDatos();
-        string lineaEstadisticas = instancia.DevolverEstadisticas();
-
-        string[] Datos = lineaDatos.Split(";");
-        string[] Estadisticas = lineaEstadisticas.Split(";");
-
-    // esto es para que todas las edades tengan 3 caractere
-        if (Datos[6].Length < 3)
-        {
-            Datos[6] = " " + Datos[6];
-        }
-
-        return $"+-{Datos[0]}------------------------------------+;" +
-                $"|         {Datos[1]}, {Datos[2]}                 |;" +
-                $"|       {Datos[3]}, {Datos[4]}                 |;" +
-                $"|           {Datos[6]} años, {Datos[5]}            |;" +
-                "+--------------------------------------+;" +
-                $"|              Salud: {Estadisticas[0]}              |;" +
-                $"|              Armadura: {Estadisticas[1]}             |;" +
-                $"|              Fuerza: {Estadisticas[2]}               |;" +
-                $"|              Destreza: {Estadisticas[3]}             |;" +
-                $"|              Velocidad: {Estadisticas[4]}            |;" +
-                "+--------------------------------------+;";
-    }
-
-    public static string DevolverNombre(Personaje pers)
-    {
-        return pers.DatosGenerales.Nombre + ',' + pers.DatosGenerales.Apodo;
-    }
-
     public static string MenuDeGuardado()
     {
         return  " |                          | ;" +
@@ -72,6 +35,53 @@ public static class Textos
                 "-+--------------------------+-;" +
                 " |                          | ;" +
                 "    Seleccione una opción: ";
+    }
+
+    public static string Tarjetas(Personaje instancia)
+    {
+        string lineaDatos = instancia.DevolverDatos();
+        string lineaEstadisticas = instancia.DevolverEstadisticas();
+
+        string[] Datos = lineaDatos.Split(";");
+        string[] Estadisticas = lineaEstadisticas.Split(";");
+
+    // esto es para que todas las edades tengan 3 caracteres
+        if (Datos[6].Length < 3)
+        {
+            Datos[6] = " " + Datos[6];
+        }
+
+        return  $"+-{Datos[0]}------------------------------------+;" +
+                $"|         {Datos[1]}, {Datos[2]}                 |;" +
+                $"|       {Datos[3]}, {Datos[4]}                 |;" +
+                $"|           {Datos[6]} años, {Datos[5]}            |;" +
+                "+--------------------------------------+;" +
+                $"|              Salud: {Estadisticas[0]}              |;" +
+                $"|              Armadura: {Estadisticas[1]}             |;" +
+                $"|              Fuerza: {Estadisticas[2]}               |;" +
+                $"|              Destreza: {Estadisticas[3]}             |;" +
+                "+--------------------------------------+;";
+    }
+
+    public static string Intro()
+    {
+        return "primera frase por ahora";
+    }
+
+    public static string DevolverNombre(Personaje pers)
+    {
+        return pers.DatosGenerales.Nombre + ',' + pers.DatosGenerales.Apodo;
+    }
+
+    public static string TutorialCartas()
+    {
+        return  "Dev: En este juego, la iniciativa de cada personaje se va a decidir con cartas.;" +
+                "Dev: Primero se muestran 2, una boca abajo, el jugador tiene que elegir una.\n;" +
+                "\n\nNarrador: Si no puede ver la segunda, como se supone que elija?;" +
+                "Dev: Esa es la apuesta, el color y el palo tambien cambian el resultado.;" +
+                "Azul = x1.5, Amarillo = x3, ♠ = +2, ♣ = +3, ♦ = +4,♥ = +5;" +
+                "Narrador: Ahora veo, una carta baja puede dar un resultado alto!;" +
+                "Dev: O no, ahora que sabemos cuales son, sabemos quien mueve primero.";
     }
 
     public static string TraerReverso()
