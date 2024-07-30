@@ -1,26 +1,57 @@
 namespace EspacioJuego;
 
-
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using EspacioAPI;
 using EspacioPersonajes;
 
 
 public static class Textos
 {
-    public static string MenuPrincipal()
+    public static void Introduccion()
     {
-        return "  # ------------------------------- #;" +
-                "  |  # - #                  # - #   |;" +
-                "  |         MENU PRINCIPAL          |;" +
-                "  |                                 |;" +
-                "  |       1. Nueva Partida          |;" +
-                "  |       2. Cargar Partida         |;" +
-                "  |       3. Ganadores Anteriores   |;" +
-                "  |       4. Salir                  |;" +
-                "  |                                 |;" +
-                "  |  # - #                  # - #   |;" +
-                "  # ------------------------------- #;" +
-                "            Elija una opción:         ";
+        string linea = "primera frase por ahora";
+        string[] texto = linea.Split(';');
+
+        Console.Write("\nNarrador: ");
+        foreach (var renglon in texto)
+        {
+            foreach (var letra in renglon)
+            {
+                Console.Write(letra);
+                Thread.Sleep(0);        // cambiar 0 por 150
+            }
+        }
+        Console.Write("\n");
+        Thread.Sleep(1500);
+        Console.WriteLine("");
+    }
+
+    public static void MenuPrincipal()
+    {
+        string[] texto = {  "  # ------------------------------- #",
+                            "  |  # - #                  # - #   |",
+                            "  |         MENU PRINCIPAL          |",
+                            "  |                                 |",
+                            "  |       1. Nueva Partida          |",
+                            "  |       2. Cargar Partida         |",
+                            "  |       3. Ganadores Anteriores   |",
+                            "  |       4. Salir                  |",
+                            "  |                                 |",
+                            "  |  # - #                  # - #   |",
+                            "  # ------------------------------- #",
+                            "            Elija una opción:        " };
+        for (int indice = 0; indice < texto.Length; indice++)
+        {
+            if (indice == texto.Length - 1)
+            {
+                Console.Write(texto[indice].TrimEnd() + " ");
+            }
+            else
+            {
+                Console.WriteLine(texto[indice]);
+            }
+        }
     }
 
     public static string MenuDeGuardado()
@@ -37,7 +68,7 @@ public static class Textos
                 "    Seleccione una opción: ";
     }
 
-    public static string Tarjetas(Personaje instancia)
+    public static string CrearTarjeta(Personaje instancia)
     {
         string lineaDatos = instancia.DevolverDatos();
         string lineaEstadisticas = instancia.DevolverEstadisticas();
@@ -63,9 +94,30 @@ public static class Textos
                 "+--------------------------------------+;";
     }
 
-    public static string Intro()
+    public static void ArmarListaTarjetas(List<string[]> lista, List<Personaje> listaTemp)
     {
-        return "primera frase por ahora";
+        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta;
+        string[] primeraFila, segundaFila;
+
+        primeraTarjeta = CrearTarjeta(listaTemp[0]).Split(";");
+        segundaTarjeta = CrearTarjeta(listaTemp[1]).Split(";");
+        TerceraTarjeta = CrearTarjeta(listaTemp[2]).Split(";");
+        primeraFila = new string[primeraTarjeta.Length];       // C# puede decidir el tamño de una arreglo automaticamente
+
+        for (int i = 0; i < primeraTarjeta.Length - 1; i++)
+        {
+            primeraFila[i] = " " + primeraTarjeta[i] + " " + segundaTarjeta[i] + " " + TerceraTarjeta[i]; // pero no de a 1
+        }
+        lista.Add(primeraFila);
+
+        primeraTarjeta = CrearTarjeta(listaTemp[3]).Split(";");
+        segundaTarjeta = CrearTarjeta(listaTemp[4]).Split(";");
+        segundaFila = new string[primeraTarjeta.Length];
+        for (int i = 0; i < primeraTarjeta.Length; i++)
+        {
+            segundaFila[i] = "                      " + primeraTarjeta[i] + " " + segundaTarjeta[i];
+        }
+        lista.Add(segundaFila);
     }
 
     public static string DevolverNombre(Personaje pers)
@@ -287,23 +339,4 @@ public static class Textos
 
         return cartaString;
     }
-
-/*
-    public static string ConcatenarCartas(string primera, string segunda)
-    {
-        string[] partesPrimera = primera.Split(";");
-        string[] partesSegunda = segunda.Split(";");
-
-        string cartasUnidas = "";
-        string linea;
-
-        for (int i = 0; i < partesPrimera.Length; i++)
-        {
-            linea = partesPrimera[i] + " " + partesSegunda[i] + ";";
-            cartasUnidas += linea;
-        }
-
-        return cartasUnidas;
-    }
-*/
 }

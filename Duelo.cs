@@ -17,16 +17,16 @@ public static class Duelo
         if (codigo.Trim() == "8855464621")
         {
             jugador.GodMode();
-            respuesta = "GodMode activo";
+            respuesta = "Dev: espero que estes rindiendo y jugando en serio...";
         }
         else if (codigo.Trim() == "1264645588")
         {
             enemigo.GodMode();
-            respuesta = "Narrador: El enemigo invoca la segunda enmienda!;Dev: Que?;Narrador: tu enemigo ahora tiene un rifle, buena surte!";
+            respuesta = "Narrador: Espero que sepas lo que estas haciendo...";
         }
         else
         {
-            respuesta = "Dev: Enserio pensabas que podias usar esto?";
+            respuesta = "Dev: En serio pensabas que podias usar esto?";
         }
 
         return respuesta;

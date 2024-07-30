@@ -69,6 +69,32 @@ public class Partida
         return listaCargada;
     }
 
+    public static int ControlDeOpciones(int tipoControl)
+    {
+        bool pruebaOpciones = false;
+        int entradaDeUsuario = 0, limiteSup = 0;
+
+        switch (tipoControl)
+        {
+            case 1:
+            limiteSup = 5;
+                break;
+            case 2:
+            limiteSup = 6;
+                break;
+        }
+
+        while (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= limiteSup)
+        {
+            pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+            if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 5)
+            {
+                entradaDeUsuario = 999999;
+            }
+        }
+        return entradaDeUsuario;
+    }
+
     public bool EjecutarOpcion(List<Personaje> lista, string nombrePartida, int opcion)
     {
         if (opcion == 1)
