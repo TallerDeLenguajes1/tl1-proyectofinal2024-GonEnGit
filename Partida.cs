@@ -69,30 +69,33 @@ public class Partida
         return listaCargada;
     }
 
-    public static int ControlDeOpciones(int tipoControl)
+    public static int ControlDeOpciones(string entrada, int tipoControl)
     {
         bool pruebaOpciones = false;
-        int entradaDeUsuario = 0, limiteSup = 0;
+        int valor = 0, limiteSup = 0;
 
         switch (tipoControl)
         {
             case 1:
-            limiteSup = 5;
+                limiteSup = 5;
                 break;
             case 2:
-            limiteSup = 6;
+                limiteSup = 6;
+                break;
+            case 3:
+                limiteSup = 2;
                 break;
         }
 
-        while (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= limiteSup)
+        while (pruebaOpciones == false || valor <= 0 || valor >= limiteSup)
         {
-            pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
-            if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 5)
+            pruebaOpciones = int.TryParse(entrada, out valor);
+            if (pruebaOpciones == false || valor <= 0 || valor >= 5)
             {
-                entradaDeUsuario = 999999;
+                valor = 99999;
             }
         }
-        return entradaDeUsuario;
+        return valor;
     }
 
     public bool EjecutarOpcion(List<Personaje> lista, string nombrePartida, int opcion)

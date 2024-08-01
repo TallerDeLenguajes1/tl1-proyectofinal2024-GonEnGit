@@ -1,0 +1,503 @@
+
+/* Primer intento del sistema de duelos */
+
+decisionCombinada = entradaDeUsuario + (decisionEnemigo * 10);
+switch (decisionCombinada)
+{
+    case 11:    // jugador ataca, enemigo ataca         - 11
+        danio = HerramientaDuelos.CalcularDanio(ataqueJugador, defensaEnemigo);
+
+        Console.WriteLine($"{listaPersonajes[0].DatosGenerales.Nombre} ataca primero!");
+        Console.WriteLine($"{listaPersonajes[ctrlDeFlujo].DatosGenerales.Nombre} recibe {danio} puntos de daño!");
+
+        if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud > 0)
+        {
+            danio = HerramientaDuelos.CalcularDanio(ataqueEnemigo, defensaJugador);
+
+            Console.WriteLine($"{listaPersonajes[ctrlDeFlujo].DatosGenerales.Nombre} ataca tambien!");
+            Console.WriteLine($"{listaPersonajes[0].DatosGenerales.Nombre} recibe {danio} puntos de daño!");
+        }
+        else
+        {
+            Console.WriteLine($"{listaPersonajes[ctrlDeFlujo].DatosGenerales.Nombre} no puede seguir peleando...");
+        }
+
+        if (listaPersonajes[0].Estadisticas.Salud <= 0)
+        {
+            gameOver = true;
+            ctrlDeFlujo = 9;
+            // estos dialogos a otra parte...?
+            Console.WriteLine("Narrador: uff eso debió doler...");
+            Console.WriteLine("Dev: hice esto muy dificil?");
+            Console.WriteLine("Narrador: ... segun el historial diria malas decisiones...");
+        }
+        break;
+
+    case 12:    // jugador ataca, enemigo defiende      - 12
+        danio = HerramientaDuelos.CalcularDanio(ataqueJugador, defensaEnemigo);
+        listaPersonajes[ctrlDeFlujo].Estadisticas.Salud -= danio;
+
+        Console.WriteLine($"{listaPersonajes[0].DatosGenerales.Nombre} ataca primero!");
+        Console.WriteLine($"{listaPersonajes[ctrlDeFlujo].DatosGenerales.Nombre} decidio defenderse...!");
+        Console.WriteLine($"{listaPersonajes[ctrlDeFlujo].DatosGenerales.Nombre} recibe {danio} puntos de daño!");
+        break;
+
+    case 13:    // jugador ataca, enemigo espera        - 13
+
+        break;
+
+    case 21:    // jugador defiende, enemigo ataca      - 21
+
+        break;
+
+    case 31:    // jugador espera, enemigo ataca        - 31
+
+        break;
+
+    default:    // casos 22, 23, 32, 33 - no pasa nada
+        Console.WriteLine("Narrador: nadie está haciendo nada... se olvidaron de la pelea?");
+        break;
+}
+
+
+/-----------------------------------/
+
+decisionCombinada = decisionEnemigo + (entradaDeUsuario * 10);
+
+if (decisionCombinada == 12 || decisionCombinada == 21)
+{
+    if (decisionCombinada == 12)        // jugador ataca, enemigo defiende
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true);
+    }
+    else                                // jugador defiende, enemigo ataca
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true);
+    }
+} 
+else if (decisionCombinada == 11 || decisionCombinada == 13 || decisionCombinada == 31)
+{
+    if (decisionCombinada == 11)        // jugador ataca, enemigo ataca
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false);
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false);
+    }
+    else if (decisionCombinada == 13)   // jugador ataca, enemigo espera
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false);
+    }
+    else                                // jugador espera, enemigo ataca
+    {
+        danio = HerramientaDuelos.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false);
+    }
+}
+else
+{
+    
+}
+
+
+/* - ---------------------------------------------------- - */
+
+do
+{
+    if (entradaDeUsuario == 1)
+    {
+        // declaras listas provisorias para liberarlas despues
+        List<Personaje> listaPersTemp = new List<Personaje>();
+        List<string[]> tarjetasAMostrar = new List<string[]>();
+    
+        // inicializas variables
+        listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);
+    
+        // crea carpetas
+        Console.Write("Ingresa un nombre para la partida: ");
+        nomPartida = Console.ReadLine();
+        HerramientaPartida.CrearCarpetas();
+    
+    /*--- esta parte se supone que sea otra historia ---*/ // ------------------------------------------------
+        // historia
+    /*--- fin de esta parte de historia---*/
+    
+    // la consola no puede mostrar las tarjetas una al lado de la otra
+    // lo que podes hacer es una matriz, un vector de 5 vectores
+    // donde cada uno de los 5 tiene la tarjeta separada linea por linea
+    
+        // llenas esa lista con los primeros 5 personajes
+        for (int indice = 0; indice <= 5; indice++)
+        {
+            linea = Textos.Tarjetas(listaPersTemp[indice]);
+            texto = linea.Split(";");
+            tarjetasAMostrar.Add(texto);
+        }
+        // si no limpias 'linea' esto es un desastre
+        linea = "";
+        // ahora con esa lista podes concatenar cada linea e imprimirlas
+        for (int indiceLinea = 0; indiceLinea < 12; indiceLinea++)
+        {
+            for (int indiceTarjeta = 0; indiceTarjeta < 3; indiceTarjeta++)
+            {
+                linea = linea + "   " + tarjetasAMostrar[indiceTarjeta][indiceLinea];
+            }
+            Console.WriteLine(linea);
+            linea = "";
+        }
+        // no es lo mas lindo pero tenes que mostrar 5 personajes, 2 quedan abajo
+        for (int indiceLinea = 0; indiceLinea < 12; indiceLinea++)
+        {
+            for (int indiceTarjeta = 3; indiceTarjeta < 5; indiceTarjeta++)
+            {
+                if (indiceTarjeta == 3)
+                {
+                    linea = "                      ";
+                } 
+                linea = linea + "   " + tarjetasAMostrar[indiceTarjeta][indiceLinea];
+            }
+            Console.WriteLine(linea);
+            linea = " ";
+        }
+    
+        /*--- seleccion de personaje ---*/
+        entradaDeUsuario = 0;
+        Console.Write("Elige un personaje: ");
+        while (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 6)
+        {
+            pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+            if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 6)
+            {
+                Console.WriteLine("");
+                Console.Write("Ingrese un numero valido: ");
+            }
+        }
+        entradaDeUsuario -= 1;      // recorda que el orden de la lista no es el mismo que los id
+        Console.WriteLine("");
+    
+        // mezclas la lista para que sea aleatoria siempre
+        listaPersTemp[entradaDeUsuario].DatosGenerales.Id = 1;  // cambias el id
+        auxiliar = listaPersTemp[entradaDeUsuario];
+        listaPersTemp.RemoveAt(entradaDeUsuario);               // lo sacas de la lista Temporal
+        listaPersonajes.Add(auxiliar);   // guardas el personaje elegido
+    
+        for (int indice = 0; indice < 9; indice++)     // necesitas el 0 pero inicializa con 0 por defecto
+        {
+            orden[indice] = 721;                       // cambias los valores a otra cosa
+        }
+        for (int indice = 0; indice < 9; indice++)     // generas el nuevo orden
+        {
+            do
+            {
+                numeroAleatorio = rnd.Next(0, 9);
+            } while (orden.Contains(numeroAleatorio));
+            orden[indice] = numeroAleatorio;
+        }
+        listaPersonajes = HerramientaFabrica.MezclarLista(listaPersonajes, orden, listaPersTemp);
+    
+        // cheat code para las pruebas
+        Console.WriteLine("Ingresa el ataque de tu personaje:");
+        linea = Console.ReadLine();
+        linea = HerramientaDuelos.CheatCode(listaPersonajes[0], listaPersonajes[1], linea);
+        Console.WriteLine(linea);
+    
+        /*--- Fin de seleccion de personaje ---*/
+    
+        // si limpias la lista y no hay mas referencias
+        // el garbage collector se encarga solo de liberar la memoria
+        // tambien podrias igualarla a null
+        tarjetasAMostrar.Clear();
+        listaPersTemp.Clear();
+    }
+    else if (entradaDeUsuario == 2)
+    {
+        linea = HerramientaPartida.ObtenerNombresDePartidas(listaPersonajes);
+        if (linea == "")
+        {
+            Console.WriteLine("Narrador: No hay partidas guardadas aún.");
+            Console.WriteLine("Dev: así que te vamos a obligar a inicar un juego nuevo!");
+            entradaDeUsuario = 1;
+            linea = "nuevapartida";
+        }
+        else
+        {
+            Console.WriteLine("/* --- Partidas Guardadas --- */\n");
+            texto = linea.Split(";");
+            for (int indice = 1; indice < texto.Length - 1; indice++)
+            {
+                Console.WriteLine($"            {indice}. " + texto[indice]);
+            }
+
+            do
+            {
+                Console.Write("Ingresá el numero de partida: ");
+                pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+                if (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= texto.Length - 1)
+                {
+                    Console.WriteLine("No ingresaste un numero que corresponda a alguna partida.");
+                }
+            } while (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= texto.Length - 1);
+
+            listaPersonajes = HerramientaPartida.CargarPartida(texto[entradaDeUsuario]);
+        }
+    }
+    else
+    {
+        gameOver = true;
+    }
+} while (linea == "nuevapartida");
+
+
+/-------------------------------------------/ un sibujo que no sirvió --- de momento
+             return "___;" +
+                   "/  /;" +
+                  "/  /;" +
+                 "/  /;" +
+                "/  /;" +
+               "/  /;" +
+              "/  /;" +
+             "/  /;" +
+            "/  /;" +
+    @"|\    /  /   /|;" +
+    @"| \__/  /___/ |;" +
+     "|_____________|;" +
+      ". /  /.;" +
+     @"| --- |\;" +
+     @"| --- | \;" +
+      @"/  / \  \;" +
+            @"\  \;" +
+             @"\  \;" +
+              @"\  \;" +
+                $"+-{Datos[0]}------------------------------------+;" +
+                $"|         {Datos[1]}, {Datos[2]}                 |;" +
+                $"|       {Datos[3]}, {Datos[4]}                 |;" +
+                $"|           {Datos[6]} años, {Datos[5]}            |;" +
+                "+--------------------------------------+;" +
+                $"|              Salud: {Estadisticas[0]}              |;" +
+                $"|              Armadura: {Estadisticas[1]}             |;" +
+                $"|              Fuerza: {Estadisticas[2]}               |;" +
+                $"|              Destreza: {Estadisticas[3]}             |;" +
+                $"|              Velocidad: {Estadisticas[4]}            |;" +
+                "+--------------------------------------+;";
+
+un primer intento de arreglar el dibujo
+
+        return "              ___;" +
+"              /  /;" +
+"             /  /;" +
+"            /  /;" +
+"           /  /;" +
+"          /  /;" +
+"         /  /;" +
+"        /  /;" +
+"       /  /;" +
+@" |\    /  /   /|;" +
+@" | \__/  /___/ |;" +
+" |_____________|;" +
+"   . /  /.;" +
+@"  | --- |\;" +
+@"  | --- | \;" +
+@"   /  / \  \;" +
+@"         \  \;" +
+@"          \  \;" +
+@"           \  \;" +
+                $"+-{Datos[0]}------------------------------------+;" +
+                $"|         {Datos[1]}, {Datos[2]}                 |;" +
+                $"|       {Datos[3]}, {Datos[4]}                 |;" +
+                $"|           {Datos[6]} años, {Datos[5]}            |;" +
+                "+--------------------------------------+;" +
+                $"|              Salud: {Estadisticas[0]}              |;" +
+                $"|              Armadura: {Estadisticas[1]}             |;" +
+                $"|              Fuerza: {Estadisticas[2]}               |;" +
+                $"|              Destreza: {Estadisticas[3]}             |;" +
+                $"|              Velocidad: {Estadisticas[4]}            |;" +
+                "+--------------------------------------+;";
+
+como mostrar las 2 cartas al lado de la otra, de distinto color
+/*---------------------------------------------------*/
+
+string cartasUnidas;
+string primeraCarta = herramienta.ArmarCarta(cartasAMostrar[0]);
+string segundaCarta = herramienta.ArmarCarta(cartasAMostrar[1]);
+string reverso = herramienta.TraerReverso();
+
+string[] partesIzq = primeraCarta.Split(";");
+string[] partesDer = reverso.Split(";");
+
+for (int indice = 0; indice < partesIzq.Length; indice++)
+{
+    if (cartasAMostrar[0].suit == "HEARTS" || cartasAMostrar[0].suit == "DIAMONDS")
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write(partesIzq[indice] + " ");
+    }
+    else
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.Write(partesIzq[indice] + " ");
+    }
+
+    if (cartasAMostrar[1].suit == "HEARTS" || cartasAMostrar[1].suit == "DIAMONDS")
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(partesDer[indice]);
+    }
+    else
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine(partesDer[indice]);
+    }
+}
+Console.ForegroundColor = ConsoleColor.White;
+{
+    
+}
+
+partesDer = segundaCarta.Split(";");
+for (int indice = 0; indice < partesIzq.Length; indice++)
+{
+    if (cartasAMostrar[0].suit == "HEARTS" || cartasAMostrar[0].suit == "DIAMONDS")
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write(partesIzq[indice] + " ");
+    }
+    else
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.Write(partesIzq[indice] + " ");
+    }
+
+    if (cartasAMostrar[1].suit == "HEARTS" || cartasAMostrar[1].suit == "DIAMONDS")
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(partesDer[indice]);
+    }
+    else
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine(partesDer[indice]);
+    }
+}
+Console.ForegroundColor = ConsoleColor.White;
+
+
+/* ------------- Viejo control de opciones ------------- */
+
+    // controla que se ingrese lo correcto
+    while (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 5)
+    {
+        pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+        if (pruebaOpciones == false || entradaDeUsuario <= 0 || entradaDeUsuario >= 5)
+        {
+            Console.WriteLine("");
+            Console.Write("Ingresa una opcion del menú: ");
+        }
+    }
+    Console.WriteLine("");
+
+
+/* ----------------- Armador de tarjetas -----------------*/
+
+    // llenas esa lista con los primeros 5 personajes
+    Console.WriteLine();
+    for (int indice = 0; indice <= 5; indice++)
+    {
+        linea = Textos.Tarjetas(listaPersTemp[indice]);
+        texto = linea.Split(";");
+        tarjetasAMostrar.Add(texto);
+        linea = ""; // si no limpias 'linea' las tarjetas se rompen
+    }
+
+    // ahora con esa lista podes concatenar cada linea e imprimirlas
+    for (int indiceLinea = 0; indiceLinea < texto.Length; indiceLinea++)
+    {
+        for (int indiceTarjeta = 0; indiceTarjeta < 3; indiceTarjeta++)
+        {
+            linea = linea + "   " + tarjetasAMostrar[indiceTarjeta][indiceLinea];
+        }
+        Console.WriteLine(linea);
+        linea = "";
+    }
+    // no es lo mas lindo pero tenes que mostrar 5 personajes, 2 quedan abajo
+    for (int indiceLinea = 0; indiceLinea < texto.Length; indiceLinea++)
+    {
+        for (int indiceTarjeta = 3; indiceTarjeta < 5; indiceTarjeta++)
+        {
+            if (indiceTarjeta == 3)
+            {
+                linea = "                      ";
+            } 
+            linea = linea + "   " + tarjetasAMostrar[indiceTarjeta][indiceLinea];
+        }
+        Console.WriteLine(linea);
+        linea = " ";
+    }
+
+
+/* -------------------- Cartas viejas --------------------*/
+
+    public static string ConcatenarCartas(string primera, string segunda)
+    {
+        string[] partesPrimera = primera.Split(";");
+        string[] partesSegunda = segunda.Split(";");
+
+        string cartasUnidas = "";
+        string linea;
+
+        for (int i = 0; i < partesPrimera.Length; i++)
+        {
+            linea = partesPrimera[i] + " " + partesSegunda[i] + ";";
+            cartasUnidas += linea;
+        }
+
+        return cartasUnidas;
+    }
+
+
+/* ---------------- Control de continuar en caso de perder ---------------- */
+
+    do
+    {
+        Console.WriteLine("Dev: queres intentar de nuevo? (S/N) ");
+        pruebaOpciones = char.TryParse(Console.ReadLine(), out continuar);
+        if (pruebaOpciones)
+        {
+            continuar = char.ToUpper(continuar);
+            if (continuar != 'S' && continuar != 'N')
+            {
+                // -------- falta completar ---------
+            }
+            else
+            {
+                Console.WriteLine("Opcion incorrecta.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Opcion incorrecta.");
+        }
+    } while (!pruebaOpciones && continuar != 'S' && continuar != 'N');
+
+
+/* -------------------------- color de las cartas -------------------------- */
+
+    for (int indice = 0; indice < partesCartaDer.Length; indice++)
+    {
+        if (cartasNuevas.cards[0].suit == "HEARTS" || cartasNuevas.cards[0].suit == "DIAMONDS")
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
+            Console.Write(partesCartaIzq[indice]);
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write(partesCartaIzq[indice]);
+        }
+        if (cartasNuevas.cards[1].suit == "HEARTS" || cartasNuevas.cards[1].suit == "DIAMONDS")
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
+            Console.WriteLine(partesCartaDer[indice]);
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;      // reemplazas el rojo acá o los duelos?
+            Console.WriteLine(partesCartaDer[indice]);
+        }
+    }

@@ -13,16 +13,16 @@ using EspacioArchivos;
 using EspacioPersonajes;
 
 // Instancias de clases y herramientas
-Personaje auxiliar;
+Random rnd = new Random();
 Partida HerramientaPartida = new Partida();
 Historial HerramientaHistorial = new Historial();
 FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
 
 // variables
 bool gameOver = false, pruebaOpciones, critico;
-int entradaDeUsuario, numeroAleatorio;
+int entradaDeUsuario, colorIzq, colorDer;
 int iniciativaJugador, iniciativaEnemigo, decisionEnemigo;
-int danio, ctrlDeFlujo;
+int danio, saludGuardada, ctrlDeFlujo;
 char continuar = 'S';
 string linea, linea2, cartaIzq, cartaDer;
 string nomJugador, nomEnemigo, nomPartida = "";
@@ -30,7 +30,7 @@ Mazo nuevoMazo = await API.ObtenerIdMazoAsync();
 ListaCartas cartasNuevas = new ListaCartas();
 
 // Arreglos
-string[] texto = {}, texto2, textoEnemigo;
+string[] texto, texto2, textoEnemigo;
 string[] partesCartaIzq, partesCartaDer;
 
 // Listas
@@ -40,16 +40,20 @@ List<Personaje> listaPersonajes = new List<Personaje>();
 
 /* ---- desarrollo del juego ---- */
 Textos.Introduccion();
-Textos.MenuPrincipal();
+texto = Textos.MenuPrincipal(); // esto así cumple con lo de no usar console en la clase, será mejor? son mas lineas
+foreach (string parte in texto)
+{
+    Console.Write(parte);
+}
 
 do              /*--- inicio del control de opcion ---*/
 {
     do
     {
-        entradaDeUsuario = Partida.ControlDeOpciones(1);     // controla que se ingrese lo correcto
+        entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 1);     // controla que se ingrese lo correcto
         if (entradaDeUsuario == 999999)
         {
-            Console.Write("Ingresa una opcion del menú: ");
+            Console.Write("Ingresa una opcion del valida: ");
         }
     } while (entradaDeUsuario == 999999);
     Console.WriteLine("");
@@ -82,10 +86,10 @@ do              /*--- inicio del control de opcion ---*/
 
             do         /*--- seleccion de personaje ---*/
             {
-                entradaDeUsuario = Partida.ControlDeOpciones(2);     // controla que se ingrese lo correcto
+                entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine() ,2);     // controla que se ingrese lo correcto
                 if (entradaDeUsuario == 999999)
                 {
-                    Console.Write("Elige uno de los 5 personaje: ");
+                    Console.Write("Elige uno de estos 5 personaje: ");
                 }
             } while (entradaDeUsuario == 999999);
             Console.Write("Elige un personaje: ");
@@ -176,25 +180,20 @@ do              /*--- inicio del control de opcion ---*/
 /*--- desarrollo del juego ---*/
 while (gameOver == false) // podrias sacar el .Salud != 0?
 {
-    // si contas los enemigos con HP en 0, podes usar la misma variable para 
-    // la historia, el enemigo activo e incluso el fin del juego
-    ctrlDeFlujo = Duelo.ContarEnemigosVencidos(listaPersonajes);    // probablemente algo esta de mas con ctrDeFlujo
+    ctrlDeFlujo = Duelo.ContarEnemigosVencidos(listaPersonajes); // cant de enemigos vencidos, sirve para controlar casi todo
     nomJugador = Textos.DevolverNombre(listaPersonajes[0]);
     nomEnemigo = Textos.DevolverNombre(listaPersonajes[ctrlDeFlujo]);
+    saludGuardada = listaPersonajes[0].Estadisticas.Salud;
     cartasNuevas.cards = await API.ObtenerCartasAsync(nuevoMazo.deck_id); // tomas 2 cartas del mazo
     while (ctrlDeFlujo <= 9)
     {
-        // dialogos antes de los duelos
+    // dialogos antes de los duelos
         switch (ctrlDeFlujo)
         {
             case 2: // esto de las historias lo va a tener que pensar mejor
                 Console.WriteLine("primera historia antes");
                 break;
         }
-
-// si queres poner un tutorial, cuando ctrDeFlujo = 1 tenes que escribir un par de cosas
-// mostrar cartas, seguir explicacion, mostrarlas dadas vuelta y el resultado
-
     // desarrollo de los duelos
         if (ctrlDeFlujo == 1)   // tutorial antes del 1er duelo
         {
@@ -205,34 +204,33 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                 Console.WriteLine(texto[indice]);
             }
         }
-
-// muestra carta con reverso
-        cartaIzq = Textos.ArmarCarta(cartasNuevas.cards[0]);
-        partesCartaIzq = cartaIzq.Split(";");
+    // muestra carta con reverso
+        cartaIzq = Textos.ArmarCarta(cartasNuevas.cards[0]); 
         cartaDer = Textos.TraerReverso();
+        partesCartaIzq = cartaIzq.Split(";");
         partesCartaDer = cartaDer.Split(";");
+        colorIzq = rnd.Next(1,3);
+        colorDer = rnd.Next(1,3);
         for (int indice = 0; indice < partesCartaDer.Length; indice++)
         {
-            if (cartasNuevas.cards[0].suit == "HEARTS" || cartasNuevas.cards[0].suit == "DIAMONDS")
+            if (colorIzq == 1)
             {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
-                Console.Write(partesCartaIzq[indice]);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(partesCartaIzq[indice]);
             }
-            if (cartasNuevas.cards[1].suit == "HEARTS" || cartasNuevas.cards[1].suit == "DIAMONDS")
+            Console.Write(partesCartaIzq[indice]);
+            if (colorDer == 1)
             {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
-                Console.WriteLine(partesCartaDer[indice]);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Blue;      // reemplazas el rojo acá o los duelos?
-                Console.WriteLine(partesCartaDer[indice]);
+                Console.ForegroundColor = ConsoleColor.Blue;
             }
+            Console.WriteLine(partesCartaDer[indice]);
         }
         Console.ForegroundColor = ConsoleColor.White;
 
@@ -246,7 +244,7 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                 Thread.Sleep(1000);
             }
         }
-// se elige una carta
+    // se elige una carta
         do
         {
             if (ctrlDeFlujo == 1)
@@ -263,36 +261,33 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                 Console.WriteLine("Solo podes elegir entre estas 2 cartas.");
             }
         } while (!pruebaOpciones || entradaDeUsuario != 1 && entradaDeUsuario != 2);
-
 // ambas cartas boca arriba
         cartaDer = Textos.ArmarCarta(cartasNuevas.cards[1]);
         partesCartaDer = cartaDer.Split(";");
         Console.WriteLine("");
         for (int indice = 0; indice < partesCartaDer.Length; indice++)
         {
-            if (cartasNuevas.cards[0].suit == "HEARTS" || cartasNuevas.cards[0].suit == "DIAMONDS")
+            if (colorIzq == 1)
             {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
-                Console.Write(partesCartaIzq[indice]);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(partesCartaIzq[indice]);
             }
-            if (cartasNuevas.cards[1].suit == "HEARTS" || cartasNuevas.cards[1].suit == "DIAMONDS")
+            Console.Write(partesCartaIzq[indice]);
+            if (colorDer == 1)
             {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;      // reemplazas el rojo acá o los duelos?
-                Console.WriteLine(partesCartaDer[indice]);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Blue;      // reemplazas el rojo acá o los duelos?
-                Console.WriteLine(partesCartaDer[indice]);
+                Console.ForegroundColor = ConsoleColor.Blue;
             }
+            Console.WriteLine(partesCartaDer[indice]);
         }
-        Console.WriteLine("");
         Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("");
         if (ctrlDeFlujo == 1)
         {
             for (int indice = 5; indice < texto.Length; indice++)
@@ -305,13 +300,13 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
     // estas 2 dependen de la eleccion
         if (entradaDeUsuario == 1)
         {
-            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[0]); // como incluis el color, otra variable?
-            iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[1]);
+            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[0], colorIzq); // como incluis el color, otra variable?
+            iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[1], colorDer);
         }
         else
         {
-            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[1]); // como incluis el color, otra variable?
-            iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[0]);
+            iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[1], colorDer); // como incluis el color, otra variable?
+            iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[0], colorIzq);
         }
     // por ultimo anuncia quien va primero
         if (iniciativaJugador >= iniciativaEnemigo)
@@ -531,7 +526,7 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
                             Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
                         }
                     }
-                    else    // 22, 23, 32, 33 - no pasa nada
+                    else                            // 22, 23, 32, 33 - no pasa nada
                     {
                         if (entradaDeUsuario == 2 && decisionEnemigo == 2)
                         {
@@ -614,33 +609,19 @@ while (gameOver == false) // podrias sacar el .Salud != 0?
         else
         {
             Console.WriteLine($"Narrador: {nomJugador} acaba de morir...");
-            Console.WriteLine($"Dev: Supongo que estoy haciendo esto demaciado dificil...");
-
+            Console.WriteLine($"Dev: No me hechen la culpa del mal balance...");
+            Console.WriteLine("Dev: queres intentar de nuevo? 1. Si 2. No");
             do
             {
-                Console.WriteLine("Dev: queres intentar de nuevo? (S/N) ");
-                pruebaOpciones = char.TryParse(Console.ReadLine(), out continuar);
-                if (pruebaOpciones)
+                entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(),3);
+                if (entradaDeUsuario == 99999)
                 {
-                    continuar = char.ToUpper(continuar);
-                    if (continuar != 'S' && continuar != 'N')
-                    {
-                        // -------- falta completar ---------
-                    }
-                    else
-                    {
-                        Console.WriteLine("Opcion incorrecta.");
-                    }
+                    Console.WriteLine("Ingresa una opcion valida.");
                 }
-                else
-                {
-                    Console.WriteLine("Opcion incorrecta.");
-                }
-            } while (!pruebaOpciones && continuar != 'S' && continuar != 'N');
-
-            if (continuar == 'S')
+            } while (entradaDeUsuario == 99999);
+            if (entradaDeUsuario == 1)
             {
-                listaPersonajes[0].Estadisticas.Salud = 100;// esto lo vas a tener que registrar de alguna forma, podrias cargar la ultima partida tambien...
+                listaPersonajes[0].Estadisticas.Salud = saludGuardada;
                 gameOver = false;
             }
             else

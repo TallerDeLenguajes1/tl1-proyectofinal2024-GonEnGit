@@ -55,7 +55,7 @@ public static class Duelo
 // la idea es hacer un calculo segun palo, color y valor
     // el palo y el color van siempre de a pares, 
     //osea que podes ignorar el color y usar el palo para el calculo
-    public static int CalcularIniciativa(Carta cartaRecibida)
+    public static int CalcularIniciativa(Carta cartaRecibida, int color)
     {
         int valorDeCarta;
 
@@ -77,15 +77,23 @@ public static class Duelo
                 valorDeCarta = int.Parse(cartaRecibida.value);
                 break;
         }
-
-// a estos calculos tambien los tenes que cambiar
-        if (cartaRecibida.suit == "SPADES" || cartaRecibida.suit == "CLUBS") // trebol o pica negra (o azul)
+    // multiplicas segun el color
+        if (color == 1)
         {
-            return (int)(valorDeCarta * 1.3) + 5;
+            valorDeCarta *= 2;
         }
-        else    // diamante o corazon rojo (o amarillo... elegiras despues)
+        else
         {
-            return (int)(valorDeCarta * 3) + 2;
+            valorDeCarta = (int)(valorDeCarta* 1.5);
+        }
+    // a estos calculos tambien los tenes que cambiar
+        if (cartaRecibida.suit == "SPADES" || cartaRecibida.suit == "CLUBS")
+        {
+            return valorDeCarta + 5;
+        }
+        else
+        {
+            return valorDeCarta + 2;
         }
     }
 

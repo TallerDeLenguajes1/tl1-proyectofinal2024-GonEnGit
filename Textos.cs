@@ -27,31 +27,21 @@ public static class Textos
         Console.WriteLine("");
     }
 
-    public static void MenuPrincipal()
+    public static string[] MenuPrincipal()
     {
-        string[] texto = {  "  # ------------------------------- #",
-                            "  |  # - #                  # - #   |",
-                            "  |         MENU PRINCIPAL          |",
-                            "  |                                 |",
-                            "  |       1. Nueva Partida          |",
-                            "  |       2. Cargar Partida         |",
-                            "  |       3. Ganadores Anteriores   |",
-                            "  |       4. Salir                  |",
-                            "  |                                 |",
-                            "  |  # - #                  # - #   |",
-                            "  # ------------------------------- #",
-                            "            Elija una opción:        " };
-        for (int indice = 0; indice < texto.Length; indice++)
-        {
-            if (indice == texto.Length - 1)
-            {
-                Console.Write(texto[indice].TrimEnd() + " ");
-            }
-            else
-            {
-                Console.WriteLine(texto[indice]);
-            }
-        }
+        string[] menu = {  "  # ------------------------------- #\n",
+                            "  |  # - #                  # - #   |\n",
+                            "  |         MENU PRINCIPAL          |\n",
+                            "  |                                 |\n",
+                            "  |       1. Nueva Partida          |\n",
+                            "  |       2. Cargar Partida         |\n",
+                            "  |       3. Ganadores Anteriores   |\n",
+                            "  |       4. Salir                  |\n",
+                            "  |                                 |\n",
+                            "  |  # - #                  # - #   |\n",
+                            "  # ------------------------------- #\n",
+                            "            Elija una opción:  " };
+        return menu;
     }
 
     public static string MenuDeGuardado()
@@ -338,5 +328,21 @@ public static class Textos
         }
 
         return cartaString;
+    }
+
+    public static string ElegirColor()
+    {
+        Random rnd = new Random();
+        string eleccion = "";
+        switch (rnd.Next(1,3))
+        {
+            case 1:
+                eleccion = "ConsoleColor.DarkYellow";
+                break;
+            case 2:
+                eleccion = "Blue";
+                break;
+        }
+        return eleccion;
     }
 }
