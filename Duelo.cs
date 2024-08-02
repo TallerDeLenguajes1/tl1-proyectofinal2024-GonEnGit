@@ -159,13 +159,18 @@ public static class Duelo
 
         if (objetivoDefiende)
         {
-            danio = (ataqueAtacante * 10) - ((defensaObjetivo / 10) + 25);
+            danio = (ataqueAtacante * 5) - ((defensaObjetivo * 3) + 10);
         }
         else
         {
-            danio = (ataqueAtacante * 10) - (defensaObjetivo / 10);
+            danio = (ataqueAtacante * 5) - (defensaObjetivo * 3);
         }
 
+
+        if (danio <= 0) // GodMode hace que, por la defensa, de negativo
+        {
+            danio = 0;
+        }
         objetivo.RecibirDanio(danio);
 
         return danio;

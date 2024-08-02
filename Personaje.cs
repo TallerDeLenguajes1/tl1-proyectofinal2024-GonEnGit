@@ -26,25 +26,18 @@ public class Personaje
 
     public void RecibirDanio(int danio)
     {
-        // este if es por el GodMode
-        if (danio <= 0)
-        {
-            danio = 0;
-        }
-
         Estadisticas.Salud -= danio;
 
-        // para evitar Salud negativa y romper el bucle
-        if (Estadisticas.Salud <= 0)
+        if (Estadisticas.Salud <= 0) // para evitar Salud negativa y romper el bucle
         {
             Estadisticas.Salud = 0;
         }
     }
 
-    public void RecuperarSalud(int maximo)  // si no, alguien va a tener salud infinita
+    public void RecuperarSalud(int maximo)
     {
         estadisticas.Salud += 10;
-        if (estadisticas.Salud > maximo)
+        if (estadisticas.Salud > maximo) // si no, alguien va a tener salud infinita
         {
             estadisticas.Salud = maximo;
         }

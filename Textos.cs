@@ -1,5 +1,6 @@
 namespace EspacioJuego;
 
+using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using EspacioAPI;
@@ -27,6 +28,18 @@ public static class Textos
         Console.WriteLine("");
     }
 
+    public static string CentrarRenglon(int anchoPantalla, string palabras)
+    {
+        int espaciosAntes = (anchoPantalla - palabras.Length) / 2;
+        string renglon = palabras;
+
+        for (int i = 0; i < espaciosAntes; i++)
+        {
+            renglon = " " + renglon;
+        }
+
+        return renglon;
+    }
     public static string[] MenuPrincipal()
     {
         string[] menu = {  "  # ------------------------------- #\n",
@@ -59,28 +72,89 @@ public static class Textos
 
     public static string CrearTarjeta(Personaje instancia)
     {
+        string renglon1, renglon2, renglon3, renglon4;
         string lineaDatos = instancia.DevolverDatos();
         string lineaEstadisticas = instancia.DevolverEstadisticas();
 
         string[] Datos = lineaDatos.Split(";");
         string[] Estadisticas = lineaEstadisticas.Split(";");
 
-    // esto es para que todas las edades tengan 3 caracteres
-        if (Datos[6].Length < 3)
+    // los renglones deben tener 39 caracteres
+    // renglones de datos iguales
+        renglon1 = "+-";
+        if (Datos[0].Length == 1)
+        {
+            renglon1 += $"{Datos[0]}-------------------------------------+;";
+        }
+        else
+        {
+            renglon1 += $"{Datos[0]}------------------------------------+;";   // un - menos que arriba
+        }
+        renglon2 = Datos[1] + ", " + Datos[2];
+        renglon3 = Datos[3] + ", " + Datos[4];
+        if (Datos[6].Length == 2 )
+        {
+            renglon4 = Datos[6] + "años,  " + Datos[5]; // 2 espacios
+        }
+        else
+        {
+            renglon4 = Datos[6] + "años, " + Datos[5];
+        }
+        while (renglon2.Length < 39)    // no los podes juntar
+        {
+            renglon2 = " " + renglon2;
+            if (renglon2.Length < 39)
+            {
+                renglon2 = renglon2 + " ";
+            }
+        }
+        while (renglon3.Length < 39)    // tienen largos totales distintos
+        {
+            renglon3 = " " + renglon3;
+            if (renglon3.Length < 39)
+            {
+                renglon3 = renglon3 + " ";
+            }
+        }
+        while (renglon4.Length < 39)
+        {
+            renglon4 = " " + renglon4;
+            if (renglon4.Length < 39)
+            {
+                renglon4 = renglon4 + " ";
+            }
+        }
+    // digitos de las estadisticas
+        if (Datos[6].Length < 3) // esto es para que todas las edades tengan 3 caracteres
         {
             Datos[6] = " " + Datos[6];
         }
+        if (Estadisticas[0].Length == 2) // mientras salud disminuye, puede tener menos de 3 digitos
+        {
+            Estadisticas[0] = "0" + Estadisticas[0];
+        }
+        else if (Estadisticas[0].Length == 1)
+        {
+            Estadisticas[0] = "00" + Estadisticas[0];
+        }
+        for (int i = 1; i < 4; i++) // por los niveles, las demas estadisticas pueden tener hasta 2 digitos
+        {
+            if (Estadisticas[i].Length < 2)
+            {
+                Estadisticas[i] = "0" + Estadisticas[i];
+            }
+        }
 
-        return  $"+-{Datos[0]}------------------------------------+;" +
-                $"|         {Datos[1]}, {Datos[2]}                 |;" +
-                $"|       {Datos[3]}, {Datos[4]}                 |;" +
-                $"|           {Datos[6]} años, {Datos[5]}            |;" +
-                "+--------------------------------------+;" +
-                $"|              Salud: {Estadisticas[0]}              |;" +
+        return  $"{renglon1}" +
+                $"|{renglon2}|;" +
+                $"|{renglon3}|;" +
+                $"|         {Datos[6]} años, {Datos[5]}           |;" +
+                "+---------------------------------------+;" +
+                $"|              Salud: {Estadisticas[0]}               |;" +
                 $"|              Armadura: {Estadisticas[1]}             |;" +
                 $"|              Fuerza: {Estadisticas[2]}               |;" +
                 $"|              Destreza: {Estadisticas[3]}             |;" +
-                "+--------------------------------------+;";
+                "+---------------------------------------+;";
     }
 
     public static void ArmarListaTarjetas(List<string[]> lista, List<Personaje> listaTemp)

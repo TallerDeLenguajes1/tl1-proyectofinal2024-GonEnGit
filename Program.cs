@@ -18,7 +18,7 @@ FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
 
 // variables
 bool gameOver = false, critico;
-int entradaDeUsuario = 99999, colorIzq, colorDer;
+int entradaDeUsuario = 99999, colorIzq, colorDer, espaciosAntes;
 int iniciativaJugador, iniciativaEnemigo, decisionEnemigo;
 int danio, ctrlDeFlujo = 1, continuar = 19;
 int saludGuardadaJu, saludGuardadaEn;
@@ -41,18 +41,21 @@ Textos.Introduccion();
 texto = Textos.MenuPrincipal();
 foreach (string parte in texto)
 {
-    Console.Write(parte);
+    linea = Textos.CentrarRenglon(Console.WindowWidth, parte);
+    Console.Write(linea);
 }
 
 do              /*--- inicio del control de opcion ---*/
 {
     while (entradaDeUsuario == 99999 && continuar == 19)
     {
-        Console.Write("\nIngresá una opción del menú:  ");
+        linea = Textos.CentrarRenglon(Console.WindowWidth, "Ingresá una opción del menú: ");
+        Console.Write("\n" + linea);
         entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 3, 0);
         if (entradaDeUsuario == 99999)
         {
-            Console.Write("Ingresá una opcion valida.");
+            linea = Textos.CentrarRenglon(Console.WindowWidth, "Ingresá una opcion valida.");
+            Console.Write(linea);
         }
     }
     Console.WriteLine("");
@@ -64,7 +67,8 @@ do              /*--- inicio del control de opcion ---*/
 
             listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);  // creas 10 personajes
 
-            Console.Write("Ingresa un nombre para la partida: ");   // creas carpetas
+            linea = Textos.CentrarRenglon(Console.WindowWidth, "Ingresa un nombre para la partida: ");
+            Console.Write(linea);   // creas carpetas
             nomPartida = Console.ReadLine();
             Partida.CrearCarpetas();
         

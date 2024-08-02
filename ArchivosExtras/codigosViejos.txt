@@ -648,3 +648,103 @@ while (entradaDeUsuario == 99999 && saltarMenu == false)
     {
         
     }
+
+
+/* --------------------- apodos --------------------- */
+
+El Defensor Inmortal
+El Héroe Ancestral
+La Espada Infernal
+El Cazador Silencioso
+El Espíritu Indomable
+Puño de Hierro
+Tempestad de Acero
+Martir de la Llama
+Comandante de Hierro
+El Monarca Olvidado
+El Caballero Dragon
+El Emperador Codicioso
+El Héroe Antiguo
+El Centinela Fantasma
+El Rey Omnisciente
+
+
+Merodeador de las sombras...? largo
+cazador de dragones...? largo
+justiciero inmortal...? largo
+algo nefasto...?
+phantom/ghost...?
+barbaro...?
+magic knight...?
+mercenary king/queen...? largo
+espadachin de la orden magica...? largo
+señor del inframundo...? largo
+
+Boreal Valley  --- esto podrias usar
+Ancient Martyr --- Antiguo Martir --- Martir Sangriento?
+Dark Sun
+Prowling --- merodeando / merodeador
+
+Sangre de Héroe
+Alma Invicta
+Guardián del Fuego
+Espíritu Inmortal
+Eco de Gloria
+Fuerza del Trueno
+Cruzado Feroz
+Viento Salvaje
+Héroe Intemporal
+Forjador del Destino
+Espíritu Indomable
+Guardia del Honor
+Camino del Valor
+Furia Interior
+Centinela Feroz
+Viento Imparable
+Tempestad Salvaje
+Eco del Valor
+Guardián Valiente
+Fuerza Legendaria
+Furia Ardiente
+Corazón Férreo
+Voz Tranquila
+Luz Sagrada
+Escudo Dorado
+Justicia Divina
+Ira Desatada
+Rabia Salvaje
+Frenesí Mortal
+Arenas Sangrientas
+Gloria Marcial
+Luchador Fiero
+
+
+/* ---- pramostrar todas las tarjetas ---- */
+
+    Textos.ArmarListaTarjetasResto(tarjetasAMostrar, listaPersTemp);
+
+    public static void ArmarListaTarjetasResto(List<string[]> lista, List<Personaje> listaTemp)
+    {
+        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta;
+        string[] primeraFila, segundaFila;
+
+        primeraTarjeta = CrearTarjeta(listaTemp[5]).Split(";");
+        segundaTarjeta = CrearTarjeta(listaTemp[6]).Split(";");
+        TerceraTarjeta = CrearTarjeta(listaTemp[7]).Split(";");
+        primeraFila = new string[primeraTarjeta.Length];       // C# puede decidir el tamño de una arreglo automaticamente
+
+        for (int i = 0; i < primeraTarjeta.Length - 1; i++)
+        {
+            primeraFila[i] = " " + primeraTarjeta[i] + " " + segundaTarjeta[i] + " " + TerceraTarjeta[i]; // pero no de a 1
+        }
+        lista.Add(primeraFila);
+
+        primeraTarjeta = CrearTarjeta(listaTemp[8]).Split(";");
+        segundaTarjeta = CrearTarjeta(listaTemp[9]).Split(";");
+        segundaFila = new string[primeraTarjeta.Length];
+        for (int i = 0; i < primeraTarjeta.Length; i++)
+        {
+            segundaFila[i] = "                      " + primeraTarjeta[i] + " " + segundaTarjeta[i];
+        }
+        lista.Add(segundaFila);
+    }

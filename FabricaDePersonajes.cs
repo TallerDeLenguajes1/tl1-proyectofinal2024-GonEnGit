@@ -12,6 +12,7 @@ public class FabricaDePersonajes
         private int id = 1;
         private string[] Clases = { "Guerrero", "Monje", "Paladín", "Berserker", "Gladiador"};
         private string[] nombresElegidos = new string[10];  // no hay mas de 10 nombres en total
+        private string[] apodosElegidos = new string[10];   // ni apodos
         private Dictionary<string, int> ContadorDeClases = new Dictionary<string,int>
         {
             {"Guerrero" , 0}, 
@@ -29,15 +30,15 @@ public class FabricaDePersonajes
             {
                 Personaje instancia = new Personaje();
 
-                instancia.DatosGenerales.GenerarDatos(clase, id, nombresElegidos);
+                instancia.DatosGenerales.GenerarDatos(clase, id, nombresElegidos, apodosElegidos);
                 instancia.Estadisticas.GenerarEstadisticas(clase);
                 ContadorDeClases[clase] += 1;
                 nombresElegidos[id - 1] = instancia.DatosGenerales.Nombre;
+                apodosElegidos[id - 1] = instancia.DatosGenerales.Apodo;
                 id += 1;
                 lista.Add(instancia);
             }
         }
-
         return lista;
     }
 
