@@ -501,3 +501,150 @@ Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(partesCartaDer[indice]);
         }
     }
+
+
+
+/* -------------- control de opciones como char -------------- */
+
+    do
+    {
+        pruebaOpciones = char.TryParse(Console.ReadLine(), out continuar);
+        continuar = char.ToUpper(continuar);
+        if (!pruebaOpciones || continuar != 'S' && continuar != 'N')
+        {
+            Console.WriteLine("Ingresa 'S' para elegir otra opcion o 'N' para salir del juego: ");
+        }
+    } while (!pruebaOpciones || continuar != 'S' && continuar != 'N');
+    if (continuar == 'N')
+    {
+        entradaDeUsuario = 4;
+    }
+
+/* -------------- menu -------------- */
+
+while (entradaDeUsuario == 99999 && saltarMenu == false)
+    {
+        Console.Write("\nIngresá una opción del menú:  ");
+        entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 1);     // controla que se ingrese lo correcto
+        if (entradaDeUsuario == 99999)
+        {
+            Console.Write("Ingresá una opcion del valida.");
+        }
+    };
+    Console.WriteLine("");
+
+    switch (entradaDeUsuario)   // ejecuta la opcion correspondiente
+    {
+        case 1:
+            List<Personaje> listaPersTemp = new List<Personaje>();  // listas provisorias para liberarlas despues
+            List<string[]> tarjetasAMostrar = new List<string[]>();
+
+            listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);  // creas 10 personajes
+
+            Console.Write("Ingresa un nombre para la partida: ");   // creas carpetas
+            nomPartida = Console.ReadLine();
+            HerramientaPartida.CrearCarpetas();
+        
+        /*--- esta parte se supone que sea otra historia ---*/ // ------------------------------------------------
+            // historia
+        /*--- fin de esta parte de historia---*/
+
+            Console.WriteLine(" ");
+            Textos.ArmarListaTarjetas(tarjetasAMostrar, listaPersTemp);
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < tarjetasAMostrar[0].Length; j++)
+                {
+                    Console.WriteLine(tarjetasAMostrar[i][j]);
+                }
+            }
+
+            Console.Write("Elige un personaje: ");   /*--- seleccion de personaje ---*/
+            do
+            {
+                entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 2);     // controla que se ingrese lo correcto
+                if (entradaDeUsuario == 99999)
+                {
+                    Console.Write("Elige uno de estos 5 personaje: ");
+                }
+            } while (entradaDeUsuario == 99999);
+
+            listaPersonajes = HerramientaFabrica.MezclarLista(entradaDeUsuario - 1, listaPersTemp); // armas lista mezclada
+
+            Console.WriteLine("\nIngresa el ataque de tu personaje:"); // cheat code
+            linea = Duelo.CheatCode(listaPersonajes[0], listaPersonajes[1], Console.ReadLine());
+            Console.WriteLine(linea + "\n");      /*--- Fin de seleccion de personaje ---*/
+
+            continuar = 14;
+            tarjetasAMostrar.Clear();  // '.Clear()' y/o '= null' habilita las listas para el garbage collector
+            listaPersTemp.Clear();
+            break;
+
+        case 2:
+            linea = HerramientaPartida.ObtenerNombresDePartidas();
+            if (linea == "vacio;")
+            {
+                Console.WriteLine("Narrador: No hay partidas guardadas aún.");
+                Console.WriteLine("Dev: así que te vamos a obligar a inicar un juego nuevo!");
+                entradaDeUsuario = 1; continuar = 19;
+            }
+            else
+            {
+                Console.WriteLine("/* --- Partidas Guardadas --- */\n");
+                texto = linea.Split(";");
+                for (int indice = 1; indice < texto.Length - 1; indice++)
+                {
+                    Console.WriteLine($"            {indice}. " + texto[indice]);
+                }
+
+                do
+                {
+                    Console.Write("Ingresá el numero de partida: ");
+                    pruebaOpciones = int.TryParse(Console.ReadLine(), out entradaDeUsuario);
+                    if (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= texto.Length - 1)
+                    {
+                        Console.WriteLine("No ingresaste un numero que corresponda a alguna partida.");
+                    }
+                } while (!pruebaOpciones || entradaDeUsuario <= 0 || entradaDeUsuario >= texto.Length - 1);
+
+                nomPartida = texto[entradaDeUsuario]; continuar = 14;
+                listaPersonajes = HerramientaPartida.CargarPartida(nomPartida);
+            }
+            break;
+
+        case 3:
+            historialCargado = HerramientaHistorial.LeerHistorial();
+            if (historialCargado.Count() != 0)
+            {
+                Console.WriteLine("/*.... Salón de Ganadores ...*/\n");
+                foreach (Historial entrada in historialCargado)
+                {
+                    linea = entrada.FechaVictoria.ToString("dd 'de' MMM 'del' yyyy 'a las' HH:mm");
+                    Console.WriteLine($"{entrada.NombreGanador} ganó en {linea}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Aun no hay gandores.\n");
+            }
+            Console.Write("\nContinuar con otra opcion? (S/N) ");
+            do
+            {
+                continuar = Partida.ControlDeOpciones(Console.ReadLine(), 4); // s = letra n° 19, n = letra n° 14
+                if (continuar == 99999)
+                {
+                    Console.Write("Ingresa una opcion valida: ");
+                }
+            } while (continuar == 99999);
+            historialCargado.Clear();
+            break;
+
+        case 4:
+            Console.WriteLine("Hasta la proxima!");
+            gameOver = true; continuar = 21;
+            break;
+    }
+    if (continuar == 14)    // continuar? no
+    {
+        
+    }

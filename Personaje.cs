@@ -41,6 +41,15 @@ public class Personaje
         }
     }
 
+    public void RecuperarSalud(int maximo)  // si no, alguien va a tener salud infinita
+    {
+        estadisticas.Salud += 10;
+        if (estadisticas.Salud > maximo)
+        {
+            estadisticas.Salud = maximo;
+        }
+    }
+
     public void subirDeNivel()
     {
         if (estadisticas.Fuerza != 999) // GodMode pone todo en 999, cualquiera sirve
@@ -84,35 +93,35 @@ public class Personaje
         {
             case "Guerrero":
                 estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 100 + (25 * estadisticas.Nivel);// el jugador tiene que recupara salud, podes usar esto
+                estadisticas.Salud = 100 + (25 * multiplicador);// el jugador tiene que recupara salud, podes usar esto
                 estadisticas.Armadura += 2 * multiplicador;
                 estadisticas.Fuerza += 1 * multiplicador;
                 estadisticas.Destreza += 1 * multiplicador;
                 break;
             case "Monje":
                 estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 100 + (25 * estadisticas.Nivel);
+                estadisticas.Salud = 100 + (25 * multiplicador);
                 estadisticas.Armadura += 1 * multiplicador;
                 estadisticas.Fuerza += 2 * multiplicador;
                 estadisticas.Destreza += 1 * multiplicador;
                 break;
             case "Arquero":
                 estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 100 + (25 * estadisticas.Nivel);
+                estadisticas.Salud = 100 + (25 * multiplicador);
                 estadisticas.Armadura += 1 * multiplicador;
                 estadisticas.Fuerza += 1 * multiplicador;
                 estadisticas.Destreza += 2 * multiplicador;
                 break;
             case "Luchador":
                 estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 125 + (25 * estadisticas.Nivel);
+                estadisticas.Salud = 125 + (25 * multiplicador);
                 estadisticas.Armadura += 1 * multiplicador;
                 estadisticas.Fuerza += 2 * multiplicador;
                 estadisticas.Destreza += 1 * multiplicador;
                 break;
             case "Ladrón":
                 estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 100 + (25 * estadisticas.Nivel);
+                estadisticas.Salud = 100 + (25 * multiplicador);
                 estadisticas.Armadura += 1 * multiplicador;
                 estadisticas.Fuerza += 2 * multiplicador;
                 estadisticas.Destreza += 2 * multiplicador;

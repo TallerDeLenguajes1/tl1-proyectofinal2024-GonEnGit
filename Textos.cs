@@ -39,23 +39,22 @@ public static class Textos
                             "  |       4. Salir                  |\n",
                             "  |                                 |\n",
                             "  |  # - #                  # - #   |\n",
-                            "  # ------------------------------- #\n",
-                            "            Elija una opción:  " };
+                            "  # ------------------------------- #\n",};
         return menu;
     }
 
     public static string MenuDeGuardado()
     {
-        return  " |                          | ;" +
-                "-+--------------------------+-;" +
-                " |    Continuar Partida?    | ;" +
-                "-+--------------------------+-;" +
-                " |  1. Guardar y Continuar  | ;" +
-                " |  2. Guardar y Salir      | ;" +
-                " |  3. Salir sin Guardar    | ;" +
-                "-+--------------------------+-;" +
-                " |                          | ;" +
-                "    Seleccione una opción: ";
+        return  "  |                          | ;" +
+                "--+--------------------------+--;" +
+                "  |    Continuar Partida?    | ;" +
+                "--+--------------------------+--;" +
+                "  |  1. Guardar y Continuar  | ;" +
+                "  |  2. Guardar y Salir      | ;" +
+                "  |  3. Salir sin Guardar    | ;" +
+                "--+--------------------------+--;" +
+                "  |                          | ;" +
+                "     Seleccione una opción: ";
     }
 
     public static string CrearTarjeta(Personaje instancia)

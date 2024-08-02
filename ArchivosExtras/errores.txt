@@ -1,6 +1,10 @@
 
-despues de ganar un duelo, si pones "Salir sin guardar" aparece el msj de partida guardada igualmente
+despues de ganar un duelo, si pones "Salir sin guardar" aparece el msj de partida guardada igualmente --- corregido
 
 
-si el enmigo defiende, con godmode, y el jugador ataca, el jugador recibe daño
+si el enmigo defiende, con godmode, y el jugador ataca, el jugador recibe daño  --- deberia estar corregido
 ---notaste que esto pasa aun sin el godmode
+
+
+la herramientaPartida está dando problemas, 
+algunos metodos necesitan instancias otros no --- corregido

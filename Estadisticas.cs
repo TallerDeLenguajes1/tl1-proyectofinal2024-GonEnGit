@@ -23,37 +23,37 @@ public class Estadisticas
         {
             case "Guerrero":
                 Salud = 100;
-                Armadura = 4;
-                Fuerza = 2;
-                Destreza = 2;
+                Armadura = 3;
+                Fuerza = 3;
+                Destreza = 3;
             break;
 
             case "Monje":
                 Salud = 100;
                 Armadura = 2;
-                Fuerza = 3;
-                Destreza = 2;
+                Fuerza = 2;
+                Destreza = 4;
             break;
 
-            case "Arquero":
-                Salud = 100;
-                Armadura = 2;
-                Fuerza = 1;
-                Destreza = 3;
-            break;
-
-            case "Luchador":
+            case "Paladín":
                 Salud = 125;
-                Armadura = 1;
+                Armadura = 5;
                 Fuerza = 3;
+                Destreza = 1;
+            break;
+
+            case "Berserker":
+                Salud = 150;
+                Armadura = 1;
+                Fuerza = 5;
                 Destreza = 2;
             break;
 
-            case "Ladrón":
-                Salud = 100;
-                Armadura = 1;
-                Fuerza = 3;
-                Destreza = 3;
+            case "Gladiador":
+                Salud = 125;
+                Armadura = 2;
+                Fuerza = 4;
+                Destreza = 4;
             break;
         }
     }

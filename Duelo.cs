@@ -17,7 +17,7 @@ public static class Duelo
         if (codigo.Trim() == "8855464621")
         {
             jugador.GodMode();
-            respuesta = "Dev: espero que estes rindiendo y jugando en serio...";
+            respuesta = "Dev: espero que estes rindiendo y no jugando en serio...";
         }
         else if (codigo.Trim() == "1264645588")
         {

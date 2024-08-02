@@ -8,9 +8,8 @@ using System.Security;
 using System.Text.Json;
 
 
-public class Historial
+public class Historial  // no puede ser estatica por los campos de Historial
 {
-    private string rutaHistorial = "Historial/historial.json";
     private string nombreGanador;
     private DateTime fechaVictoria;
 
@@ -24,8 +23,9 @@ public class Historial
         FechaVictoria = DateTime.Now;
     }
 
-    public void AgregarAlHistorial(string nombre)
+    public static void AgregarAlHistorial(string nombre)
     {
+        string rutaHistorial = "Historial/historial.json";
         string respuesta;
         string datosHistorial;
         List<Historial> lista = new List<Historial>();
@@ -54,12 +54,17 @@ public class Historial
         }
     }
 
-    public List<Historial> LeerHistorial()
+    public static List<Historial> LeerHistorial()
     {
+        string rutaHistorial = "Historial/historial.json";
         string datosHistorial;
+        List<Historial> historialCargado = new List<Historial>(); // ojo, esta lista no esta apuntada a null, solo está vacia
 
-        datosHistorial = ClaseJson.LeerArchivo(rutaHistorial);
-        List<Historial> historialCargado = JsonSerializer.Deserialize<List<Historial>>(datosHistorial);
+        if (File.Exists(rutaHistorial))
+        {
+            datosHistorial = ClaseJson.LeerArchivo(rutaHistorial);
+            historialCargado = JsonSerializer.Deserialize<List<Historial>>(datosHistorial);
+        }
 
         return historialCargado;
     }

@@ -10,14 +10,15 @@ public class FabricaDePersonajes
     // por como armaste los metodos para generar los datos
     // si o si tenes que elegir las clases y mandarlas
         private int id = 1;
-        private string[] Clases = { "Guerrero", "Monje", "Arquero", "Luchador", "Ladrón"};
+        private string[] Clases = { "Guerrero", "Monje", "Paladín", "Berserker", "Gladiador"};
+        private string[] nombresElegidos = new string[10];  // no hay mas de 10 nombres en total
         private Dictionary<string, int> ContadorDeClases = new Dictionary<string,int>
         {
             {"Guerrero" , 0}, 
             {"Monje" , 0},
-            {"Arquero" , 0},
-            {"Luchador" , 0}, 
-            {"Ladrón" , 0},
+            {"Paladín" , 0},
+            {"Berserker" , 0}, 
+            {"Gladiador" , 0},
         };
 
     public List<Personaje> CreadorDePersonajes(List<Personaje> lista)
@@ -28,10 +29,11 @@ public class FabricaDePersonajes
             {
                 Personaje instancia = new Personaje();
 
-                instancia.DatosGenerales.GenerarDatos(clase, id);
+                instancia.DatosGenerales.GenerarDatos(clase, id, nombresElegidos);
                 instancia.Estadisticas.GenerarEstadisticas(clase);
-                id += 1;
                 ContadorDeClases[clase] += 1;
+                nombresElegidos[id - 1] = instancia.DatosGenerales.Nombre;
+                id += 1;
                 lista.Add(instancia);
             }
         }

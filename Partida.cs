@@ -9,23 +9,21 @@ using System.Text.Json;
 using EspacioPersonajes;
 
 
-public class Partida
+public static class Partida
 {
-    private string nombreCarpeta = "PartidasGuardadas/";
-
-    public void CrearCarpetas()
+    public static void CrearCarpetas()
     {
-        string rutaFinal = nombreCarpeta;
-        if (!Directory.Exists(rutaFinal))
+        string nombreCarpeta = "PartidasGuardadas/";
+        if (!Directory.Exists(nombreCarpeta))
         {
-            Directory.CreateDirectory(rutaFinal);
+            Directory.CreateDirectory(nombreCarpeta);
         }
     }
 
-    public void GuardarPartida(List<Personaje> lista, string nombrePartida)
+    public static void GuardarPartida(List<Personaje> lista, string nombrePartida)
     {
         // PartidasGuardadas/nombrePartida
-        string rutaFinal = nombreCarpeta + nombrePartida;
+        string rutaFinal = "PartidasGuardadas/" + nombrePartida;
         if (!Directory.Exists(rutaFinal))
         {
             Directory.CreateDirectory(rutaFinal);
@@ -38,8 +36,9 @@ public class Partida
         ClaseJson.GuardarEnArchivoNuevo(persSerializados, rutaPersonajes);
     }
 
-    public string ObtenerNombresDePartidas()
+    public static string ObtenerNombresDePartidas()
     {
+        string nombreCarpeta = "PartidasGuardadas/";
         string nomConcatenados = "vacio;";    // para anular el espacio 0
         if (Directory.Exists(nombreCarpeta))
         {
@@ -54,13 +53,14 @@ public class Partida
                 }
             }
         }
+        //nomConcatenados = "vacio;"; // para pruebas
         return nomConcatenados;
     }
 
-    public List<Personaje> CargarPartida(string partidaElegida)
+    public static List<Personaje> CargarPartida(string partidaElegida)
     {
         string datosDeArchivo;
-        string rutaFinal = nombreCarpeta + partidaElegida + "/personajes.json";
+        string rutaFinal = "PartidasGuardadas/" + partidaElegida + "/personajes.json";
 
         datosDeArchivo = ClaseJson.LeerArchivo(rutaFinal);
         List<Personaje> listaCargada = JsonSerializer.Deserialize<List<Personaje>>(datosDeArchivo);
@@ -69,28 +69,54 @@ public class Partida
         return listaCargada;
     }
 
-    public static int ControlDeOpciones(string entrada, int tipoControl)
+    public static int ControlDeOpciones(string entrada, int tipoControl, int limDesconocido)
     {
-        bool pruebaOpciones = false;
-        int valor = 0, limiteSup = 0;
+        int valor, limiteSup = 0;
+        char letra;
+        bool pruebaOpciones;
 
-        switch (tipoControl)
+        if (tipoControl == 7)   // control de letras
         {
-            case 1:
-                limiteSup = 5;
-                break;
-            case 2:
-                limiteSup = 6;
-                break;
-            case 3:
-                limiteSup = 2;
-                break;
+            pruebaOpciones = char.TryParse(entrada, out letra);
+            if (pruebaOpciones == false)
+            {
+                valor = 99999;
+            }
+            else
+            {
+                letra = char.ToUpper(letra);
+                if (letra == 'S')
+                {
+                    valor = 19;
+                }
+                else
+                {
+                    valor = 14;
+                }
+            }
         }
-
-        while (pruebaOpciones == false || valor <= 0 || valor >= limiteSup)
+        else                    // control de numeros segun limite
         {
+            switch (tipoControl)
+            {
+                case 1:             // continuar despues de perder y seleccion de carta
+                    limiteSup = 3;
+                    break;
+                case 2:
+                    limiteSup = 4;  // opciones de duelo y menu de guardado
+                    break;
+                case 3:             // opciones menu principal
+                    limiteSup = 5;
+                    break;
+                case 4:             // seleccion de personaje
+                    limiteSup = 6;
+                    break;
+                case 5:             // n° de partida a cargar
+                    limiteSup = limDesconocido;
+                    break;
+            }
             pruebaOpciones = int.TryParse(entrada, out valor);
-            if (pruebaOpciones == false || valor <= 0 || valor >= 5)
+            if (pruebaOpciones == false || valor <= 0 || valor >= limiteSup) // no permite el 0, no necesitas cambiar el lim inferior
             {
                 valor = 99999;
             }
@@ -98,7 +124,7 @@ public class Partida
         return valor;
     }
 
-    public bool EjecutarOpcion(List<Personaje> lista, string nombrePartida, int opcion)
+    public static bool EjecutarOpcion(List<Personaje> lista, string nombrePartida, int opcion)
     {
         if (opcion == 1)
         {
