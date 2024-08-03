@@ -8,3 +8,6 @@ si el enmigo defiende, con godmode, y el jugador ataca, el jugador recibe daño 
 
 la herramientaPartida está dando problemas, 
 algunos metodos necesitan instancias otros no --- corregido
+
+
+hay un error en las iniciativas.... parece que al elegir la carta 2 igual te da la carta 1

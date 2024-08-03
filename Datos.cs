@@ -12,7 +12,7 @@ public class Datos
     string[] razasPosibles = {"Humano", "Enano", "Elfo", "Orco",};
 // 3 de los apodos tienen 22 caracteres
     string[] apodosPosibles = { "El Defensor Inmortal","El Héroe Ancestral","La Espada Infernal","El Cazador Silencioso",
-                                "El Espíritu Indomable","Puño de Hierro","Unkindled","Martir de la Llama",
+                                "Maidenless","Puño de Hierro","Unkindled","Martir de la Llama",
                                 "Comandante de Hierro","El Monarca Olvidado","El Caballero Dragon","El Emperador Codicioso",
                                 "El Héroe Antiguo","El Centinela Fantasma","El Rey Omnisciente"};
 // Gladiadior y Berserker -- 10 letras

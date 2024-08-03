@@ -7,7 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 
 using System.Text.Json;
 using EspacioPersonajes;
-
+using EspacioJuego;
 
 public static class Partida
 {
@@ -20,7 +20,7 @@ public static class Partida
         }
     }
 
-    public static void GuardarPartida(List<Personaje> lista, string nombrePartida)
+    public static void GuardarPartida(List<Personaje> lista, List<Artefacto> cofre, List<Artefacto> inv, string nombrePartida)
     {
         // PartidasGuardadas/nombrePartida
         string rutaFinal = "PartidasGuardadas/" + nombrePartida;
@@ -29,11 +29,17 @@ public static class Partida
             Directory.CreateDirectory(rutaFinal);
         }
 
-        // PartidasGuardadas/nombrePartida/personajes.json
+        // PartidasGuardadas/nombrePartida/archivo.json
         string rutaPersonajes = rutaFinal + "/personajes.json";
         string persSerializados = JsonSerializer.Serialize(lista);
+        string rutaCofre = rutaFinal + "/cofre.json";
+        string cofreSerializado = JsonSerializer.Serialize(cofre);
+        string rutaInventario = rutaFinal + "/inventario.json";
+        string invSerializado = JsonSerializer.Serialize(inv);
 
         ClaseJson.GuardarEnArchivoNuevo(persSerializados, rutaPersonajes);
+        ClaseJson.GuardarEnArchivoNuevo(cofreSerializado, rutaCofre);
+        ClaseJson.GuardarEnArchivoNuevo(invSerializado, rutaInventario);
     }
 
     public static string ObtenerNombresDePartidas()
@@ -57,13 +63,12 @@ public static class Partida
         return nomConcatenados;
     }
 
-    public static List<Personaje> CargarPartida(string partidaElegida)
+    public static List<T> CargarPartida<T>(string partidaElegida, string tipoDeLista)
     {
-        string datosDeArchivo;
-        string rutaFinal = "PartidasGuardadas/" + partidaElegida + "/personajes.json";
+        string datosDeArchivo, rutaFinal = $"PartidasGuardadas/{partidaElegida}/{tipoDeLista}.json";
 
         datosDeArchivo = ClaseJson.LeerArchivo(rutaFinal);
-        List<Personaje> listaCargada = JsonSerializer.Deserialize<List<Personaje>>(datosDeArchivo);
+        List<T> listaCargada = JsonSerializer.Deserialize<List<T>>(datosDeArchivo);
         // parece que en C#, '= new List<>' sobra si acto seguido asignas una lista
 
         return listaCargada;
@@ -103,7 +108,7 @@ public static class Partida
                     limiteSup = 3;
                     break;
                 case 2:
-                    limiteSup = 4;  // opciones de duelo y menu de guardado
+                    limiteSup = 4;  // opciones de duelo, menu de guardado y artefactos
                     break;
                 case 3:             // opciones menu principal
                     limiteSup = 5;
@@ -124,18 +129,18 @@ public static class Partida
         return valor;
     }
 
-    public static bool EjecutarOpcion(List<Personaje> lista, string nombrePartida, int opcion)
+    public static bool EjecutarOpcion(List<Personaje> lista, List<Artefacto> cofre, List<Artefacto> inv, string nombre, int opcion)
     {
         if (opcion == 1)
         {
-            GuardarPartida(lista, nombrePartida);
+            GuardarPartida(lista, cofre, inv, nombre);
             return false;
         }
         else
         {
             if (opcion == 2)
             {
-                GuardarPartida(lista, nombrePartida);
+                GuardarPartida(lista, cofre, inv, nombre);
             }
             return true;
         }

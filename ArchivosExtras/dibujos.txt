@@ -1,15 +1,15 @@
 
-cabeza de la carta:
+/--- Cabeza de la carta:
 
 "-------------;|X            |;|   -------   |"
 
 
-pie de la carta:
+/--- Pie de la carta:
 
 "|   -------   |;|            X|;-------------"
 
 
-cuerpos segun el valor:
+/--- Cuerpos segun el valor:
 
 "|  |       |  |;|  |       |  |;|  |       |  |;|  |   X   |  |;|  |       |  |;|  |       |  |;|  |       |  |"   A
 
@@ -38,10 +38,47 @@ cuerpos segun el valor:
 "|  |X      |  |;|  |       |  |;|  |       |  |;|  |   K   |  |;|  |       |  |;|  |       |  |;|  |      X|  |"   K
 
 
-reverso:
+/--- Reverso de las cartas:
 
 " -------------- ;| []  []  []  |;|   []  []  []|;| []  []  []  |; " +
 "  |   []  []  []|;| []  []  []  |;|   []  []  []|;| []  []  []  |; " +
 "  |   []  []  []|;| []  []  []  |;|   []  []  []|;| []  []  []  |; " +
 "  -------------- "
 
+/--- Querias hacer unas armas para los duelos... solo llegaste a ahcer uno por ahora
+
+        return "              ___;" +
+"              /  /;" +
+"             /  /;" +
+"            /  /;" +
+"           /  /;" +
+"          /  /;" +
+"         /  /;" +
+"        /  /;" +
+"       /  /;" +
+@" |\    /  /   /|;" +
+@" | \__/  /___/ |;" +
+" |_____________|;" +
+"   . /  /.;" +
+@"  | --- |\;" +
+@"  | --- | \;" +
+@"   /  / \  \;" +
+@"         \  \;" +
+@"          \  \;" +
+@"           \  \;" +
+
+
+/--- Tarjetas para los Artefactos
+
+ /≒≒≒≒≒≒≒≒≒≒✠≑≑≑≑≑≑≑≑≑✠≓≓≓≓≓≓≓≓≓≓\
+/                  Nombre                     \
+|                                             |
+|<∻∻∻∻∻∻∻∻∻∻∻∻∻∰∻∻∰∻∻∻∻∻∻∻∻∻∻∻∻∻>|
+|                                             |
+| Descripción:                                |
+|   Una espada legen daria,                   |
+|   con un poder inmenso,                     |
+|   y un pasado misterioso.                   |
+|                                             |
+| Efecto: Daño +150                           |
+✦≒≒≒≒≒≒≒≒≒≒✠≑≑≑≑≑≑≑≑≑≑≑≑≑✠≓≓≓≓≓≓≓≓≓≓✦

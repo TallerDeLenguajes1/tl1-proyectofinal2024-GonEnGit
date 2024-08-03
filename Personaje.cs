@@ -1,8 +1,7 @@
 namespace  EspacioPersonajes;
 
 
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
+using EspacioJuego;
 
 
 public class Personaje
@@ -43,44 +42,44 @@ public class Personaje
         }
     }
 
-    public void subirDeNivel()
+    public void SubirDeNivel()
     {
         if (estadisticas.Fuerza != 999) // GodMode pone todo en 999, cualquiera sirve
         {
             if (generales.Id <= 3)      //jugador, y enemigos 1 y 2
             {
-                sumarStatsSegunClase(1);
+                SumarStatsSegunClase(1);
             }
             else if(generales.Id <= 6)
             {
                 if (generales.Id == 4)  // tercer enemigo, cuarto personaje
                 {
-                    sumarStatsSegunClase(3);
+                    SumarStatsSegunClase(3);
                 }
                 else
                 {
-                    sumarStatsSegunClase(5);
+                    SumarStatsSegunClase(5);
                 }
             }
             else if (generales.Id <= 9)
             {
                 if (generales.Id == 9)  // octavo enemigo, noveno personaje
                 {
-                    sumarStatsSegunClase(9);
+                    SumarStatsSegunClase(9);
                 }
                 else
                 {
-                    sumarStatsSegunClase(7);
+                    SumarStatsSegunClase(7);
                 }
             }
             else
             {
-                sumarStatsSegunClase(11);
+                SumarStatsSegunClase(11);
             }
         }
     }
 
-    public void sumarStatsSegunClase(int multiplicador)
+    public void SumarStatsSegunClase(int multiplicador)
     {
         switch (generales.Clase)
         {
@@ -88,43 +87,59 @@ public class Personaje
                 estadisticas.Nivel += multiplicador;
                 estadisticas.Salud = 100 + (25 * multiplicador);// el jugador tiene que recupara salud, podes usar esto
                 estadisticas.Armadura += 2 * multiplicador;
-                estadisticas.Fuerza += 1 * multiplicador;
-                estadisticas.Destreza += 1 * multiplicador;
+                estadisticas.Fuerza += 2 * multiplicador;
+                estadisticas.Destreza += 2 * multiplicador;
                 break;
             case "Monje":
                 estadisticas.Nivel += multiplicador;
                 estadisticas.Salud = 100 + (25 * multiplicador);
                 estadisticas.Armadura += 1 * multiplicador;
-                estadisticas.Fuerza += 2 * multiplicador;
-                estadisticas.Destreza += 1 * multiplicador;
-                break;
-            case "Arquero":
-                estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 100 + (25 * multiplicador);
-                estadisticas.Armadura += 1 * multiplicador;
                 estadisticas.Fuerza += 1 * multiplicador;
                 estadisticas.Destreza += 2 * multiplicador;
                 break;
-            case "Luchador":
+            case "Paladín":
                 estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 125 + (25 * multiplicador);
+                estadisticas.Salud = 100 + (25 * multiplicador);
+                estadisticas.Armadura += 2 * multiplicador;
+                estadisticas.Fuerza += 1 * multiplicador;
+                estadisticas.Destreza += 1 * multiplicador;
+                break;
+            case "Berserker":
+                estadisticas.Nivel += multiplicador;
+                estadisticas.Salud = 150 + (25 * multiplicador);
                 estadisticas.Armadura += 1 * multiplicador;
                 estadisticas.Fuerza += 2 * multiplicador;
                 estadisticas.Destreza += 1 * multiplicador;
                 break;
-            case "Ladrón":
+            case "Gladiador":
                 estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 100 + (25 * multiplicador);
+                estadisticas.Salud = 125 + (25 * multiplicador);
                 estadisticas.Armadura += 1 * multiplicador;
-                estadisticas.Fuerza += 2 * multiplicador;
+                estadisticas.Fuerza += 1 * multiplicador;
                 estadisticas.Destreza += 2 * multiplicador;
                 break;
         }
     }
 
-    public void MejorasPorItem()
+// así la podrias usar con enemigos tambien
+// pero no hay nesecidad de traer un personaje tambien
+    public void MejorasPorItem(Artefacto artefacto)
     {
-        
+        switch (artefacto.Efecto)
+        {
+            case "Salud":
+                estadisticas.Salud += artefacto.Cantidad;
+                break;
+            case "Armadura":
+                estadisticas.Armadura += artefacto.Cantidad;
+                break;
+            case "Fuerza":
+                estadisticas.Fuerza += artefacto.Cantidad;
+                break;
+            case "Destreza":
+                estadisticas.Destreza += artefacto.Cantidad;
+                break;
+        }
     }
 
     public void GodMode()

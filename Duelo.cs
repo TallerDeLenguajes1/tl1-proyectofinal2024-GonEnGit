@@ -53,8 +53,6 @@ public static class Duelo
     }
 
 // la idea es hacer un calculo segun palo, color y valor
-    // el palo y el color van siempre de a pares, 
-    //osea que podes ignorar el color y usar el palo para el calculo
     public static int CalcularIniciativa(Carta cartaRecibida, int color)
     {
         int valorDeCarta;
@@ -80,11 +78,11 @@ public static class Duelo
     // multiplicas segun el color
         if (color == 1)
         {
-            valorDeCarta *= 2;
+            valorDeCarta = (int)(valorDeCarta* 1.5);
         }
         else
         {
-            valorDeCarta = (int)(valorDeCarta* 1.5);
+            valorDeCarta *= 2;
         }
     // a estos calculos tambien los tenes que cambiar
         if (cartaRecibida.suit == "SPADES" || cartaRecibida.suit == "CLUBS")

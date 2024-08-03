@@ -1,5 +1,6 @@
 namespace EspacioJuego;
 
+using System.ComponentModel;
 using EspacioAPI;
 using EspacioPersonajes;
 
@@ -30,6 +31,11 @@ public static class Textos
         int espaciosAntes = (anchoPantalla - palabras.Length) / 2;
         string renglon = palabras;
 
+        if (espaciosAntes <= 0) // parece que string muy largos rompen esto
+        {
+            espaciosAntes = 10;
+        }
+
         for (int i = 0; i < espaciosAntes; i++)
         {
             renglon = " " + renglon;
@@ -39,17 +45,17 @@ public static class Textos
     }
     public static string[] MenuPrincipal()
     {
-        string[] menu = {  "  # ------------------------------- #\n",
-                            "  |  # - #                  # - #   |\n",
-                            "  |         MENU PRINCIPAL          |\n",
-                            "  |                                 |\n",
-                            "  |       1. Nueva Partida          |\n",
-                            "  |       2. Cargar Partida         |\n",
-                            "  |       3. Ganadores Anteriores   |\n",
-                            "  |       4. Salir                  |\n",
-                            "  |                                 |\n",
-                            "  |  # - #                  # - #   |\n",
-                            "  # ------------------------------- #\n",};
+        string[] menu = {   "# ------------------------------- #\n",
+                            "|  # - #                  # - #   |\n",
+                            "|         MENU PRINCIPAL          |\n",
+                            "|                                 |\n",
+                            "|       1. Nueva Partida          |\n",
+                            "|       2. Cargar Partida         |\n",
+                            "|       3. Ganadores Anteriores   |\n",
+                            "|       4. Salir                  |\n",
+                            "|                                 |\n",
+                            "|  # - #                  # - #   |\n",
+                            "# ------------------------------- #\n",};
         return menu;
     }
 
@@ -76,8 +82,7 @@ public static class Textos
         string[] Datos = lineaDatos.Split(";");
         string[] Estadisticas = lineaEstadisticas.Split(";");
 
-    // los renglones deben tener 39 caracteres
-    // renglones de datos iguales
+    // renglones de tarjetas de personjae tienen 39 caracteres + 2 bordes
         renglon1 = "+-";
         if (Datos[0].Length == 1)
         {
@@ -87,40 +92,18 @@ public static class Textos
         {
             renglon1 += $"{Datos[0]}------------------------------------+;";   // un - menos que arriba
         }
-        renglon2 = Datos[1] + ", " + Datos[2];
-        renglon3 = Datos[3] + ", " + Datos[4];
+        renglon1 = ArmarRenglon(renglon1, 39);
+        renglon2 = ArmarRenglon(Datos[1] + ", " + Datos[2], 39);
+        renglon3 = ArmarRenglon(Datos[3] + ", " + Datos[4], 39);
         if (Datos[6].Length == 2 )
         {
-            renglon4 = Datos[6] + "años,  " + Datos[5]; // 2 espacios
+            renglon4 = Datos[6] + " años,  " + Datos[5]; // 2 espacios
         }
         else
         {
-            renglon4 = Datos[6] + "años, " + Datos[5];
+            renglon4 = Datos[6] + " años, " + Datos[5];
         }
-        while (renglon2.Length < 39)    // no los podes juntar
-        {
-            renglon2 = " " + renglon2;
-            if (renglon2.Length < 39)
-            {
-                renglon2 = renglon2 + " ";
-            }
-        }
-        while (renglon3.Length < 39)    // tienen largos totales distintos
-        {
-            renglon3 = " " + renglon3;
-            if (renglon3.Length < 39)
-            {
-                renglon3 = renglon3 + " ";
-            }
-        }
-        while (renglon4.Length < 39)
-        {
-            renglon4 = " " + renglon4;
-            if (renglon4.Length < 39)
-            {
-                renglon4 = renglon4 + " ";
-            }
-        }
+        renglon4 = ArmarRenglon(renglon4, 39);
     // digitos de las estadisticas
         if (Datos[6].Length < 3) // esto es para que todas las edades tengan 3 caracteres
         {
@@ -140,49 +123,99 @@ public static class Textos
             {
                 Estadisticas[i] = "0" + Estadisticas[i];
             }
+            if (Estadisticas[i].Length < 3)
+            {
+                Estadisticas[i] = " " + Estadisticas[i];
+            }
         }
 
         return  $"{renglon1}" +
                 $"|{renglon2}|;" +
                 $"|{renglon3}|;" +
-                $"|         {Datos[6]} años, {Datos[5]}           |;" +
+                $"|{renglon4}|;" +
                 "+---------------------------------------+;" +
                 $"|              Salud: {Estadisticas[0]}               |;" +
-                $"|              Armadura: {Estadisticas[1]}             |;" +
-                $"|              Fuerza: {Estadisticas[2]}               |;" +
-                $"|              Destreza: {Estadisticas[3]}             |;" +
-                "+---------------------------------------+;";
+                $"|              Armadura: {Estadisticas[1]}            |;" +
+                $"|              Fuerza: {Estadisticas[2]}              |;" +
+                $"|              Destreza: {Estadisticas[3]}            |;" +
+                "+---------------------------------------+";
     }
 
-    public static void ArmarListaTarjetas(List<string[]> lista, List<Personaje> listaTemp)
+    public static void ArmarListaTarjetas(List<string[]> lista, List<Personaje> listaTemp, List<Artefacto> cofre, int tipo)
     {
-        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta;
-        string[] primeraFila, segundaFila;
+        string[] partes, primeraFila, segundaFila;
+        List<string[]> tarjetas = new List<string[]>();
 
-        primeraTarjeta = CrearTarjeta(listaTemp[0]).Split(";");
-        segundaTarjeta = CrearTarjeta(listaTemp[1]).Split(";");
-        TerceraTarjeta = CrearTarjeta(listaTemp[2]).Split(";");
-        primeraFila = new string[primeraTarjeta.Length];       // C# puede decidir el tamño de una arreglo automaticamente
-
-        for (int i = 0; i < primeraTarjeta.Length - 1; i++)
+        if (tipo == 1)
         {
-            primeraFila[i] = " " + primeraTarjeta[i] + " " + segundaTarjeta[i] + " " + TerceraTarjeta[i]; // pero no de a 1
+            for (int indiceTarjeta = 0; indiceTarjeta < 5; indiceTarjeta++)
+            {
+                partes = CrearTarjeta(listaTemp[indiceTarjeta]).Split(";");
+                tarjetas.Add(partes);
+            }
+        }
+        else
+        {
+            for (int indiceTarjeta = 0; indiceTarjeta < 3; indiceTarjeta++)
+            {
+                partes = CrearTarjetaArt(cofre[indiceTarjeta]).Split(";");
+                tarjetas.Add(partes);
+            }
+        }
+
+        primeraFila = new string[tarjetas[0].Length];
+        for (int indiceFilas = 0; indiceFilas < tarjetas[0].Length; indiceFilas++)
+        {
+        // sin este control las tarjetas de artefacos se deforma
+            if (indiceFilas == 0 && tipo == 2)
+            {
+                primeraFila[indiceFilas] = tarjetas[0][indiceFilas] + "     " + tarjetas[1][indiceFilas] + "     " + tarjetas[2][indiceFilas];
+            }
+            else
+            {
+                primeraFila[indiceFilas] = tarjetas[0][indiceFilas] + "   " + tarjetas[1][indiceFilas] + "   " + tarjetas[2][indiceFilas];
+            }
         }
         lista.Add(primeraFila);
 
-        primeraTarjeta = CrearTarjeta(listaTemp[3]).Split(";");
-        segundaTarjeta = CrearTarjeta(listaTemp[4]).Split(";");
-        segundaFila = new string[primeraTarjeta.Length];
-        for (int i = 0; i < primeraTarjeta.Length; i++)
+        if (tipo == 1)
         {
-            segundaFila[i] = "                      " + primeraTarjeta[i] + " " + segundaTarjeta[i];
+            segundaFila = new string[tarjetas[0].Length];
+            for (int indiceFilas = 0; indiceFilas < tarjetas[0].Length; indiceFilas++)
+            {
+                segundaFila[indiceFilas] = tarjetas[3][indiceFilas] + "   " + tarjetas[4][indiceFilas];
+            }
+            lista.Add(segundaFila);
         }
-        lista.Add(segundaFila);
     }
 
     public static string DevolverNombre(Personaje pers)
     {
-        return pers.DatosGenerales.Nombre + ',' + pers.DatosGenerales.Apodo;
+        return pers.DatosGenerales.Nombre + ", " + pers.DatosGenerales.Apodo;
+    }
+
+    public static string DatosDeSubaDeNivel(string clase)
+    {
+        string linea = "Salud +25;";
+        switch (clase)
+        {
+            case "Guerrero":
+                linea += "Armadura +2;Fuerza +2;Destreza +2";
+                break;
+            case "Monje":
+                linea += "Armadura +1;Fuerza +1;Destreza +2";
+                break;
+            case "Paladín":
+                linea += "Armadura +2;Fuerza +1;Destreza +1";
+                break;
+            case "Berserker":
+                linea += "Armadura +1;Fuerza +2;Destreza +1";
+                break;
+            case "Gladiador":
+                linea += "Armadura +1;Fuerza +1;Destreza +2";
+                break;
+        }
+        return linea;
     }
 
     public static string TutorialCartas()
@@ -191,7 +224,7 @@ public static class Textos
                 "Dev: Primero se muestran 2, una boca abajo, el jugador tiene que elegir una.\n;" +
                 "\n\nNarrador: Si no puede ver la segunda, como se supone que elija?;" +
                 "Dev: Esa es la apuesta, el color y el palo tambien cambian el resultado.;" +
-                "Azul = x1.5, Amarillo = x3, ♠ = +2, ♣ = +3, ♦ = +4,♥ = +5;" +
+                "Azul = x2, Amarillo = x1.5, ♠ = +2, ♣ = +3, ♦ = +4,♥ = +5;" +
                 "Narrador: Ahora veo, una carta baja puede dar un resultado alto!;" +
                 "Dev: O no, ahora que sabemos cuales son, sabemos quien mueve primero.";
     }
@@ -211,6 +244,55 @@ public static class Textos
                 "|   []  []  []|;" +
                 "| []  []  []  |;" +
                 " ------------- ";
+    }
+
+    public static string CrearTarjetaArt(Artefacto artefacto)
+    {
+    // renglon de Artefacto: 45 caracteres + 2 bordes
+        string lineaId = ArmarRenglon(artefacto.Id.ToString(), 40);
+        string lineaNombre = ArmarRenglon(artefacto.Nombre, 40);
+        string LineaDesc1 = ArmarRenglon(artefacto.Descripcion[0], 40);
+        string LineaDesc2 = ArmarRenglon(artefacto.Descripcion[1], 40);
+        string LineaDesc3;
+        string LineaEfecto = ArmarRenglon(artefacto.Efecto + " +" + artefacto.Cantidad, 31); // sacas ' Efecto: '
+
+        if (artefacto.Descripcion.Length == 3)
+        {
+            LineaDesc3 = ArmarRenglon(artefacto.Descripcion[2], 40);
+        }
+        else
+        {
+            LineaDesc3 = "                                        ";
+        }
+        return  @"/≒≒≒≒≒≒≒≒≒≒≒≒✠≑≑≑≑≑≑≑≑≑≑≑≑✠≓≓≓≓≓≓≓≓≓≓≓≓\;" +
+                $@"/{lineaNombre}\;" +
+                "|                                        |;" +
+                "|<∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∰∻∻∰∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻>|;" +
+                "|                                        |;" +
+                "|                                        |;" +
+                $"|{LineaDesc1}|;" +
+                $"|{LineaDesc2}|;" +
+                $"|{LineaDesc3}|;" +
+                "|                                        |;" +
+                "|                                        |;" +
+                $"| Efecto: {LineaEfecto}|;" +
+                "✦≒≒≒≒≒≒≒≒≒≒≒≒≒✠≑≑≑≑≑≑≑≑≑≑≑≑✠≓≓≓≓≓≓≓≓≓≓≓≓≓✦;" +
+                $"{lineaId}";
+        
+    }
+
+    public static string ArmarRenglon(string datos, int cantEspacios)
+    {
+        string renglon = datos;
+        while (renglon.Length < cantEspacios)
+        {
+            renglon = " " + renglon;
+            if (renglon.Length < cantEspacios)
+            {
+                renglon = renglon + " ";
+            }
+        }
+        return renglon;
     }
 
     public static string ArmarCarta(Carta carta)
@@ -398,21 +480,5 @@ public static class Textos
         }
 
         return cartaString;
-    }
-
-    public static string ElegirColor()
-    {
-        Random rnd = new Random();
-        string eleccion = "";
-        switch (rnd.Next(1,3))
-        {
-            case 1:
-                eleccion = "ConsoleColor.DarkYellow";
-                break;
-            case 2:
-                eleccion = "Blue";
-                break;
-        }
-        return eleccion;
     }
 }

@@ -19,17 +19,17 @@ FabricaDeArtefactos HerramientaFabricaArt = new FabricaDeArtefactos();
 
 // variables
 bool gameOver = false, critico;
-int entradaDeUsuario = 99999, colorIzq, colorDer, espaciosAntes;
+int entradaDeUsuario = 99999, espaciosAntes = Console.WindowWidth;
 int iniciativaJugador, iniciativaEnemigo, decisionEnemigo;
 int danio, ctrlDeFlujo = 1, continuar = 19;
 int saludGuardadaJu, saludGuardadaEn;
-string linea, linea2, cartaIzq, cartaDer;
+string linea, linea2, linea3, cartaIzq, cartaDer;
 string nomJugador, nomEnemigo, nomPartida = "";
 Mazo nuevoMazo = await API.ObtenerIdMazoAsync();
 ListaCartas cartasNuevas = new ListaCartas();
 
 // Arreglos
-string[] texto, texto2, textoEnemigo;
+string[] texto, texto2, texto3, textoEnemigo;
 string[] partesCartaIzq, partesCartaDer;
 
 // Listas
@@ -37,6 +37,7 @@ List<Historial> historialCargado;
 List<Personaje> listaPersonajes = new List<Personaje>();
 List<Artefacto> cofre = new List<Artefacto>();
 List<Artefacto> inventario = new List<Artefacto>();
+List<string[]> tarjetasAMostrar = new List<string[]>();
 
 
 /* ---- Desarrollo del juego ---- */
@@ -44,7 +45,7 @@ Textos.Introduccion();
 texto = Textos.MenuPrincipal();
 foreach (string parte in texto)
 {
-    linea = Textos.CentrarRenglon(Console.WindowWidth, parte);
+    linea = Textos.CentrarRenglon(espaciosAntes, parte);
     Console.Write(linea);
 }
 
@@ -52,12 +53,12 @@ do              /*--- inicio del control de opcion ---*/
 {
     while (entradaDeUsuario == 99999 && continuar == 19)
     {
-        linea = Textos.CentrarRenglon(Console.WindowWidth, "Ingresá una opción del menú: ");
+        linea = Textos.CentrarRenglon(espaciosAntes, "Ingresá una opción del menú: ");
         Console.Write("\n" + linea);
         entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 3, 0);
         if (entradaDeUsuario == 99999)
         {
-            linea = Textos.CentrarRenglon(Console.WindowWidth, "Ingresá una opcion valida.");
+            linea = Textos.CentrarRenglon(espaciosAntes, "Ingresá una opcion valida.");
             Console.Write(linea);
         }
     }
@@ -66,12 +67,11 @@ do              /*--- inicio del control de opcion ---*/
     {
         case 1:
             List<Personaje> listaPersTemp = new List<Personaje>();  // listas provisorias para liberarlas despues
-            List<string[]> tarjetasAMostrar = new List<string[]>();
 
             listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);  // creas 10 personajes
-            cofre = HerramientaFabricaArt.CreadorDeArtefactos(cofre);
+            cofre = HerramientaFabricaArt.CreadorDeArtefactos(cofre);               // lista aleatoria de Artefactos
 
-            linea = Textos.CentrarRenglon(Console.WindowWidth, "Ingresa un nombre para la partida: ");
+            linea = Textos.CentrarRenglon(espaciosAntes, "Ingresa un nombre para la partida: ");
             Console.Write(linea);   // creas carpetas
             nomPartida = Console.ReadLine();
             Partida.CrearCarpetas();
@@ -81,12 +81,13 @@ do              /*--- inicio del control de opcion ---*/
         /*--- fin de esta parte de historia---*/
 
             Console.WriteLine(" ");
-            Textos.ArmarListaTarjetas(tarjetasAMostrar, listaPersTemp);
+            Textos.ArmarListaTarjetas(tarjetasAMostrar, listaPersTemp, cofre, 1);
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < tarjetasAMostrar[0].Length; j++)
                 {
-                    Console.WriteLine(tarjetasAMostrar[i][j]);
+                    linea = Textos.CentrarRenglon(espaciosAntes, tarjetasAMostrar[i][j]);
+                    Console.WriteLine(linea);
                 }
             }
 
@@ -102,7 +103,7 @@ do              /*--- inicio del control de opcion ---*/
 
             listaPersonajes = HerramientaFabrica.MezclarLista(entradaDeUsuario - 1, listaPersTemp); // armas lista mezclada
 
-            Console.WriteLine("\nIngresa el ataque de tu personaje:"); // cheat code
+            Console.Write("\nIngresa el ataque de tu personaje: "); // cheat code
             linea = Duelo.CheatCode(listaPersonajes[0], listaPersonajes[1], Console.ReadLine());
             Console.WriteLine(linea + "\n");      /*--- Fin de seleccion de personaje ---*/
 
@@ -121,8 +122,8 @@ do              /*--- inicio del control de opcion ---*/
             else
             {
                 Console.WriteLine("/* --- Partidas Guardadas --- */\n");
-                texto = linea.Split(";");                                   // crea una entrada vacia al final
-                for (int indice = 1; indice < texto.Length - 1; indice++)   // por como funciona el for, así la podes ignorar
+                texto = linea.Split(";");
+                for (int indice = 1; indice < texto.Length - 1; indice++)
                 {
                     Console.WriteLine($"            {indice}. " + texto[indice]);
                 }
@@ -138,7 +139,9 @@ do              /*--- inicio del control de opcion ---*/
                 } while (entradaDeUsuario == 99999);
 
                 nomPartida = texto[entradaDeUsuario]; continuar = 21;   // el 21 es arbitrario, solo importa que rompe el while
-                listaPersonajes = Partida.CargarPartida(nomPartida);
+                listaPersonajes = Partida.CargarPartida<Personaje>(nomPartida, "personajes");
+                cofre = Partida.CargarPartida<Artefacto>(nomPartida, "cofre");
+                inventario = Partida.CargarPartida<Artefacto>(nomPartida, "inventario");
             }
             break;
         case 3:
@@ -213,27 +216,11 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
     cartaDer = Textos.TraerReverso();
     partesCartaIzq = cartaIzq.Split(";");
     partesCartaDer = cartaDer.Split(";");
-    colorIzq = rnd.Next(1,3);
-    colorDer = rnd.Next(1,3);
-    for (int indice = 0; indice < partesCartaDer.Length; indice++)
+    for (int indice = 0; indice < partesCartaIzq.Length; indice++)
     {
-        if (colorIzq == 1)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-        }
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.Write(partesCartaIzq[indice]);
-        if (colorDer == 1)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-        }
+        Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine(partesCartaDer[indice]);
     }
     Console.ForegroundColor = ConsoleColor.White;
@@ -271,23 +258,9 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
     Console.WriteLine("");
     for (int indice = 0; indice < partesCartaDer.Length; indice++)
     {
-        if (colorIzq == 1)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-        }
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.Write(partesCartaIzq[indice]);
-        if (colorDer == 1)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-        }
+        Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine(partesCartaDer[indice]);
     }
     Console.ForegroundColor = ConsoleColor.White;
@@ -305,13 +278,13 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
 // estas 2 dependen de la eleccion
     if (entradaDeUsuario == 1)
     {
-        iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[0], colorIzq);
-        iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[1], colorDer);
+        iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[0], 1);
+        iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[1], 2);
     }
     else
     {
-        iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[1], colorDer);
-        iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[0], colorIzq);
+        iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[1], 2);
+        iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[0], 1);
     }
 // por ultimo anuncia quien va primero
     if (iniciativaJugador >= iniciativaEnemigo)
@@ -329,7 +302,7 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
         texto = linea.Split(";");
         linea2 = Textos.CrearTarjeta(listaPersonajes[ctrlDeFlujo]);
         textoEnemigo = linea2.Split(";");
-        for (int indice = 0; indice < 11; indice++)
+        for (int indice = 0; indice < texto.Length; indice++)
         {
             if (indice != 3)
             {
@@ -391,7 +364,7 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                         {
                             Console.WriteLine($"{nomEnemigo} está evaluando la situción... creo?");
                             Console.WriteLine($"{nomEnemigo} recuperó 10 puntos de salud!");
-                            listaPersonajes[ctrlDeFlujo].RecuperarSalud(saludGuardadaEn);
+                            listaPersonajes[ctrlDeFlujo].RecuperarSalud(saludGuardadaEn); // SaludG actua como limite, no es error
                         }
                     }
                 }
@@ -573,19 +546,47 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
     if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud == 0)   // si el jugador gana
     {
         Console.WriteLine($"{nomEnemigo} sufrió demasiado daño... ");
-        Console.WriteLine("Dev: habrá que buscar a alguien mas...\n");
+        Console.WriteLine("Dev: habrá que buscar a alguien mas...\n\n");
         ctrlDeFlujo += 1;
-        listaPersonajes[0].subirDeNivel();
-        listaPersonajes[ctrlDeFlujo].subirDeNivel();
+        listaPersonajes[0].SubirDeNivel(); // el nivel devuelve la vida al max, artefactos despues
+        listaPersonajes[ctrlDeFlujo].SubirDeNivel();
+        linea = Textos.DatosDeSubaDeNivel(listaPersonajes[0].DatosGenerales.Clase);
+        texto = linea.Split(";");   // la verdad estos pares linea - texto podrian ser un metodo tambien -------------
+        Console.WriteLine($"{nomJugador} subio de nivel: \n");
+        for (int indice = 0; indice < texto.Length; indice++)
+        {
+            Console.WriteLine("             " + texto[indice]);
+        }
 
+        Textos.ArmarListaTarjetas(tarjetasAMostrar, listaPersonajes, cofre, 2);    /* --- Eleccion de artefactos --- */
+        for (int indice = 0; indice < tarjetasAMostrar[0].Length; indice++)
+        {
+            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, tarjetasAMostrar[0][indice]));
+        }
+        if (ctrlDeFlujo == 2)
+        {
+            Console.WriteLine("Narrador: El ganador puede elegir una mejora.");
+        }
+        do
+        {
+            Console.Write("Elige un artefacto: ");
+            entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 2, 0);
+            if (entradaDeUsuario == 99999)
+            {
+                Console.WriteLine("Narrador: No, solo están estos 3...");
+            }
+        } while (entradaDeUsuario == 99999);
+        inventario.Add(cofre[entradaDeUsuario]);
+        listaPersonajes[0].MejorasPorItem(cofre[entradaDeUsuario]);
+        cofre.RemoveAt(entradaDeUsuario);                                           /* --- Fin artefactos --- */
         if (ctrlDeFlujo != 9)
         {
             // guardado de partida en json
             linea = Textos.MenuDeGuardado();
             texto = linea.Split(";");
-            for (int indice = 0; indice < texto.Count(); indice++)
+            for (int indice = 0; indice < texto.Length; indice++)
             {
-                if (indice == (texto.Count() - 1))
+                if (indice == (texto.Length - 1))
                 {
                     Console.Write("  " + texto[indice]);
                 }
@@ -603,7 +604,7 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                     Console.Write("Ingresa un opcion valida: ");
                 }
             } while (entradaDeUsuario == 99999);
-            gameOver = Partida.EjecutarOpcion(listaPersonajes, nomPartida, entradaDeUsuario);
+            gameOver = Partida.EjecutarOpcion(listaPersonajes, cofre, inventario, nomPartida, entradaDeUsuario); //-----------------------------------
             if (entradaDeUsuario == 1 || entradaDeUsuario == 2)
             {
                 Console.WriteLine("Partida guardada."); // esto lo podrias mejorar con algun control
