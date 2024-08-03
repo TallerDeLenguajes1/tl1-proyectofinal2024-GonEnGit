@@ -1,19 +1,16 @@
 namespace EspacioPersonajes;
 
 
-using System.Data;
-using System.Runtime.CompilerServices;
-
 
 public class FabricaDePersonajes
 {
     // por como armaste los metodos para generar los datos
     // si o si tenes que elegir las clases y mandarlas
         private int id = 1;
-        private string[] Clases = { "Guerrero", "Monje", "Paladín", "Berserker", "Gladiador"};
+        private string[] clases = { "Guerrero", "Monje", "Paladín", "Berserker", "Gladiador"};
         private string[] nombresElegidos = new string[10];  // no hay mas de 10 nombres en total
         private string[] apodosElegidos = new string[10];   // ni apodos
-        private Dictionary<string, int> ContadorDeClases = new Dictionary<string,int>
+        private Dictionary<string, int> contadorDeClases = new Dictionary<string,int>
         {
             {"Guerrero" , 0}, 
             {"Monje" , 0},
@@ -26,13 +23,13 @@ public class FabricaDePersonajes
     {
         for (int vueltas = 0; vueltas < 2; vueltas++)
         {
-            foreach (string clase in Clases)
+            foreach (string clase in clases)
             {
                 Personaje instancia = new Personaje();
 
                 instancia.DatosGenerales.GenerarDatos(clase, id, nombresElegidos, apodosElegidos);
                 instancia.Estadisticas.GenerarEstadisticas(clase);
-                ContadorDeClases[clase] += 1;
+                contadorDeClases[clase] += 1;
                 nombresElegidos[id - 1] = instancia.DatosGenerales.Nombre;
                 apodosElegidos[id - 1] = instancia.DatosGenerales.Apodo;
                 id += 1;

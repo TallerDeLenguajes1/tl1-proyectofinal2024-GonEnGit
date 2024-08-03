@@ -7,12 +7,12 @@ public class Datos
     string[] nombresHumanos = {"Aelric", "Thalorin", "Branthor", "Valen", "Kaelith", "Darion", "Eredor", "Galanor", "Lothar", "Bob"};
     string[] nombresElfos = {"Aelarion", "Thalindra", "Lirael", "Elendril", "Faelar", "Nymira", "Aerandir", "Thalion", "Galadreth", "Elaria"};
     string[] nombresEnanos = {"Durin", "Thrain", "Bromir", "Gromli", "Durgan", "Thorgrim", "Kargan", "Brokk", "Thalrik", "Grimbol"};
-    string[] nombresOrcos = {"Gorbag", "Big Stick", "Bolg", "Lurtz", "Ugluk", "Shagrat", "Grishnakh", "Snaga", "Krashnak", "Murgash"};
+    string[] nombresOrcos = {"Gorbag", "Big Stick", "Bolg", "Lurtz", "Swan", "Shagrat", "Grishnakh", "Snaga", "Krashnak", "Murgash"};
 // Humano -- 6 letras
     string[] razasPosibles = {"Humano", "Enano", "Elfo", "Orco",};
 // 3 de los apodos tienen 22 caracteres
     string[] apodosPosibles = { "El Defensor Inmortal","El Héroe Ancestral","La Espada Infernal","El Cazador Silencioso",
-                                "El Espíritu Indomable","Puño de Hierro","Tempestad de Acero","Martir de la Llama",
+                                "El Espíritu Indomable","Puño de Hierro","Unkindled","Martir de la Llama",
                                 "Comandante de Hierro","El Monarca Olvidado","El Caballero Dragon","El Emperador Codicioso",
                                 "El Héroe Antiguo","El Centinela Fantasma","El Rey Omnisciente"};
 // Gladiadior y Berserker -- 10 letras

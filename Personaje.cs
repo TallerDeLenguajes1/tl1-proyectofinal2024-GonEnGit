@@ -122,6 +122,11 @@ public class Personaje
         }
     }
 
+    public void MejorasPorItem()
+    {
+        
+    }
+
     public void GodMode()
     {
         estadisticas.Salud = 999;

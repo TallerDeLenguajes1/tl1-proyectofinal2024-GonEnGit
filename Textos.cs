@@ -1,8 +1,5 @@
 namespace EspacioJuego;
 
-using System.Collections;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using EspacioAPI;
 using EspacioPersonajes;
 

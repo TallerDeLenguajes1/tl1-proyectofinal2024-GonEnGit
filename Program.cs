@@ -15,6 +15,7 @@ using EspacioPersonajes;
 // Instancias de clases y herramientas
 Random rnd = new Random();
 FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
+FabricaDeArtefactos HerramientaFabricaArt = new FabricaDeArtefactos();
 
 // variables
 bool gameOver = false, critico;
@@ -34,6 +35,8 @@ string[] partesCartaIzq, partesCartaDer;
 // Listas
 List<Historial> historialCargado;
 List<Personaje> listaPersonajes = new List<Personaje>();
+List<Artefacto> cofre = new List<Artefacto>();
+List<Artefacto> inventario = new List<Artefacto>();
 
 
 /* ---- Desarrollo del juego ---- */
@@ -66,6 +69,7 @@ do              /*--- inicio del control de opcion ---*/
             List<string[]> tarjetasAMostrar = new List<string[]>();
 
             listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);  // creas 10 personajes
+            cofre = HerramientaFabricaArt.CreadorDeArtefactos(cofre);
 
             linea = Textos.CentrarRenglon(Console.WindowWidth, "Ingresa un nombre para la partida: ");
             Console.Write(linea);   // creas carpetas
