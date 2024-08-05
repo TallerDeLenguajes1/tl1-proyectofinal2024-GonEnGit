@@ -10,4 +10,11 @@ la herramientaPartida está dando problemas,
 algunos metodos necesitan instancias otros no --- corregido
 
 
-hay un error en las iniciativas.... parece que al elegir la carta 2 igual te da la carta 1
+hay un error en las iniciativas.... parece que al elegir la carta 2 igual te da la carta 1 -- corregido
+
+la seleccion de personaje acepta cosas que n osean numeros,
+aun así elige el personaje correcto....                     --- corregido?, solo acepta el + pero igualmente elige bien
+
+cuando elegis un artefacto, el programa recibe mal los indices --- corregido
+
+parece que al guardar y salir se reinicia la salud si está puesto el godmode

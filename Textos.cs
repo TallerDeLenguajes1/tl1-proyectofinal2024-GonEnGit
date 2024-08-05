@@ -61,16 +61,17 @@ public static class Textos
 
     public static string MenuDeGuardado()
     {
-        return  "  |                          | ;" +
+        return  " |                          | ;" +
                 "--+--------------------------+--;" +
-                "  |    Continuar Partida?    | ;" +
+                " |    Continuar Partida?    | ;" +
                 "--+--------------------------+--;" +
-                "  |  1. Guardar y Continuar  | ;" +
-                "  |  2. Guardar y Salir      | ;" +
-                "  |  3. Salir sin Guardar    | ;" +
+                " |  1. Guardar y Continuar  | ;" +
+                " |  2. Guardar y Salir      | ;" +
+                " |  3. Ver Inventario       | ;" +
+                " |  4. Salir sin Guardar    | ;" +
                 "--+--------------------------+--;" +
-                "  |                          | ;" +
-                "     Seleccione una opción: ";
+                " |                          |\n;" +
+                "Seleccione una opción:    ";
     }
 
     public static string CrearTarjeta(Personaje instancia)

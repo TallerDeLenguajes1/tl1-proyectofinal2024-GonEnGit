@@ -16,7 +16,6 @@ public class Datos
                                 "Comandante de Hierro","El Monarca Olvidado","El Caballero Dragon","El Emperador Codicioso",
                                 "El Héroe Antiguo","El Centinela Fantasma","El Rey Omnisciente"};
 // Gladiadior y Berserker -- 10 letras
-// {"Guerrero", "Monje", "Paladín", "Berserker", "Gladiador"}
 
     private int id, edad;
     private string clase, nombre;
@@ -29,7 +28,7 @@ public class Datos
     public string Raza { get => raza; set => raza = value; }
     public string Apodo { get => apodo; set => apodo = value; }
     public string Nacimiento { get => nacimiento; set => nacimiento = value; }
-
+    
     public void GenerarDatos(string claseElegida, int id, string[] nombresElegidos, string[] apodosElegidos)
     {
         bool control;

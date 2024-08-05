@@ -23,30 +23,30 @@ public class Estadisticas
         {
             case "Guerrero":
                 Salud = 100;
-                Armadura = 3;
-                Fuerza = 3;
-                Destreza = 3;
+                Armadura = 4;
+                Fuerza = 4;
+                Destreza = 4;
             break;
 
             case "Monje":
                 Salud = 100;
-                Armadura = 2;
-                Fuerza = 2;
-                Destreza = 4;
+                Armadura = 3;
+                Fuerza = 4;
+                Destreza = 5;
             break;
 
             case "Paladín":
                 Salud = 125;
                 Armadura = 5;
-                Fuerza = 3;
-                Destreza = 1;
+                Fuerza = 3;     // no me gusta, esto tendrias que controlar
+                Destreza = 2;
             break;
 
             case "Berserker":
                 Salud = 150;
-                Armadura = 1;
+                Armadura = 2;
                 Fuerza = 5;
-                Destreza = 2;
+                Destreza = 3;
             break;
 
             case "Gladiador":

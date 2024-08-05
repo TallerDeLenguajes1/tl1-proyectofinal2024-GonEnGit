@@ -25,7 +25,10 @@ public class FabricaDePersonajes
         {
             foreach (string clase in clases)
             {
-                Personaje instancia = new Personaje();
+                Datos dat = new Datos();
+                Estadisticas est = new Estadisticas();
+                Personaje instancia = new Personaje(dat,est);
+
 
                 instancia.DatosGenerales.GenerarDatos(clase, id, nombresElegidos, apodosElegidos);
                 instancia.Estadisticas.GenerarEstadisticas(clase);

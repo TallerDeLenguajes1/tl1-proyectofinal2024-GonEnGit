@@ -12,6 +12,11 @@ public class Personaje
     public Datos DatosGenerales { get => generales; set => generales = value; }
     public Estadisticas Estadisticas { get => estadisticas; set => estadisticas = value; }
 
+    public Personaje(Datos datos,Estadisticas estadisticas){
+        DatosGenerales = datos;
+        Estadisticas = estadisticas;
+    }
+
     public string DevolverDatos()       // podrias sacar estos dos metodos de acá?
     {
         return  $"{DatosGenerales.Id};{DatosGenerales.Nombre};{DatosGenerales.Apodo};{DatosGenerales.Clase};" +
@@ -125,20 +130,23 @@ public class Personaje
 // pero no hay nesecidad de traer un personaje tambien
     public void MejorasPorItem(Artefacto artefacto)
     {
-        switch (artefacto.Efecto)
+        if (estadisticas.Fuerza != 999)
         {
-            case "Salud":
-                estadisticas.Salud += artefacto.Cantidad;
-                break;
-            case "Armadura":
-                estadisticas.Armadura += artefacto.Cantidad;
-                break;
-            case "Fuerza":
-                estadisticas.Fuerza += artefacto.Cantidad;
-                break;
-            case "Destreza":
-                estadisticas.Destreza += artefacto.Cantidad;
-                break;
+            switch (artefacto.Efecto)
+            {
+                case "Salud":
+                    estadisticas.Salud += artefacto.Cantidad;
+                    break;
+                case "Armadura":
+                    estadisticas.Armadura += artefacto.Cantidad;
+                    break;
+                case "Fuerza":
+                    estadisticas.Fuerza += artefacto.Cantidad;
+                    break;
+                case "Destreza":
+                    estadisticas.Destreza += artefacto.Cantidad;
+                    break;
+            }
         }
     }
 

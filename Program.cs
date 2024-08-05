@@ -16,6 +16,7 @@ using EspacioPersonajes;
 Random rnd = new Random();
 FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
 FabricaDeArtefactos HerramientaFabricaArt = new FabricaDeArtefactos();
+Datos dat = new Datos();
 
 // variables
 bool gameOver = false, critico;
@@ -66,13 +67,13 @@ do              /*--- inicio del control de opcion ---*/
     switch (entradaDeUsuario)
     {
         case 1:
-            List<Personaje> listaPersTemp = new List<Personaje>();  // listas provisorias para liberarlas despues
+            List<Personaje> listaPersTemp = new List<Personaje>();
 
-            listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);  // creas 10 personajes
-            cofre = HerramientaFabricaArt.CreadorDeArtefactos(cofre);               // lista aleatoria de Artefactos
+            listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);
+            cofre = HerramientaFabricaArt.CreadorDeArtefactos(cofre);
 
-            linea = Textos.CentrarRenglon(espaciosAntes, "Ingresa un nombre para la partida: ");
-            Console.Write(linea);   // creas carpetas
+            linea = Textos.CentrarRenglon(espaciosAntes, "Ingresa un nombre para la partida: "); 
+            Console.Write(linea);
             nomPartida = Console.ReadLine();
             Partida.CrearCarpetas();
         
@@ -101,7 +102,7 @@ do              /*--- inicio del control de opcion ---*/
                 }
             } while (entradaDeUsuario == 99999);
 
-            listaPersonajes = HerramientaFabrica.MezclarLista(entradaDeUsuario - 1, listaPersTemp); // armas lista mezclada
+            listaPersonajes = HerramientaFabrica.MezclarLista(entradaDeUsuario - 1, listaPersTemp);
 
             Console.Write("\nIngresa el ataque de tu personaje: "); // cheat code
             linea = Duelo.CheatCode(listaPersonajes[0], listaPersonajes[1], Console.ReadLine());
@@ -109,7 +110,7 @@ do              /*--- inicio del control de opcion ---*/
 
             continuar = 21;
             listaPersTemp.Clear();
-            tarjetasAMostrar.Clear();  // '.Clear()' y/o '= null' habilita las listas para el garbage collector
+            tarjetasAMostrar.Clear();
             break;
         case 2:
             linea = Partida.ObtenerNombresDePartidas();
@@ -121,11 +122,11 @@ do              /*--- inicio del control de opcion ---*/
             }
             else
             {
-                Console.WriteLine("/* --- Partidas Guardadas --- */\n");
+                Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"/* --- Partidas Guardadas --- */\n"));
                 texto = linea.Split(";");
                 for (int indice = 1; indice < texto.Length - 1; indice++)
                 {
-                    Console.WriteLine($"            {indice}. " + texto[indice]);
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{indice}. " + texto[indice]));
                 }
 
                 do
@@ -193,15 +194,14 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
     saludGuardadaJu = listaPersonajes[0].Estadisticas.Salud;
     saludGuardadaEn = listaPersonajes[ctrlDeFlujo].Estadisticas.Salud;
     cartasNuevas.cards = await API.ObtenerCartasAsync(nuevoMazo.deck_id); // tomas 2 cartas del mazo
-// dialogos antes de los duelos
-    switch (ctrlDeFlujo)
+    switch (ctrlDeFlujo) // dialogos
     {
         case 2: // esto de las historias lo vas a tener que pensar mejor
             Console.WriteLine("primera historia antes");
             break;
     }
 // desarrollo de los duelos
-    if (ctrlDeFlujo == 1)   // tutorial antes del 1er duelo
+    if (ctrlDeFlujo == 1)   // 1ra parte del tutorial
     {
         linea = Textos.TutorialCartas();
         texto = linea.Split(";");
@@ -211,21 +211,20 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
             Thread.Sleep(1500);
         }
     }
-// muestra carta con reverso
-    cartaIzq = Textos.ArmarCarta(cartasNuevas.cards[0]); 
+    cartaIzq = Textos.ArmarCarta(cartasNuevas.cards[0]); // muestra carta con reverso
     cartaDer = Textos.TraerReverso();
     partesCartaIzq = cartaIzq.Split(";");
     partesCartaDer = cartaDer.Split(";");
     for (int indice = 0; indice < partesCartaIzq.Length; indice++)
     {
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.Write(partesCartaIzq[indice]);
+        Console.Write(Textos.CentrarRenglon(espaciosAntes - 19, partesCartaIzq[indice]));
         Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine(partesCartaDer[indice]);
+        Console.WriteLine("     " + partesCartaDer[indice]);
     }
     Console.ForegroundColor = ConsoleColor.White;
 
-    if (ctrlDeFlujo == 1)
+    if (ctrlDeFlujo == 1) // 2da parte del tutorial
     {
         Console.Write("\nPresiona una tecla para continuar.");
         Console.ReadKey();
@@ -235,8 +234,7 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
             Thread.Sleep(1000);
         }
     }
-// se elige una carta
-    do
+    do  // seleccion de carta
     {
         if (ctrlDeFlujo == 1)
         {
@@ -252,20 +250,19 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
             Console.WriteLine("Solo podes elegir entre estas 2 cartas.");
         }
     } while (entradaDeUsuario == 99999);
-// ambas cartas boca arriba
-    cartaDer = Textos.ArmarCarta(cartasNuevas.cards[1]);
+    cartaDer = Textos.ArmarCarta(cartasNuevas.cards[1]); // muestra cartas boca arriba
     partesCartaDer = cartaDer.Split(";");
     Console.WriteLine("");
     for (int indice = 0; indice < partesCartaDer.Length; indice++)
     {
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.Write(partesCartaIzq[indice]);
+        Console.Write(Textos.CentrarRenglon(espaciosAntes - 19, partesCartaIzq[indice]));
         Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine(partesCartaDer[indice]);
+        Console.WriteLine("     " + partesCartaDer[indice]);
     }
     Console.ForegroundColor = ConsoleColor.White;
     Console.WriteLine("");
-    if (ctrlDeFlujo == 1)
+    if (ctrlDeFlujo == 1) // 3ra parte del tutorial
     {
         for (int indice = 5; indice < texto.Length; indice++)
         {
@@ -275,8 +272,7 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
         Console.WriteLine("\nPresiona una tecla para continuar.");
         Console.ReadKey();
     }
-// estas 2 dependen de la eleccion
-    if (entradaDeUsuario == 1)
+    if (entradaDeUsuario == 1) // calculo de iniciativa
     {
         iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[0], 1);
         iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[1], 2);
@@ -286,17 +282,15 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
         iniciativaJugador = Duelo.CalcularIniciativa(cartasNuevas.cards[1], 2);
         iniciativaEnemigo = Duelo.CalcularIniciativa(cartasNuevas.cards[0], 1);
     }
-// por ultimo anuncia quien va primero
-    if (iniciativaJugador >= iniciativaEnemigo)
+    if (iniciativaJugador >= iniciativaEnemigo) // anuncio de iniciativa
     {
-        Console.WriteLine($"\n{nomJugador} mueve primero con {iniciativaJugador} de iniciativa!");
+        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"\n{nomJugador} mueve primero con {iniciativaJugador} de iniciativa!"));
     }
     else
     {
-        Console.WriteLine($"\n{nomEnemigo} mueve primero con {iniciativaEnemigo} de iniciativa!");
+        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"\n{nomEnemigo} mueve primero con {iniciativaEnemigo} de iniciativa!"));
     }
-// bucle del duelo
-    do
+    do  // bucle del duelo
     {
         linea = Textos.CrearTarjeta(listaPersonajes[0]);    // tarjetas de los personajes que pelean
         texto = linea.Split(";");
@@ -306,34 +300,33 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
         {
             if (indice != 3)
             {
-                Console.WriteLine("  " + texto[indice] + " " + textoEnemigo[indice]);
+                Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, texto[indice] + "      " + textoEnemigo[indice]));
             }
         }
 
         if (iniciativaJugador >= iniciativaEnemigo) // primer turno jugador, segundo turno enemigo
         {
-        // decisiones
-            Console.WriteLine("Elige una acción:");
-            Console.Write("1.Atacar 2.Defender 3.Esperar: ");
+            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Elige una acción:"));          // decisiones
+            Console.Write(Textos.CentrarRenglon(espaciosAntes,"1.Atacar 2.Defender 3.Esperar: "));
             entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 2, 0);
             if (entradaDeUsuario == 99999)
             {
                 entradaDeUsuario = 2;   // jugador defiende por defecto
             }
             decisionEnemigo = Duelo.AccionEnemigo();
-        // combate
-            if (entradaDeUsuario == 1)
+            Thread.Sleep(1000);
+            if (entradaDeUsuario == 1)        // combate
             {
                 if (decisionEnemigo == 2)   // 12 - jugador ataca, enemigo defiende
                 {
                     critico = Duelo.DecidirCritico(listaPersonajes[0]);
                     danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true, critico);
-                    Console.WriteLine($"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"\n{nomJugador} ataca pero {nomEnemigo} pudo defenderse!"));
                     if (critico)
                     {
-                        Console.WriteLine("Aun así fue un golpe critico!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Aun así fue un golpe critico!"));
                     }
-                    Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recibe {danio} puntos de daño."));
                 }
                 else                        // 11 y 13 - jugador ataca, enemigo ataca o espera
                 {
@@ -341,29 +334,28 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                     danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
                     if (critico)
                     {
-                        Console.WriteLine($"{nomJugador} atacá con todas sus fuerzas!");
-                        Console.WriteLine($"{nomEnemigo} recibirá daño extra!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} atacá con todas sus fuerzas!"));
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recibirá daño extra!"));
                     }
                     else
                     {
-                        Console.WriteLine($"{nomJugador} ataca!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} ataca!"));
                     }
-                    Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recibe {danio} puntos de daño."));
 
-                // si el enemigo muere se corta el duelo
-                    if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0)
+                    if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0)  // si el enemigo muere se corta el duelo
                     {
                         if (decisionEnemigo == 1)   // si no muere, ataca
                         {
-                            Console.WriteLine($"{nomEnemigo} puede seguir peleando y decidio atacar tambien!");
-                            Console.WriteLine("Aun así no podrá hacer mas daño esta vez...");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} puede seguir peleando y decidio atacar tambien!"));
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Aun así no podrá hacer mas daño esta vez..."));
                             danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, false);
-                            Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recibe {danio} puntos de daño."));
                         }
                         else                        // o aclaras que espera
                         {
-                            Console.WriteLine($"{nomEnemigo} está evaluando la situción... creo?");
-                            Console.WriteLine($"{nomEnemigo} recuperó 10 puntos de salud!");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} está evaluando la situción... creo?"));
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recuperó 10 puntos de salud!"));
                             listaPersonajes[ctrlDeFlujo].RecuperarSalud(saludGuardadaEn); // SaludG actua como limite, no es error
                         }
                     }
@@ -375,44 +367,44 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                 {
                     if (entradaDeUsuario == 2)  // 21 - enemigo ataca, jugador defiende
                     {
-                        Console.WriteLine($"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!"));
                         critico = Duelo.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
                         if (critico)
                         {
-                            Console.WriteLine("Aun así fue un golpe critico!");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Aun así fue un golpe critico!"));
                         }
                         danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true, critico);
-                        Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recibe {danio} puntos de daño."));
                     }
                     else                        // 31 - enemigo ataca, jugador espera
                     {
-                        Console.WriteLine($"{nomEnemigo} atacá ... y tu estas esperando...?");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} atacá ... y tu estas esperando...?"));
                         critico = Duelo.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
                         if (critico)
                         {
-                            Console.WriteLine($"{nomEnemigo} estaba preparando un ataque especial, recibiras mas daño!");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} estaba preparando un ataque especial, recibiras mas daño!"));
                         }
                         danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, critico);
-                        Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recibe {danio} puntos de daño."));
                         if (listaPersonajes[0].Estadisticas.Salud != 0)
                         {
-                            Console.WriteLine($"{nomJugador} recupera 10 puntos de salud!");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recupera 10 puntos de salud!"));
                             listaPersonajes[0].RecuperarSalud(saludGuardadaJu);
                         }
                     }
                 }
                 else    // 22, 23, 32, 33 - no pasa nada
                 {
-                    Console.WriteLine("Narrador: ...Nadie está haciendo nada...");
-                    Console.WriteLine("Dev: Se aburrieron antes que nosotros");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Narrador: ...Nadie está haciendo nada..."));
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Dev: Se aburrieron antes que nosotros"));
                     if (entradaDeUsuario == 3)
                     {
-                        Console.WriteLine($"{nomJugador} recupera 10 puntos de salud!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recupera 10 puntos de salud!"));
                         listaPersonajes[0].RecuperarSalud(saludGuardadaJu);
                     }
                     if (decisionEnemigo == 3)
                     {
-                        Console.WriteLine($"{nomEnemigo} recupera 10 puntos de salud!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recupera 10 puntos de salud!"));
                         listaPersonajes[0].RecuperarSalud(saludGuardadaJu);
                     }
                 }
@@ -420,8 +412,7 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
         }
         else        // primer turno enemigo, segundo turno jugador
         {
-            // decisiones
-            decisionEnemigo = Duelo.AccionEnemigo();
+            decisionEnemigo = Duelo.AccionEnemigo();  // decisiones
             switch (decisionEnemigo)
             {
                 case 1:
@@ -434,8 +425,8 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                     linea = "esperar";
                     break;
             }
-            Console.WriteLine($"{nomEnemigo} va a {linea}! Elige una accion:");
-            Console.Write("1.Atacar 2.Defender 3.Esperar: ");
+            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} va a {linea}! Elige una accion:"));
+            Console.Write(Textos.CentrarRenglon(espaciosAntes,"1.Atacar 2.Defender 3.Esperar: "));
             entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 2, 0);
             if (entradaDeUsuario == 99999) // jugador defiende por defecto
             {
@@ -448,12 +439,12 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                 {
                     critico = Duelo.DecidirCritico(listaPersonajes[ctrlDeFlujo]);
                     danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], true, critico);
-                    Console.WriteLine($"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} ataca pero {nomJugador} pudo defenderse!"));
                     if (critico)
                     {
-                        Console.WriteLine("Aun así fue un golpe critico!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Aun así fue un golpe critico!"));
                     }
-                    Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recibe {danio} puntos de daño."));
                 }
                 else                        // 11 y 13 - enemigo ataca, jugador ataca o espera
                 {
@@ -461,31 +452,31 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                     danio = Duelo.CalcularDanio(listaPersonajes[ctrlDeFlujo], listaPersonajes[0], false, critico);
                     if (critico)
                     {
-                        Console.WriteLine($"{nomEnemigo} atacá con todas sus fuerzas!");
-                        Console.WriteLine($"{nomJugador} recibirá daño extra!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} atacá con todas sus fuerzas!"));
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recibirá daño extra!"));
                     }
                     else
                     {
-                        Console.WriteLine($"{nomEnemigo} ataca!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} ataca!"));
                     }
-                    Console.WriteLine($"{nomJugador} recibe {danio} puntos de daño.");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recibe {danio} puntos de daño."));
 
                     if (listaPersonajes[0].Estadisticas.Salud != 0)
                     {
                         if (entradaDeUsuario == 1)
                         {
-                            Console.WriteLine($"{nomJugador} puede seguir peleando y decidio atacar tambien!");
-                            Console.WriteLine("Aun así no podra hacer mas daño esta vez...");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} puede seguir peleando y decidio atacar tambien!"));
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Aun así no podra hacer mas daño esta vez..."));
 
                             critico = false;
                             danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
 
-                            Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recibe {danio} puntos de daño."));
                         }
                         else
                         {
-                            Console.WriteLine($"{nomJugador} está esperando...?");
-                            Console.WriteLine($"{nomJugador} recupera 10 puntos de salud.");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} está esperando...?"));
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recupera 10 puntos de salud."));
                             listaPersonajes[0].RecuperarSalud(saludGuardadaJu);
                         }
                     }
@@ -499,42 +490,42 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                     {
                         critico = Duelo.DecidirCritico(listaPersonajes[0]);
                         danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], true, critico);
-                        Console.WriteLine($"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} ataca pero {nomEnemigo} pudo defenderse!"));
                         if (critico)
                         {
-                            Console.WriteLine("Aun así fue un golpe critico!");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Aun así fue un golpe critico!"));
                         }
-                        Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recibe {danio} puntos de daño."));
                     }
                     else                        // 31 - jugador ataca, enemigo espera
                     {
                         critico = Duelo.DecidirCritico(listaPersonajes[0]);
                         danio = Duelo.CalcularDanio(listaPersonajes[0], listaPersonajes[ctrlDeFlujo], false, critico);
-                        Console.WriteLine($"{nomJugador} ataca pero no se que esta haciendo {nomEnemigo}...");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} ataca pero no se que esta haciendo {nomEnemigo}..."));
                         if (critico)
                         {
-                            Console.WriteLine("Incluso recibirá un golpe critico!");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Incluso recibirá un golpe critico!"));
                         }
-                        Console.WriteLine($"{nomEnemigo} recibe {danio} puntos de daño.");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recibe {danio} puntos de daño."));
                         if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud != 0)
                         {
-                            Console.WriteLine($"{nomEnemigo} recuper 10 puntos de salud.");
+                            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recuper 10 puntos de salud."));
                             listaPersonajes[ctrlDeFlujo].RecuperarSalud(saludGuardadaEn);
                         }
                     }
                 }
                 else                            // 22, 23, 32, 33 - no pasa nada
                 {
-                    Console.WriteLine("Narrador: ...Nadie está haciendo nada... ");
-                    Console.WriteLine("Dev: se aburrieron antes que nosotros?");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Narrador: ...Nadie está haciendo nada... "));
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Dev: se aburrieron antes que nosotros?"));
                     if (entradaDeUsuario == 3)
                     {
-                        Console.WriteLine($"{nomJugador} recuper 10 puntos de salud.");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomJugador} recuper 10 puntos de salud."));
                         listaPersonajes[0].RecuperarSalud(saludGuardadaJu);
                     }
                     if (decisionEnemigo == 3)
                     {
-                        Console.WriteLine($"{nomEnemigo} recuper 10 puntos de salud.");
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,$"{nomEnemigo} recuper 10 puntos de salud."));
                         listaPersonajes[ctrlDeFlujo].RecuperarSalud(saludGuardadaEn);
                     }
                 }
@@ -545,7 +536,7 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
 
     if (listaPersonajes[ctrlDeFlujo].Estadisticas.Salud == 0)   // si el jugador gana
     {
-        Console.WriteLine($"{nomEnemigo} sufrió demasiado daño... ");
+        Console.WriteLine($"\n{nomEnemigo} sufrió demasiado daño... ");
         Console.WriteLine("Dev: habrá que buscar a alguien mas...\n\n");
         ctrlDeFlujo += 1;
         listaPersonajes[0].SubirDeNivel(); // el nivel devuelve la vida al max, artefactos despues
@@ -576,23 +567,23 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                 Console.WriteLine("Narrador: No, solo están estos 3...");
             }
         } while (entradaDeUsuario == 99999);
+        entradaDeUsuario -= 1;
         inventario.Add(cofre[entradaDeUsuario]);
         listaPersonajes[0].MejorasPorItem(cofre[entradaDeUsuario]);
         cofre.RemoveAt(entradaDeUsuario);                                           /* --- Fin artefactos --- */
         if (ctrlDeFlujo != 9)
-        {
-            // guardado de partida en json
+        {                                          /* --- Menú de guardado --- */
             linea = Textos.MenuDeGuardado();
             texto = linea.Split(";");
             for (int indice = 0; indice < texto.Length; indice++)
             {
                 if (indice == (texto.Length - 1))
                 {
-                    Console.Write("  " + texto[indice]);
+                    Console.Write(Textos.CentrarRenglon(espaciosAntes,texto[indice]));
                 }
                 else
                 {
-                    Console.WriteLine("  " + texto[indice]);
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,texto[indice]));
                 }
             }
             do
@@ -600,17 +591,33 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                 entradaDeUsuario = Partida.ControlDeOpciones(Console.ReadLine(), 2, 0);
                 if (entradaDeUsuario == 99999)
                 {
-                    Console.WriteLine("Dev: no puedo dejar que pongas cualquier cosa siempre...");
-                    Console.Write("Ingresa un opcion valida: ");
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Dev: no puedo dejar que pongas cualquier cosa siempre..."));
+                    Console.Write(Textos.CentrarRenglon(espaciosAntes,"Ingresa un opcion valida: "));
                 }
             } while (entradaDeUsuario == 99999);
-            gameOver = Partida.EjecutarOpcion(listaPersonajes, cofre, inventario, nomPartida, entradaDeUsuario); //-----------------------------------
+            gameOver = Partida.EjecutarOpcion(listaPersonajes, cofre, inventario, nomPartida, entradaDeUsuario);
+            if (entradaDeUsuario == 3)  // muestra inventario, esto seguro puede mejorar
+            {
+                Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, "Inventario:"));
+
+                for (int indice = 0; indice < inventario.Count(); indice++)
+                {
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, $"{indice + 1}. {inventario[indice].Nombre}\n"));
+                    foreach (string parte in inventario[indice].Descripcion)
+                    {
+                        Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, parte));
+                    }
+                    Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, $"\n{inventario[indice].Efecto} +{inventario[indice].Cantidad}\n"));
+                }// no se centra ------------------------
+
+                gameOver = false;  // sobre escribe el gameOver de EjecutarOpcion
+            }
             if (entradaDeUsuario == 1 || entradaDeUsuario == 2)
             {
-                Console.WriteLine("Partida guardada."); // esto lo podrias mejorar con algun control
+                Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Partida guardada.")); // esto lo podrias mejorar con algun control
             }
-        }
-        else    // esta sería la ultima rama, cuando ganas todos los duelos
+        }              /* --- Fin del menu de guardado --- */
+        else    /* --- Fin del juego por victoria e historial --- */
         {
             Console.WriteLine("Dev: Parece que el jugador pudo ganar todos los duelos...");
             Console.WriteLine("Narrador: y eso no es bueno?");

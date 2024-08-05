@@ -55,44 +55,53 @@ public static class Duelo
 // la idea es hacer un calculo segun palo, color y valor
     public static int CalcularIniciativa(Carta cartaRecibida, int color)
     {
-        int valorDeCarta;
+        int valorFinal;
 
         switch (cartaRecibida.value)
         {
             case "ACE":
-                valorDeCarta = 1;
+                valorFinal = 1;
                 break;
             case "JACK":
-                valorDeCarta = 11;
+                valorFinal = 11;
                 break;
             case "QUEEN":
-                valorDeCarta = 12;
+                valorFinal = 12;
                 break;
             case "KING":
-                valorDeCarta = 13;
+                valorFinal = 13;
                 break;
             default:
-                valorDeCarta = int.Parse(cartaRecibida.value);
+                valorFinal = int.Parse(cartaRecibida.value);
                 break;
         }
     // multiplicas segun el color
         if (color == 1)
         {
-            valorDeCarta = (int)(valorDeCarta* 1.5);
+            valorFinal = (int)(valorFinal* 1.5);
         }
         else
         {
-            valorDeCarta *= 2;
+            valorFinal *= 2;
         }
     // a estos calculos tambien los tenes que cambiar
-        if (cartaRecibida.suit == "SPADES" || cartaRecibida.suit == "CLUBS")
+        switch (cartaRecibida.suit)
         {
-            return valorDeCarta + 5;
+            case "SPADES":
+                valorFinal += 2;
+                break;
+            case "CLUBS":
+                valorFinal += 3;
+                break;
+            case "DIAMONDS":
+                valorFinal += 4;
+                break;
+            case "HEARTS":
+                valorFinal += 5;
+                break;
         }
-        else
-        {
-            return valorDeCarta + 2;
-        }
+
+        return valorFinal;
     }
 
     public static int AccionEnemigo()

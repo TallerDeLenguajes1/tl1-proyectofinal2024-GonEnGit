@@ -76,8 +76,8 @@ public static class Partida
 
     public static int ControlDeOpciones(string entrada, int tipoControl, int limDesconocido)
     {
-        int valor, limiteSup = 0;
-        char letra;
+        int valor = 0, limiteSup = 0;
+        char letra = 'G';
         bool pruebaOpciones;
 
         if (tipoControl == 7)   // control de letras
@@ -107,8 +107,8 @@ public static class Partida
                 case 1:             // continuar despues de perder y seleccion de carta
                     limiteSup = 3;
                     break;
-                case 2:
-                    limiteSup = 4;  // opciones de duelo, menu de guardado y artefactos
+                case 2:             // opciones de duelo, menu de guardado y control de artefactos
+                    limiteSup = 4;
                     break;
                 case 3:             // opciones menu principal
                     limiteSup = 5;
