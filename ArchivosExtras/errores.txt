@@ -19,7 +19,12 @@ cuando elegis un artefacto, el programa recibe mal los indices --- corregido
 
 parece que al guardar y salir se reinicia la salud si está puesto el godmode
 
+el efecto de los artefactos no se centra en la lista cuando mostras el inventario
+
 otra cosa, parece que podrias cambiar todas las asignaciones de las listas
 a como esta en la linea 70
 
 cambiaste los artefactos espada de fuego y espada espiralada pero te olvidaste los efectos --- corregido
+
+el mas grave: los nombres, apodos y razas estan en personaje... se crea --cada-- arreglo para --cada-- personaje...
+osea... 10 veces para c/u....                                                       --- corregido (?)

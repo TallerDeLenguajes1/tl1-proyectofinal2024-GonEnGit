@@ -16,7 +16,7 @@ public class Estadisticas
     public int Destreza { get => destreza; set => destreza = value; }
 
 // los datos se generan primero, pode usar eso para 
-    public void GenerarEstadisticas(string clase)
+    public Estadisticas(string clase)
     {
         Nivel = 1;
         switch (clase)
@@ -38,7 +38,7 @@ public class Estadisticas
             case "Paladín":
                 Salud = 125;
                 Armadura = 5;
-                Fuerza = 3;     // no me gusta, esto tendrias que controlar
+                Fuerza = 3;
                 Destreza = 2;
             break;
 

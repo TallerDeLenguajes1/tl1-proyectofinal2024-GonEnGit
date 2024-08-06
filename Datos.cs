@@ -28,89 +28,15 @@ public class Datos
     public string Raza { get => raza; set => raza = value; }
     public string Apodo { get => apodo; set => apodo = value; }
     public string Nacimiento { get => nacimiento; set => nacimiento = value; }
-    
-    public void GenerarDatos(string claseElegida, int id, string[] nombresElegidos, string[] apodosElegidos)
+
+    public Datos(int idNuevo, string nombreNuevo, string apodoNuevo, string claseNuevo, string razaNuevo, int edadNuevo, string nacimientoNuevo)
     {
-        bool control;
-        var rand = new Random();
-        int  dia, mes, indiceNombres, indiceApodos;
-        int indiceRaza = rand.Next(0,4);
-        string diaString, mesString;
-
-        Id = id;
-        Clase = claseElegida;
-        Raza = razasPosibles[indiceRaza];
-        do
-        {
-            indiceApodos = rand.Next(0,15);
-            control = apodosElegidos.Contains(apodosPosibles[indiceApodos]);
-        } while (control);
-        Apodo = apodosPosibles[indiceApodos];
-
-        dia = rand.Next(1,27);
-        if (dia <= 9)
-        {
-            diaString = "0" + $"{dia}";
-        }
-        else
-        {
-            diaString = $"{dia}";
-        }
-        mes = rand.Next(1,12);
-        if (mes <= 9)
-        {
-            mesString = "0" + $"{mes}";
-        }
-        else
-        {
-            mesString = $"{mes}";
-        }
-        switch (Raza)
-        {
-            case "Humano":
-                int anioHumano = rand.Next(710,731);
-                Nacimiento = $"{diaString}/{mesString}/{anioHumano}"; // 20 a 40 años
-                Edad = 750 - anioHumano;
-                do
-                {
-                    indiceNombres = rand.Next(1,10);
-                    control = nombresElegidos.Contains(nombresHumanos[indiceNombres]);
-                } while (control);
-                Nombre = nombresHumanos[indiceNombres];
-                break;
-            case "Enano":
-                int anioEnano = rand.Next(600,671);
-                Nacimiento = $"{diaString}/{mesString}/{anioEnano}";  // 70 a 150 años
-                Edad = 750 - anioEnano;
-                do
-                {
-                    indiceNombres = rand.Next(1,10);
-                    control = nombresElegidos.Contains(nombresEnanos[indiceNombres]);
-                } while (control);
-                Nombre = nombresEnanos[indiceNombres];
-                break;
-            case "Elfo":
-                int anioElfo = rand.Next(450,651);
-                Nacimiento = $"{diaString}/{mesString}/{anioElfo}";   // 100 a 300 años
-                Edad = 750 - anioElfo;
-                do
-                {
-                    indiceNombres = rand.Next(1,10);
-                    control = nombresElegidos.Contains(nombresElfos[indiceNombres]);
-                } while (control);
-                Nombre = nombresElfos[indiceNombres];
-                break;
-            case "Orco":
-                int anioOrco = rand.Next(710,736);
-                Nacimiento = $"{diaString}/{mesString}/{anioOrco}";   // 15 a 40 años
-                Edad = 750 - anioOrco;
-                do
-                {
-                    indiceNombres = rand.Next(1,10);
-                    control = nombresElegidos.Contains(nombresOrcos[indiceNombres]);
-                } while (control);
-                Nombre = nombresOrcos[indiceNombres];
-                break;
-        }
+        Id = idNuevo;
+        Nombre = nombreNuevo;
+        Apodo = apodoNuevo;
+        Clase = claseNuevo;
+        Raza = razaNuevo;
+        Edad = edadNuevo;
+        Nacimiento = nacimientoNuevo;
     }
 }

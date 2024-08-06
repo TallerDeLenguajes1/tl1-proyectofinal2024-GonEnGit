@@ -43,6 +43,91 @@ public static class Textos
 
         return renglon;
     }
+
+    public static void ArmarListaTarjetasPers(List<string[]> lista, List<Personaje> listaTemp)
+    {
+        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta;
+        string[] primeraFila, segundaFila;
+
+        primeraTarjeta = CrearTarjetaPers(listaTemp[0]).Split(";");
+        segundaTarjeta = CrearTarjetaPers(listaTemp[1]).Split(";");
+        TerceraTarjeta = CrearTarjetaPers(listaTemp[2]).Split(";");
+        primeraFila = new string[primeraTarjeta.Length];       // C# puede decidir el tamño de una arreglo automaticamente
+
+        for (int i = 0; i < primeraTarjeta.Length; i++)
+        {
+            primeraFila[i] = "     " + primeraTarjeta[i] + "     " + segundaTarjeta[i] + "     " + TerceraTarjeta[i]; // pero no de a 1
+        }
+        lista.Add(primeraFila);
+
+        primeraTarjeta = CrearTarjetaPers(listaTemp[3]).Split(";");
+        segundaTarjeta = CrearTarjetaPers(listaTemp[4]).Split(";");
+        segundaFila = new string[primeraTarjeta.Length];
+        for (int i = 0; i < primeraTarjeta.Length; i++)
+        {
+            segundaFila[i] = primeraTarjeta[i] + "     " + segundaTarjeta[i];
+        }
+        lista.Add(segundaFila);
+    }
+
+    public static string[] ArmarListaTarjetasArt(List<Artefacto> cofre)
+    {
+        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta, renglones;
+
+        primeraTarjeta = CrearTarjetaArt(cofre[0], 1).Split(";");
+        segundaTarjeta = CrearTarjetaArt(cofre[1], 2).Split(";");
+        TerceraTarjeta = CrearTarjetaArt(cofre[2], 3).Split(";");
+
+        renglones = new string[primeraTarjeta.Length];
+        segundaTarjeta[0] = "  " + segundaTarjeta[0] + "  "; // esto se podria mejorar
+        for (int i = 0; i < primeraTarjeta.Length; i++)
+        {
+            renglones[i] = primeraTarjeta[i] + "     " + segundaTarjeta[i] + "     " + TerceraTarjeta[i];
+        }
+
+        return renglones;
+    }
+
+    public static string DevolverNombre(Personaje pers)
+    {
+        return pers.DatosGenerales.Nombre + ", " + pers.DatosGenerales.Apodo;
+    }
+
+    public static string DatosDeSubaDeNivel(string clase)
+    {
+        string linea = "Salud +25;";
+        switch (clase)
+        {
+            case "Guerrero":
+                linea += "Armadura +2;Fuerza +2;Destreza +2";
+                break;
+            case "Monje":
+                linea += "Armadura +1;Fuerza +1;Destreza +2";
+                break;
+            case "Paladín":
+                linea += "Armadura +2;Fuerza +1;Destreza +1";
+                break;
+            case "Berserker":
+                linea += "Armadura +1;Fuerza +2;Destreza +1";
+                break;
+            case "Gladiador":
+                linea += "Armadura +1;Fuerza +1;Destreza +2";
+                break;
+        }
+        return linea;
+    }
+
+    public static string TutorialCartas()
+    {
+        return  "Dev: En este juego, la iniciativa de cada personaje se va a decidir con cartas.;" +
+                "Dev: Primero se muestran 2, una boca abajo, el jugador tiene que elegir una.\n;" +
+                "\n\nNarrador: Si no puede ver la segunda, como se supone que elija?;" +
+                "Dev: Esa es la apuesta, el color y el palo tambien cambian el resultado.;" +
+                "Azul = x2, Amarillo = x1.5, ♠ = +2, ♣ = +3, ♦ = +4,♥ = +5;" +
+                "Narrador: Ahora veo, una carta baja puede dar un resultado alto!;" +
+                "Dev: O no, ahora que sabemos cuales son, sabemos quien mueve primero.";
+    }
+
     public static string[] MenuPrincipal()
     {
         string[] menu = {   "# ------------------------------- #\n",
@@ -74,7 +159,7 @@ public static class Textos
                 "Seleccione una opción:    ";
     }
 
-    public static string CrearTarjeta(Personaje instancia)
+    public static string CrearTarjetaPers(Personaje instancia)
     {
         string renglon1, renglon2, renglon3, renglon4;
         string lineaDatos = instancia.DevolverDatos();
@@ -142,107 +227,6 @@ public static class Textos
                 "+---------------------------------------+";
     }
 
-    public static void ArmarListaTarjetasPers(List<string[]> lista, List<Personaje> listaTemp)
-    {
-        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta;
-        string[] primeraFila, segundaFila;
-
-        primeraTarjeta = CrearTarjeta(listaTemp[0]).Split(";");
-        segundaTarjeta = CrearTarjeta(listaTemp[1]).Split(";");
-        TerceraTarjeta = CrearTarjeta(listaTemp[2]).Split(";");
-        primeraFila = new string[primeraTarjeta.Length];       // C# puede decidir el tamño de una arreglo automaticamente
-
-        for (int i = 0; i < primeraTarjeta.Length; i++)
-        {
-            primeraFila[i] = "     " + primeraTarjeta[i] + "     " + segundaTarjeta[i] + "     " + TerceraTarjeta[i]; // pero no de a 1
-        }
-        lista.Add(primeraFila);
-
-        primeraTarjeta = CrearTarjeta(listaTemp[3]).Split(";");
-        segundaTarjeta = CrearTarjeta(listaTemp[4]).Split(";");
-        segundaFila = new string[primeraTarjeta.Length];
-        for (int i = 0; i < primeraTarjeta.Length; i++)
-        {
-            segundaFila[i] = primeraTarjeta[i] + "     " + segundaTarjeta[i];
-        }
-        lista.Add(segundaFila);
-    }
-
-    public static string[] ArmarListaTarjetasArt(List<Artefacto> cofre)
-    {
-        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta, renglones;
-
-        primeraTarjeta = CrearTarjetaArt(cofre[0], 1).Split(";");
-        segundaTarjeta = CrearTarjetaArt(cofre[1], 2).Split(";");
-        TerceraTarjeta = CrearTarjetaArt(cofre[2], 3).Split(";");
-
-        renglones = new string[primeraTarjeta.Length];
-        segundaTarjeta[0] = "  " + segundaTarjeta[0] + "  "; // esto se podria mejorar
-        for (int i = 0; i < primeraTarjeta.Length; i++)
-        {
-            renglones[i] = primeraTarjeta[i] + "     " + segundaTarjeta[i] + "     " + TerceraTarjeta[i];
-        }
-
-        return renglones;
-    }
-
-    public static string DevolverNombre(Personaje pers)
-    {
-        return pers.DatosGenerales.Nombre + ", " + pers.DatosGenerales.Apodo;
-    }
-
-    public static string DatosDeSubaDeNivel(string clase)
-    {
-        string linea = "Salud +25;";
-        switch (clase)
-        {
-            case "Guerrero":
-                linea += "Armadura +2;Fuerza +2;Destreza +2";
-                break;
-            case "Monje":
-                linea += "Armadura +1;Fuerza +1;Destreza +2";
-                break;
-            case "Paladín":
-                linea += "Armadura +2;Fuerza +1;Destreza +1";
-                break;
-            case "Berserker":
-                linea += "Armadura +1;Fuerza +2;Destreza +1";
-                break;
-            case "Gladiador":
-                linea += "Armadura +1;Fuerza +1;Destreza +2";
-                break;
-        }
-        return linea;
-    }
-
-    public static string TutorialCartas()
-    {
-        return  "Dev: En este juego, la iniciativa de cada personaje se va a decidir con cartas.;" +
-                "Dev: Primero se muestran 2, una boca abajo, el jugador tiene que elegir una.\n;" +
-                "\n\nNarrador: Si no puede ver la segunda, como se supone que elija?;" +
-                "Dev: Esa es la apuesta, el color y el palo tambien cambian el resultado.;" +
-                "Azul = x2, Amarillo = x1.5, ♠ = +2, ♣ = +3, ♦ = +4,♥ = +5;" +
-                "Narrador: Ahora veo, una carta baja puede dar un resultado alto!;" +
-                "Dev: O no, ahora que sabemos cuales son, sabemos quien mueve primero.";
-    }
-
-    public static string TraerReverso()
-    {
-        return  " ------------- ;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                "|   []  []  []|;" +
-                "| []  []  []  |;" +
-                " ------------- ";
-    }
-
     public static string CrearTarjetaArt(Artefacto artefacto, int numOpcion)
     {
     // renglon de Artefacto: 45 caracteres + 2 bordes
@@ -289,6 +273,23 @@ public static class Textos
             }
         }
         return renglon;
+    }
+
+    public static string TraerReverso()
+    {
+        return  " ------------- ;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                "|   []  []  []|;" +
+                "| []  []  []  |;" +
+                " ------------- ";
     }
 
     public static string ArmarCarta(Carta carta)

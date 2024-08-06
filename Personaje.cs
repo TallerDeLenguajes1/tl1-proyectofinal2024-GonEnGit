@@ -6,8 +6,8 @@ using EspacioJuego;
 
 public class Personaje
 {
-    private Datos generales = new Datos();
-    private Estadisticas estadisticas = new Estadisticas();
+    private Datos generales;
+    private Estadisticas estadisticas;
 
     public Datos DatosGenerales { get => generales; set => generales = value; }
     public Estadisticas Estadisticas { get => estadisticas; set => estadisticas = value; }
@@ -17,7 +17,7 @@ public class Personaje
         Estadisticas = estadisticas;
     }
 
-    public string DevolverDatos()       // podrias sacar estos dos metodos de acá?
+    public string DevolverDatos()
     {
         return  $"{DatosGenerales.Id};{DatosGenerales.Nombre};{DatosGenerales.Apodo};{DatosGenerales.Clase};" +
                 $"{DatosGenerales.Raza};{DatosGenerales.Nacimiento};{DatosGenerales.Edad}";
@@ -32,7 +32,7 @@ public class Personaje
     {
         Estadisticas.Salud -= danio;
 
-        if (Estadisticas.Salud <= 0) // para evitar Salud negativa y romper el bucle
+        if (Estadisticas.Salud <= 0)     // para evitar Salud negativa
         {
             Estadisticas.Salud = 0;
         }
@@ -41,7 +41,7 @@ public class Personaje
     public void RecuperarSalud(int maximo)
     {
         estadisticas.Salud += 10;
-        if (estadisticas.Salud > maximo) // si no, alguien va a tener salud infinita
+        if (estadisticas.Salud > maximo) // para evitar Salud infinita
         {
             estadisticas.Salud = maximo;
         }
@@ -90,7 +90,7 @@ public class Personaje
         {
             case "Guerrero":
                 estadisticas.Nivel += multiplicador;
-                estadisticas.Salud = 100 + (25 * multiplicador);// el jugador tiene que recupara salud, podes usar esto
+                estadisticas.Salud = 100 + (25 * multiplicador); // al final del duelo, Salud de nuevo al maximo
                 estadisticas.Armadura += 2 * multiplicador;
                 estadisticas.Fuerza += 2 * multiplicador;
                 estadisticas.Destreza += 2 * multiplicador;
@@ -126,8 +126,6 @@ public class Personaje
         }
     }
 
-// así la podrias usar con enemigos tambien
-// pero no hay nesecidad de traer un personaje tambien
     public void MejorasPorItem(Artefacto artefacto)
     {
         if (estadisticas.Fuerza != 999)

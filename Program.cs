@@ -16,7 +16,6 @@ using EspacioPersonajes;
 Random rnd = new Random();
 FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
 FabricaDeArtefactos HerramientaFabricaArt = new FabricaDeArtefactos();
-Datos dat = new Datos();
 
 // variables
 bool gameOver = false, critico;
@@ -292,9 +291,9 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
     }
     do  // bucle del duelo
     {
-        linea = Textos.CrearTarjeta(listaPersonajes[0]);    // tarjetas de los personajes que pelean
+        linea = Textos.CrearTarjetaPers(listaPersonajes[0]);    // tarjetas de los personajes que pelean
         texto = linea.Split(";");
-        linea2 = Textos.CrearTarjeta(listaPersonajes[ctrlDeFlujo]);
+        linea2 = Textos.CrearTarjetaPers(listaPersonajes[ctrlDeFlujo]);
         textoEnemigo = linea2.Split(";");
         for (int indice = 0; indice < texto.Length; indice++)
         {
