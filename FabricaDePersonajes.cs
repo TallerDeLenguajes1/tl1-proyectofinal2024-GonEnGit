@@ -19,8 +19,9 @@ public class FabricaDePersonajes
             {"Gladiador" , 0},
         };
 
-    public List<Personaje> CreadorDePersonajes(List<Personaje> lista)
+    public List<Personaje> CreadorDePersonajes()
     {
+        List<Personaje> lista = new List<Personaje>();
         for (int vueltas = 0; vueltas < 2; vueltas++)
         {
             foreach (string clase in clases)

@@ -67,9 +67,7 @@ do              /*--- inicio del control de opcion ---*/
     switch (entradaDeUsuario)
     {
         case 1:
-            List<Personaje> listaPersTemp = new List<Personaje>();
-
-            listaPersTemp = HerramientaFabrica.CreadorDePersonajes(listaPersTemp);
+            List<Personaje> listaPersTemp = HerramientaFabrica.CreadorDePersonajes();
             cofre = HerramientaFabricaArt.CreadorDeArtefactos(cofre);
 
             linea = Textos.CentrarRenglon(espaciosAntes, "Ingresa un nombre para la partida: "); 
@@ -82,7 +80,7 @@ do              /*--- inicio del control de opcion ---*/
         /*--- fin de esta parte de historia---*/
 
             Console.WriteLine(" ");
-            Textos.ArmarListaTarjetas(tarjetasAMostrar, listaPersTemp, cofre, 1);
+            Textos.ArmarListaTarjetasPers(tarjetasAMostrar, listaPersTemp);
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < tarjetasAMostrar[0].Length; j++)
@@ -201,6 +199,8 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
             break;
     }
 // desarrollo de los duelos
+
+    ctrlDeFlujo = 5;                                        // BORRAR --------------------------------
     if (ctrlDeFlujo == 1)   // 1ra parte del tutorial
     {
         linea = Textos.TutorialCartas();
@@ -549,10 +549,10 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
             Console.WriteLine("             " + texto[indice]);
         }
 
-        Textos.ArmarListaTarjetas(tarjetasAMostrar, listaPersonajes, cofre, 2);    /* --- Eleccion de artefactos --- */
-        for (int indice = 0; indice < tarjetasAMostrar[0].Length; indice++)
+        texto = Textos.ArmarListaTarjetasArt(cofre);    /* --- Eleccion de artefactos --- */
+        for (int indice = 0; indice < texto.Length; indice++)
         {
-            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, tarjetasAMostrar[0][indice]));
+            Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, texto[indice]));
         }
         if (ctrlDeFlujo == 2)
         {
@@ -567,10 +567,13 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                 Console.WriteLine("Narrador: No, solo están estos 3...");
             }
         } while (entradaDeUsuario == 99999);
+
         entradaDeUsuario -= 1;
-        inventario.Add(cofre[entradaDeUsuario]);
         listaPersonajes[0].MejorasPorItem(cofre[entradaDeUsuario]);
-        cofre.RemoveAt(entradaDeUsuario);                                           /* --- Fin artefactos --- */
+        HerramientaFabricaArt.PasarAInventario(entradaDeUsuario, cofre, inventario);
+        /* --- Fin artefactos --- */
+
+
         if (ctrlDeFlujo != 9)
         {                                          /* --- Menú de guardado --- */
             linea = Textos.MenuDeGuardado();
@@ -609,12 +612,13 @@ while (gameOver == false && ctrlDeFlujo <= 9)          /*--- Desarrollo del jueg
                     }
                     Console.WriteLine(Textos.CentrarRenglon(espaciosAntes, $"\n{inventario[indice].Efecto} +{inventario[indice].Cantidad}\n"));
                 }// no se centra ------------------------
-
+                Thread.Sleep(1500);
                 gameOver = false;  // sobre escribe el gameOver de EjecutarOpcion
             }
             if (entradaDeUsuario == 1 || entradaDeUsuario == 2)
             {
                 Console.WriteLine(Textos.CentrarRenglon(espaciosAntes,"Partida guardada.")); // esto lo podrias mejorar con algun control
+                Thread.Sleep(1500);
             }
         }              /* --- Fin del menu de guardado --- */
         else    /* --- Fin del juego por victoria e historial --- */

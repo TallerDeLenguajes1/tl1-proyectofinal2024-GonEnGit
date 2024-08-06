@@ -7,7 +7,7 @@ public class FabricaDeArtefactos
                                     "nom5","nom6","nom7","nom8","nom9","nom10","nom11","nom12",};
     private string[] descripciones = {  "Dev: Una bandera española;Narrador: No esperaba encontrar eso aquí",
                                         "Narrador: Te recuerda a una fogata;que te mantuvo seguro;Esa calma aumenta tu salud",
-                                        "Narrador: Una mejor arma, una mayor fuerza;Dev: Pero el fuego es irrelevante;en este juego!",
+                                        "Narrador: Una mejor arma;Dev: Pero el fuego es irrelevante;en este juego!",
                                         "desc4;part2",
                                         "desc5;part2",
                                         "desc6;part2",
@@ -17,9 +17,9 @@ public class FabricaDeArtefactos
                                         "desc10;part2",
                                         "desc11;part2",
                                         "desc12;part2",};
-    private string[] efectos = {"Destreza","Fuerza","Salud","efect4","efect5","efect6",
+    private string[] efectos = {"Destreza","Salud","Fuerza","efect4","efect5","efect6",
                                 "efect7","efect8","efect9","efect10","efect11","efect12",};
-    private int[] cantidades = {2, 1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private int[] cantidades = {2, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
     public List<Artefacto> CreadorDeArtefactos(List<Artefacto> lista)
@@ -37,7 +37,6 @@ public class FabricaDeArtefactos
             artElegidos[iter] = nombres[numElegido];
             Artefacto iteracion = new Artefacto
             {
-                Id = iter + 1,
                 Nombre = nombres[numElegido],
                 Descripcion = descripciones[numElegido].Split(";"),
                 Efecto = efectos[numElegido],
@@ -46,5 +45,32 @@ public class FabricaDeArtefactos
             lista.Add(iteracion);
         }
         return lista;
+    }
+
+    public void PasarAInventario(int entradaDeUsuario,List<Artefacto> cofre, List<Artefacto> inventario)
+    {
+        inventario.Add(cofre[entradaDeUsuario]);
+        cofre.RemoveAt(entradaDeUsuario);
+        MezclarCofre(cofre);
+    }
+
+    public void MezclarCofre(List<Artefacto> cofre)
+    {
+        Random rnd = new Random();
+        int indiceAleatorio;
+        List<Artefacto> cofreTemp = new List<Artefacto>();
+
+        while (cofre.Count() > 0)
+        {
+            indiceAleatorio = rnd.Next(0, cofre.Count());
+            cofreTemp.Add(cofre[indiceAleatorio]);
+            cofre.RemoveAt(indiceAleatorio);
+        }
+
+        foreach (Artefacto Art in cofreTemp)
+        {
+            cofre.Add(Art);
+        }
+        cofreTemp.Clear();
     }
 }

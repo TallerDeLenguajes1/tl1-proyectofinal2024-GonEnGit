@@ -142,52 +142,48 @@ public static class Textos
                 "+---------------------------------------+";
     }
 
-    public static void ArmarListaTarjetas(List<string[]> lista, List<Personaje> listaTemp, List<Artefacto> cofre, int tipo)
+    public static void ArmarListaTarjetasPers(List<string[]> lista, List<Personaje> listaTemp)
     {
-        string[] partes, primeraFila, segundaFila;
-        List<string[]> tarjetas = new List<string[]>();
+        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta;
+        string[] primeraFila, segundaFila;
 
-        if (tipo == 1)
-        {
-            for (int indiceTarjeta = 0; indiceTarjeta < 5; indiceTarjeta++)
-            {
-                partes = CrearTarjeta(listaTemp[indiceTarjeta]).Split(";");
-                tarjetas.Add(partes);
-            }
-        }
-        else
-        {
-            for (int indiceTarjeta = 0; indiceTarjeta < 3; indiceTarjeta++)
-            {
-                partes = CrearTarjetaArt(cofre[indiceTarjeta]).Split(";");
-                tarjetas.Add(partes);
-            }
-        }
+        primeraTarjeta = CrearTarjeta(listaTemp[0]).Split(";");
+        segundaTarjeta = CrearTarjeta(listaTemp[1]).Split(";");
+        TerceraTarjeta = CrearTarjeta(listaTemp[2]).Split(";");
+        primeraFila = new string[primeraTarjeta.Length];       // C# puede decidir el tamño de una arreglo automaticamente
 
-        primeraFila = new string[tarjetas[0].Length];
-        for (int indiceFilas = 0; indiceFilas < tarjetas[0].Length; indiceFilas++)
+        for (int i = 0; i < primeraTarjeta.Length; i++)
         {
-        // sin este control las tarjetas de artefacos se deforma
-            if (indiceFilas == 0 && tipo == 2)
-            {
-                primeraFila[indiceFilas] = tarjetas[0][indiceFilas] + "     " + tarjetas[1][indiceFilas] + "     " + tarjetas[2][indiceFilas];
-            }
-            else
-            {
-                primeraFila[indiceFilas] = tarjetas[0][indiceFilas] + "   " + tarjetas[1][indiceFilas] + "   " + tarjetas[2][indiceFilas];
-            }
+            primeraFila[i] = "     " + primeraTarjeta[i] + "     " + segundaTarjeta[i] + "     " + TerceraTarjeta[i]; // pero no de a 1
         }
         lista.Add(primeraFila);
 
-        if (tipo == 1)
+        primeraTarjeta = CrearTarjeta(listaTemp[3]).Split(";");
+        segundaTarjeta = CrearTarjeta(listaTemp[4]).Split(";");
+        segundaFila = new string[primeraTarjeta.Length];
+        for (int i = 0; i < primeraTarjeta.Length; i++)
         {
-            segundaFila = new string[tarjetas[0].Length];
-            for (int indiceFilas = 0; indiceFilas < tarjetas[0].Length; indiceFilas++)
-            {
-                segundaFila[indiceFilas] = tarjetas[3][indiceFilas] + "   " + tarjetas[4][indiceFilas];
-            }
-            lista.Add(segundaFila);
+            segundaFila[i] = primeraTarjeta[i] + "     " + segundaTarjeta[i];
         }
+        lista.Add(segundaFila);
+    }
+
+    public static string[] ArmarListaTarjetasArt(List<Artefacto> cofre)
+    {
+        string[] primeraTarjeta, segundaTarjeta, TerceraTarjeta, renglones;
+
+        primeraTarjeta = CrearTarjetaArt(cofre[0], 1).Split(";");
+        segundaTarjeta = CrearTarjetaArt(cofre[1], 2).Split(";");
+        TerceraTarjeta = CrearTarjetaArt(cofre[2], 3).Split(";");
+
+        renglones = new string[primeraTarjeta.Length];
+        segundaTarjeta[0] = "  " + segundaTarjeta[0] + "  "; // esto se podria mejorar
+        for (int i = 0; i < primeraTarjeta.Length; i++)
+        {
+            renglones[i] = primeraTarjeta[i] + "     " + segundaTarjeta[i] + "     " + TerceraTarjeta[i];
+        }
+
+        return renglones;
     }
 
     public static string DevolverNombre(Personaje pers)
@@ -247,10 +243,10 @@ public static class Textos
                 " ------------- ";
     }
 
-    public static string CrearTarjetaArt(Artefacto artefacto)
+    public static string CrearTarjetaArt(Artefacto artefacto, int numOpcion)
     {
     // renglon de Artefacto: 45 caracteres + 2 bordes
-        string lineaId = ArmarRenglon(artefacto.Id.ToString(), 40);
+        string lineaId = ArmarRenglon(numOpcion.ToString(), 40);
         string lineaNombre = ArmarRenglon(artefacto.Nombre, 40);
         string LineaDesc1 = ArmarRenglon(artefacto.Descripcion[0], 40);
         string LineaDesc2 = ArmarRenglon(artefacto.Descripcion[1], 40);
@@ -279,7 +275,6 @@ public static class Textos
                 $"| Efecto: {LineaEfecto}|;" +
                 "✦≒≒≒≒≒≒≒≒≒≒≒≒≒✠≑≑≑≑≑≑≑≑≑≑≑≑✠≓≓≓≓≓≓≓≓≓≓≓≓≓✦;" +
                 $"{lineaId}";
-        
     }
 
     public static string ArmarRenglon(string datos, int cantEspacios)

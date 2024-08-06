@@ -121,7 +121,7 @@ public static class Partida
                     break;
             }
             pruebaOpciones = int.TryParse(entrada, out valor);
-            if (pruebaOpciones == false || valor <= 0 || valor >= limiteSup) // no permite el 0, no necesitas cambiar el lim inferior
+            if (pruebaOpciones == false || valor <= 0 || valor >= limiteSup)
             {
                 valor = 99999;
             }
