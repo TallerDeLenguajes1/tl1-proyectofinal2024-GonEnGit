@@ -1,6 +1,6 @@
 namespace  EspacioPersonajes;
 
-
+using System.Text.Json.Serialization;
 using EspacioJuego;
 
 
@@ -12,9 +12,11 @@ public class Personaje
     public Datos DatosGenerales { get => generales; set => generales = value; }
     public Estadisticas Estadisticas { get => estadisticas; set => estadisticas = value; }
 
-    public Personaje(Datos datos,Estadisticas estadisticas){
-        DatosGenerales = datos;
-        Estadisticas = estadisticas;
+    public Personaje(){}
+
+    public Personaje(Datos datosNuevos,Estadisticas estNuevas){
+        DatosGenerales = datosNuevos;
+        Estadisticas = estNuevas;
     }
 
     public string DevolverDatos()

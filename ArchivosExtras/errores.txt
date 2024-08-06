@@ -28,3 +28,5 @@ cambiaste los artefactos espada de fuego y espada espiralada pero te olvidaste l
 
 el mas grave: los nombres, apodos y razas estan en personaje... se crea --cada-- arreglo para --cada-- personaje...
 osea... 10 veces para c/u....                                                       --- corregido (?)
+
+ahora hay un error con cargar partida...  --- corregido

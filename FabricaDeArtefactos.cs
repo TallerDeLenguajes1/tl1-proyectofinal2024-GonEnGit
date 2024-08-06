@@ -15,7 +15,7 @@ public class FabricaDeArtefactos
                                         "Dev: Aun puedes atacar pero no moverte;Narrador: Igualmente siempre es bueno;poder detener una espada con la cara",
                                         "Narrador: \"Tesoros mas adelate\";Dev: no le creas, es un precipicio!",
                                         "Dev: No me voy a negar a una de estas;Narrador: Y esta es de verdad!",
-                                        "Narrador: Para que se supone que sirve esto?;Dev: ... pegales con fuerza?",
+                                        "Narrador: Para que se supone que;sirve esto?;Dev: ... pegales con fuerza?",
                                         "Narrador: deten el tiempo y a entrenar;Dev: no habia presupuesto;para todo un edificio",
                                         "Dev: Ya está usada...;Narrador: Una pena, intenta no morir...",
                                         "desc12;part2",};

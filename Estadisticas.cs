@@ -15,7 +15,8 @@ public class Estadisticas
     public int Fuerza { get => fuerza; set => fuerza = value; }
     public int Destreza { get => destreza; set => destreza = value; }
 
-// los datos se generan primero, pode usar eso para 
+    public Estadisticas(){}
+
     public Estadisticas(string clase)
     {
         Nivel = 1;
