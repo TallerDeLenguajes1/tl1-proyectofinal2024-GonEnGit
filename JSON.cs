@@ -25,7 +25,7 @@ public static class ClaseJson
         return datosDeArchivo;
     }
 
-    public static string GuardarEnArchivoNuevo(string datos, string rutaFinal)
+    public static void GuardarEnArchivoNuevo(string datos, string rutaFinal)
     {
         using (FileStream archivo = new FileStream(rutaFinal, FileMode.Create))
         {
@@ -35,11 +35,9 @@ public static class ClaseJson
                 escritor.Close();
             }
         }
-
-        return "guardado con exito";
     }
 
-    public static string GuardarEnArchivo(string datos, string rutaFinal)
+    public static void GuardarEnArchivo(string datos, string rutaFinal)
     {
         using (FileStream archivo = new FileStream(rutaFinal, FileMode.Open))
         {
@@ -49,7 +47,5 @@ public static class ClaseJson
                 escritor.Close();
             }
         }
-
-        return "guardado con exito";
     }
 }

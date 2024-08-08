@@ -21,10 +21,10 @@ public class FabricaDeArtefactos
     private string[] efectos = {"Destreza","Salud","Fuerza",
                                 "Oro","Armadura","Armadura",
                                 "Destreza","Salud","Fuerza",
-                                "Fuerza","Resurrección","Armadura",};
+                                "Fuerza","Resurrecciones","Armadura",};
     private int[] cantidades = {2, 10, 1, 
                                 10000, 2, 3,
-                                1, 15, 2,
+                                3, 15, 2,
                                 3, 0, 2};
 
 

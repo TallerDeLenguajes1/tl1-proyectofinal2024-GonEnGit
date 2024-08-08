@@ -9,7 +9,7 @@ namespace EspacioAPI;
 // incluso podes remover toda una sub clase
 
 // pero no podes cambiar los nombres de los campos
-// es Deserialize no sabe donde poner los datos
+// el Deserialize no sabe donde poner los datos
 
 public class Mazo
 {

@@ -7,23 +7,19 @@ using EspacioPersonajes;
 
 public static class Textos
 {
-    public static void Introduccion()
+/* --- Metodos generales --- */
+    public static string ArmarRenglon(string datos, int cantEspacios)
     {
-        string linea = "primera frase por ahora";
-        string[] texto = linea.Split(';');
-
-        Console.Write("\nNarrador: ");
-        foreach (var renglon in texto)
+        string renglon = datos;
+        while (renglon.Length < cantEspacios)
         {
-            foreach (var letra in renglon)
+            renglon = " " + renglon;
+            if (renglon.Length < cantEspacios)
             {
-                Console.Write(letra);
-                Thread.Sleep(0);        // cambiar 0 por 150
+                renglon = renglon + " ";
             }
         }
-        Console.Write("\n");
-        Thread.Sleep(1500);
-        Console.WriteLine("");
+        return renglon;
     }
 
     public static string CentrarRenglon(int anchoPantalla, string palabras)
@@ -117,30 +113,74 @@ public static class Textos
         return linea;
     }
 
+/* --- Historias --- */
+    public static string Introduccion()
+    {
+        return  "\n;" +
+                "Narrador: ;"+
+                "Las hojas caidas cuentan la historia... ;" +
+                "El gran ani...\n;" +
+                "Dev: Que estas haciendo?;" +
+                "Narrador: Contando la historia del juego que mas?;" +
+                "Dev: Nadie lee estas cosas... Ademas esa historia no es nueva!;" +
+                "Dev: estas buscando que me desaprueben por copiar?;" +
+                "Narrador: No pero...;" +
+                "Dev: Traigan el titulo!;";
+    }
+
+    public static string IntroSeleccionPers()
+    {
+        return  "\nNarrador: y ahora, para nuestro primer duelo!;" +
+                "Dev: ejem...;" +
+                "Nerrador: Que pasa ahora...?;" +
+                "Dev: Aun no eligen un personaje...;" +
+                "Narrador: ah... me olvidé de eso... Elige tu personaje!;";
+    }
+
     public static string TutorialCartas()
     {
         return  "Dev: En este juego, la iniciativa de cada personaje se va a decidir con cartas.;" +
                 "Dev: Primero se muestran 2, una boca abajo, el jugador tiene que elegir una.\n;" +
                 "\n\nNarrador: Si no puede ver la segunda, como se supone que elija?;" +
                 "Dev: Esa es la apuesta, el color y el palo tambien cambian el resultado.;" +
-                "Azul = x2, Amarillo = x1.5, ♠ = +2, ♣ = +3, ♦ = +4,♥ = +5;" +
+                "Azul = x2, Amarillo = x1.5, ♠ = +2, ♣ = +3, ♦ = +4, ♥ = +5;" +
                 "Narrador: Ahora veo, una carta baja puede dar un resultado alto!;" +
                 "Dev: O no, ahora que sabemos cuales son, sabemos quien mueve primero.";
     }
 
+/* --- Dibujos --- */
+    public static string Titulo()
+    {
+
+        return  " _____         _                   _        ;" +
+                "|_   _|       | |                 | |       ;" +
+                  "| | ___   __| | ___     ___  ___| |_ ___;" +
+                 @"| |/ _ \ / _` |/ _ \   / _ \/ __| __/ _ \;" +
+                 @"  | | (_) | (_| | (_) | |  __/\__ \ || (_) |;" +
+                 @"|_|\___/ \__,_|\___/   \___||___/\__\___/;" +
+                 "                                  _                        ___;" +
+                @"                                 | |                      |__ \;" +
+                "  _ __   ___  _ __   _   _ _ __   | |_ _ __ ___  _ __   ___   ) |;" +
+               @"| '_ \ / _ \| '__| | | | | '_ \  | __| '__/ _ \| '_ \ / _ \ / /;" +
+                "| |_) | (_) | |    | |_| | | | | | |_| | | (_) | | | | (_) |_|;" +
+               @"| .__/ \___/|_|     \__,_|_| |_|  \__|_|  \___/|_| |_|\___/(_);" +
+                "| |                                                           ;" +
+                "|_|                                                           ;";
+    }
+
     public static string[] MenuPrincipal()
     {
-        string[] menu = {   "# ------------------------------- #\n",
-                            "|  # - #                  # - #   |\n",
-                            "|         MENU PRINCIPAL          |\n",
-                            "|                                 |\n",
-                            "|       1. Nueva Partida          |\n",
-                            "|       2. Cargar Partida         |\n",
-                            "|       3. Ganadores Anteriores   |\n",
-                            "|       4. Salir                  |\n",
-                            "|                                 |\n",
-                            "|  # - #                  # - #   |\n",
-                            "# ------------------------------- #\n",};
+        string[] menu = {   "# ------------------------------- #",
+                            "|  # - #                  # - #   |",
+                            "|         MENU PRINCIPAL          |",
+                            "|                                 |",
+                            "|       1. Nueva Partida          |",
+                            "|       2. Cargar Partida         |",
+                            "|       3. Ganadores Anteriores   |",
+                            "|       4. Salir                  |",
+                            "|                                 |",
+                            "|  # - #                  # - #   |",
+                            "# ------------------------------- #",};
         return menu;
     }
 
@@ -260,7 +300,7 @@ public static class Textos
                 $"{lineaId}";
     }
 
-    public static string ArmarItemAMOstrar(Artefacto artefacto)
+    public static string ArmarItemAMostrar(Artefacto artefacto)
     {
         string lineaNombre = ArmarRenglon(artefacto.Nombre, 36);
         string lineaDesc1 = ArmarRenglon(artefacto.Descripcion[0], 40);
@@ -292,15 +332,6 @@ public static class Textos
                     @"\__/________________________________ _ /;";
     }
 
-    public static string IntroSeleccionPers()
-    {
-        return  "Narrador: y ahora, para nuestro primer duelo!" +
-                "Dev: ejem..." +
-                "Nerrador: Que pasa haora...?" +
-                "Dev: Aun no eligen un personaje..." +
-                "Narrador: a me olvidé de eso... Elige tu personaje!";
-    }
-
     public static string CierreYTrono()
     {
         return  "Narrador: ... Ya no queda nadie mas... solo queda entregar el trono...;" +
@@ -322,23 +353,9 @@ public static class Textos
                         "⠀⢸⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⡇;" +
                         "⠀⢸⣿⣿⡇⠸⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠇⢸⣿⣿⡇;" +
                         "⠀⠈⠛⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  ⠘⠛⠛⠁;" +
-                "Narrador: Eso... es todo...? Hasta está deformado!;" +
+                "Narrador: Eso... es todo...? Hasta está torcido!;" +
                 "Dev: Es el unico que teniamos...;" +
                 "Dev: Felicidades por ganar nuestro juego!;";
-    }
-
-    public static string ArmarRenglon(string datos, int cantEspacios)
-    {
-        string renglon = datos;
-        while (renglon.Length < cantEspacios)
-        {
-            renglon = " " + renglon;
-            if (renglon.Length < cantEspacios)
-            {
-                renglon = renglon + " ";
-            }
-        }
-        return renglon;
     }
 
     public static string TraerReverso()

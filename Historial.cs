@@ -26,7 +26,6 @@ public class Historial  // no puede ser estatica por los campos de Historial
     public static void AgregarAlHistorial(string nombre)
     {
         string rutaHistorial = "Historial/historial.json";
-        string respuesta;
         string datosHistorial;
         List<Historial> lista = new List<Historial>();
 
@@ -43,8 +42,7 @@ public class Historial  // no puede ser estatica por los campos de Historial
             lista = JsonSerializer.Deserialize<List<Historial>>(datosHistorial);
             lista.Add(entrada);
             datosHistorial = JsonSerializer.Serialize(lista);
-            respuesta = ClaseJson.GuardarEnArchivo(datosHistorial, rutaHistorial);
-            Console.WriteLine("El historial" + respuesta);
+            ClaseJson.GuardarEnArchivo(datosHistorial, rutaHistorial);
         }
         else    // si no, lo creas añadis y guardas
         {

@@ -52,7 +52,6 @@ public static class Duelo
         return contador;
     }
 
-// la idea es hacer un calculo segun palo, color y valor
     public static int CalcularIniciativa(Carta cartaRecibida, int color)
     {
         int valorFinal;
@@ -75,8 +74,8 @@ public static class Duelo
                 valorFinal = int.Parse(cartaRecibida.value);
                 break;
         }
-    // multiplicas segun el color
-        if (color == 1)
+
+        if (color == 1)    // multiplica segun el color
         {
             valorFinal = (int)(valorFinal* 1.5);
         }
@@ -84,8 +83,8 @@ public static class Duelo
         {
             valorFinal *= 2;
         }
-    // a estos calculos tambien los tenes que cambiar
-        switch (cartaRecibida.suit)
+
+        switch (cartaRecibida.suit)    // suma valor del palo
         {
             case "SPADES":
                 valorFinal += 2;
@@ -111,18 +110,32 @@ public static class Duelo
         int accion;
         if (numero % 10 == 9)   // numero terminados en 9
         {
-            accion = 3;     // el enemigo Espera, ~ 10%
+            accion = 3;         // el enemigo Espera, ~ 10%
         }
         else if (numero % 10 == 3 || numero % 10 == 5 || numero % 10 == 7)
         {
-            accion = 2;     // el enemigo Defiende, ~ 30%
+            accion = 2;         // el enemigo Defiende, ~ 30%
         }
         else
         {
-            accion = 1;     // el enemigo Ataca, ~ 60%
+            accion = 1;         // el enemigo Ataca, ~ 60%
         }
 
         return accion;
+    }
+
+    public static bool DecidirCritico(Personaje pers)
+    {
+        Random rnd = new Random();
+        int numero = rnd.Next(0, 100);
+        if (numero <= pers.Estadisticas.Destreza * 10)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public static int CalcularDefensa(Personaje pers)
@@ -142,22 +155,6 @@ public static class Duelo
         }
     }
 
-    public static bool DecidirCritico(Personaje pers)
-    {
-        Random rnd = new Random();
-        int numero = rnd.Next(0, 100);
-        if (numero <= pers.Estadisticas.Destreza * 10)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-// devolves el daño para mostrarlo
-// y usas un metodo de personje para cambiar la vida
     public static int CalcularDanio(Personaje atacante, Personaje objetivo, bool objetivoDefiende, bool critico)
     {
         int ataqueAtacante = CalcularAtaque(atacante, critico);
