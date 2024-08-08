@@ -17,9 +17,10 @@ aun así elige el personaje correcto....                     --- corregido?, sol
 
 cuando elegis un artefacto, el programa recibe mal los indices --- corregido
 
-parece que al guardar y salir se reinicia la salud si está puesto el godmode
+parece que al guardar y salir se reinicia la salud si está puesto el godmode --- parece corregido, revisar bien
 
 el efecto de los artefactos no se centra en la lista cuando mostras el inventario
+tampoco se está centrando la lista de ganadores                                     --- ambos solucionados
 
 otra cosa, parece que podrias cambiar todas las asignaciones de las listas
 a como esta en la linea 70

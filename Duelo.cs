@@ -107,19 +107,19 @@ public static class Duelo
     public static int AccionEnemigo()
     {
         Random rnd = new Random();
-        int numero = rnd.Next(1, 13);
+        int numero = rnd.Next(0, 101);
         int accion;
-        if (numero == 1 || numero == 11)
+        if (numero % 10 == 9)   // numero terminados en 9
         {
-            accion = 3;     // el enemigo Espera, 16,7%
+            accion = 3;     // el enemigo Espera, ~ 10%
         }
-        else if (numero % 2 != 0)
+        else if (numero % 10 == 3 || numero % 10 == 5 || numero % 10 == 7)
         {
-            accion = 2;     // el enemigo Defiende, 33,3%
+            accion = 2;     // el enemigo Defiende, ~ 30%
         }
         else
         {
-            accion = 1;     // el enemigo Ataca, 50%
+            accion = 1;     // el enemigo Ataca, ~ 60%
         }
 
         return accion;

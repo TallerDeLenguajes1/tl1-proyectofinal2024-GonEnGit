@@ -2,13 +2,12 @@ namespace EspacioJuego;
 
 public class FabricaDeArtefactos
 {
-// la idea es que todos coinciden y el id va a ser el indice
     private string[] nombres = {"Estandarte de la inquisición","Espada en espiral","Espada De Fuego",
                                 "Bolsa de monedas de oro","Sabaton","Pocion de piel de plomo",
                                 "Mensaje en el suelo","Una torta","Arco sin flechas",
-                                "Pocion temporal","Piedra del despertar","nom12",};
+                                "Pocion temporal","Piedra del despertar","Escudo de Gran Inicaitiva",};
     private string[] descripciones = {  "Dev: Una bandera española;Narrador: No esperaba encontrar eso aquí",
-                                        "Narrador: Te recuerda a una fogata;que te mantuvo seguro;Esa calma aumenta tu salud",
+                                        "Narrador: Te recuerda a una fogata;que te mantuvo a salvo;Dev: Esa calma aumenta tu salud",
                                         "Narrador: Una mejor arma;Dev: Pero el fuego es irrelevante;en este juego!",
                                         "Narrador: Un monton de dinero;para usar en la tienda;Dev: Si solo hubiera programado una...",
                                         "Narrador: Una mejor armadura;Dev: Y muy buenas canciones",
@@ -16,17 +15,17 @@ public class FabricaDeArtefactos
                                         "Narrador: \"Tesoros mas adelate\";Dev: no le creas, es un precipicio!",
                                         "Dev: No me voy a negar a una de estas;Narrador: Y esta es de verdad!",
                                         "Narrador: Para que se supone que;sirve esto?;Dev: ... pegales con fuerza?",
-                                        "Narrador: deten el tiempo y a entrenar;Dev: no habia presupuesto;para todo un edificio",
+                                        "Narrador: deten el tiempo y a entrenar;Dev: no habia presupuesto para; todo un edificio...",
                                         "Dev: Ya está usada...;Narrador: Una pena, intenta no morir...",
-                                        "desc12;part2",};
+                                        "Narrador: Lamentablemente no va a;aumentar la tuya;Dev: pero sigue sirviendo de escudo!",};
     private string[] efectos = {"Destreza","Salud","Fuerza",
                                 "Oro","Armadura","Armadura",
                                 "Destreza","Salud","Fuerza",
-                                "Fuerza","Resurrección","efect12",};
+                                "Fuerza","Resurrección","Armadura",};
     private int[] cantidades = {2, 10, 1, 
-                                100000, 2, 3,
+                                10000, 2, 3,
                                 1, 15, 2,
-                                3, 0, 0};
+                                3, 0, 2};
 
 
     public List<Artefacto> CreadorDeArtefactos(List<Artefacto> lista)

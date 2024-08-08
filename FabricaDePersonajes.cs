@@ -7,15 +7,15 @@ namespace EspacioPersonajes;
 public class FabricaDePersonajes
 {
     private int id = 1;
-    string[] razasPosibles = {"Humano", "Enano", "Elfo", "Orco",};
+    private string[] razasPosibles = {"Humano", "Enano", "Elfo", "Orco",};
     private string[] clases = { "Guerrero", "Monje", "Paladín", "Berserker", "Gladiador"};
 
-    string[] nombresHumanos = {"Aelric", "Thalorin", "Branthor", "Valen", "Kaelith", "Darion", "Eredor", "Galanor", "Lothar", "Bob"};
-    string[] nombresElfos = {"Aelarion", "Thalindra", "Lirael", "Elendril", "Faelar", "Nymira", "Aerandir", "Thalion", "Galadreth", "Elaria"};
-    string[] nombresEnanos = {"Durin", "Thrain", "Bromir", "Gromli", "Durgan", "Thorgrim", "Kargan", "Brokk", "Thalrik", "Grimbol"};
-    string[] nombresOrcos = {"Gorbag", "Big Stick", "Bolg", "Lurtz", "Swan", "Shagrat", "Grishnakh", "Snaga", "Krashnak", "Murgash"};
+    private string[] nombresHumanos = {"Aelric", "Thalorin", "Valdemar", "Valen", "Kaelith", "Darion", "Eredor", "Galanor", "Lothar", "Bob"};
+    private string[] nombresElfos = {"Aelarion", "Thalindra", "Lirael", "Elendril", "Faelar", "Nymira", "Aerandir", "Thalion", "Galadreth", "Elaria"};
+    private string[] nombresEnanos = {"Durin", "Thrain", "Bromir", "Gromli", "Durgan", "Thorgrim", "Kargan", "Brokk", "Thalrik", "Grimbol"};
+    private string[] nombresOrcos = {"Gorbag", "Big Stick", "Bolg", "Lurtz", "Swan", "Shagrat", "Grishnakh", "Snaga", "Krashnak", "Murgash"};
 
-    string[] apodosPosibles = { "El Defensor Inmortal","El Héroe Ancestral","La Espada Infernal","El Cazador Silencioso",
+    private string[] apodosPosibles = { "El Defensor Inmortal","El Héroe Ancestral","La Espada Infernal","El Cazador Silencioso",
                                 "Maidenless","Puño de Hierro","Unkindled","Martir de la Llama",
                                 "Comandante de Hierro","El Monarca Olvidado","El Caballero Dragon","El Emperador Codicioso",
                                 "El Héroe Antiguo","El Centinela Fantasma","El Rey Omnisciente"};
@@ -146,11 +146,11 @@ public class FabricaDePersonajes
         int numeroAleatorio;
         Random rnd = new Random();
 
-        for (int indice = 0; indice < 9; indice++)     // necesitas el 0 pero inicializa con 0 por defecto
+        for (int indice = 0; indice < 9; indice++)
         {
-            ordenGenerado[indice] = 721;                       // cambias los valores a otra cosa
+            ordenGenerado[indice] = 21; // necesitas el 0, cambias todos los valores
         }
-        for (int indice = 0; indice < 9; indice++)     // generas el nuevo ordenGenerado
+        for (int indice = 0; indice < 9; indice++)
         {
             do
             {
@@ -167,15 +167,11 @@ public class FabricaDePersonajes
         Personaje auxiliar;
         List<Personaje> listaFinal = new List<Personaje>();
 
-        // guardas pj elegido en el lugar 0
-        auxiliar = listaTemp[eleccion];
-        auxiliar.DatosGenerales.Id = 1;     // cambias el id
-        listaFinal.Add(auxiliar);           // guardas el personaje elegido
-        listaTemp.RemoveAt(eleccion);       // lo sacas de la lista Temporal
+        auxiliar = listaTemp[eleccion];     // guardas pj elegido en el lugar 0
+        auxiliar.DatosGenerales.Id = 1;
+        listaFinal.Add(auxiliar);
+        listaTemp.RemoveAt(eleccion);
 
-        // mezclas la lista para que sea aleatoria siempre
-        // count devuelve la cantidad de personajes
-        // el indice va a ser .Count - 1
         for (int indice = 0; indice < listaTemp.Count; indice++)
         {
             auxiliar = listaTemp[orden[indice]];

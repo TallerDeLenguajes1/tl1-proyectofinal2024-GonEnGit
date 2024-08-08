@@ -131,9 +131,12 @@ public static class Partida
 
     public static bool EjecutarOpcion(List<Personaje> lista, List<Artefacto> cofre, List<Artefacto> inv, string nombre, int opcion)
     {
-        if (opcion == 1)
+        if (opcion == 1 || opcion == 3)
         {
-            GuardarPartida(lista, cofre, inv, nombre);
+            if (opcion == 1)
+            {
+                GuardarPartida(lista, cofre, inv, nombre);
+            }
             return false;
         }
         else
@@ -146,5 +149,5 @@ public static class Partida
         }
     }
 
-    // un borrar partida? tambien podes, varias partidas?
+    // un borrar partida? tambien podes
 }

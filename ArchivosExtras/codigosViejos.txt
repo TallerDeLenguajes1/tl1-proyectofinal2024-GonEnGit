@@ -719,7 +719,7 @@ Gloria Marcial
 Luchador Fiero
 
 
-/* ---- pramostrar todas las tarjetas ---- */
+/* ---- para mostrar todas las tarjetas ---- */
 
     Textos.ArmarListaTarjetasResto(tarjetasAMostrar, listaPersTemp);
 
@@ -747,4 +747,18 @@ Luchador Fiero
             segundaFila[i] = "                      " + primeraTarjeta[i] + " " + segundaTarjeta[i];
         }
         lista.Add(segundaFila);
+    }
+
+
+/* ------------- vieja muestra de inventario ------------- */
+
+    for (int indice = 0; indice < inventario.Count(); indice++)
+    {
+        Console.WriteLine(Textos.CentrarRenglon(espaciosAIzq, $"{indice + 1}. {inventario[indice].Nombre}\n"));
+        foreach (string parte in inventario[indice].Descripcion)
+        {
+            Console.WriteLine(Textos.CentrarRenglon(espaciosAIzq, parte));
+        }
+        Console.WriteLine("");
+        Console.WriteLine(Textos.CentrarRenglon(espaciosAIzq, $"{inventario[indice].Efecto} +{inventario[indice].Cantidad}\n"));
     }

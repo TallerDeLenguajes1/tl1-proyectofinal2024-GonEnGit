@@ -155,8 +155,7 @@ public static class Textos
                 " |  3. Ver Inventario       | ;" +
                 " |  4. Salir sin Guardar    | ;" +
                 "--+--------------------------+--;" +
-                " |                          |\n;" +
-                "Seleccione una opción:    ";
+                " |                          |;";
     }
 
     public static string CrearTarjetaPers(Personaje instancia)
@@ -232,33 +231,100 @@ public static class Textos
     // renglon de Artefacto: 45 caracteres + 2 bordes
         string lineaId = ArmarRenglon(numOpcion.ToString(), 40);
         string lineaNombre = ArmarRenglon(artefacto.Nombre, 40);
-        string LineaDesc1 = ArmarRenglon(artefacto.Descripcion[0], 40);
-        string LineaDesc2 = ArmarRenglon(artefacto.Descripcion[1], 40);
-        string LineaDesc3;
-        string LineaEfecto = ArmarRenglon(artefacto.Efecto + " +" + artefacto.Cantidad, 31); // sacas ' Efecto: '
+        string lineaDesc1 = ArmarRenglon(artefacto.Descripcion[0], 40);
+        string lineaDesc2 = ArmarRenglon(artefacto.Descripcion[1], 40);
+        string lineaDesc3;
+        string lineaEfecto = ArmarRenglon(artefacto.Efecto + " +" + artefacto.Cantidad, 31); // sacas ' Efecto: '
 
         if (artefacto.Descripcion.Length == 3)
         {
-            LineaDesc3 = ArmarRenglon(artefacto.Descripcion[2], 40);
+            lineaDesc3 = ArmarRenglon(artefacto.Descripcion[2], 40);
         }
         else
         {
-            LineaDesc3 = "                                        ";
+            lineaDesc3 = "                                        ";
         }
-        return  @"/≒≒≒≒≒≒≒≒≒≒≒≒✠≑≑≑≑≑≑≑≑≑≑≑≑✠≓≓≓≓≓≓≓≓≓≓≓≓\;" +
+        return  @"/≒≒≒≒≒≒≒≒≒≒≒✠≑≑≑≑≑≑≑≑≑≑≑≑≑≑✠≓≓≓≓≓≓≓≓≓≓≓\;" +
                 $@"/{lineaNombre}\;" +
                 "|                                        |;" +
                 "|<∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∰∻∻∰∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻∻>|;" +
                 "|                                        |;" +
                 "|                                        |;" +
-                $"|{LineaDesc1}|;" +
-                $"|{LineaDesc2}|;" +
-                $"|{LineaDesc3}|;" +
+                $"|{lineaDesc1}|;" +
+                $"|{lineaDesc2}|;" +
+                $"|{lineaDesc3}|;" +
                 "|                                        |;" +
                 "|                                        |;" +
-                $"| Efecto: {LineaEfecto}|;" +
+                $"| Efecto: {lineaEfecto}|;" +
                 "✦≒≒≒≒≒≒≒≒≒≒≒≒≒✠≑≑≑≑≑≑≑≑≑≑≑≑✠≓≓≓≓≓≓≓≓≓≓≓≓≓✦;" +
                 $"{lineaId}";
+    }
+
+    public static string ArmarItemAMOstrar(Artefacto artefacto)
+    {
+        string lineaNombre = ArmarRenglon(artefacto.Nombre, 36);
+        string lineaDesc1 = ArmarRenglon(artefacto.Descripcion[0], 40);
+        string lineaDesc2 = ArmarRenglon(artefacto.Descripcion[1], 40);
+        string lineaDesc3;
+        string lineaEfecto = ArmarRenglon(artefacto.Efecto + " +" + artefacto.Cantidad, 40); // sacas ' Efecto: '
+
+        if (artefacto.Descripcion.Length == 3)
+        {
+            lineaDesc3 = ArmarRenglon(artefacto.Descripcion[2], 40);
+        }
+        else
+        {
+            lineaDesc3 = "                                        ";
+        }
+        return   "__ _____________________________________;" + 
+                @"/  \ ____________________________________\;" +
+                @"| \ |                                    |;" +
+                $@"\_| |{lineaNombre}|;" +
+                    "|                                        |;" +
+                    "|                                        |;" +
+                    $"|{lineaDesc1}|;" +
+                    $"|{lineaDesc2}|;" +
+                    $"|{lineaDesc3}|;" +
+                    "|                                        |;" +
+                    "|                                        |;" +
+                    $"|{lineaEfecto}|;" + 
+                    @"|   \ _____________________________  __  |;" +
+                    @"\__/________________________________ _ /;";
+    }
+
+    public static string IntroSeleccionPers()
+    {
+        return  "Narrador: y ahora, para nuestro primer duelo!" +
+                "Dev: ejem..." +
+                "Nerrador: Que pasa haora...?" +
+                "Dev: Aun no eligen un personaje..." +
+                "Narrador: a me olvidé de eso... Elige tu personaje!";
+    }
+
+    public static string CierreYTrono()
+    {
+        return  "Narrador: ... Ya no queda nadie mas... solo queda entregar el trono...;" +
+                "Dev: Trono? tenia que haber un trono?!;" +
+                "Narrador: esa era la idea desde el principio... no leiste la historia...;" +
+                "Dev: uh... a ver... aquí hay uno!\n;" +
+                                "⢀⣀  ⣀⡀;" +
+                        "⢸⣿⡇⢠⣤⣶⣾⣿⣿⣿⣿⣷⣶⣤⡄⢸⣿⡇;" +
+                        "⢸⣿⡇⢸⣿⣿⣿⠛   ⠛⣿⣿⣿⡇⢸⣿⡇;" +
+                        "⢸⣿⡇⢸⣿⣿⣇⣀⣀⣀⣀⣸⣿⣿⡇⢸⣿⡇;" +
+                        "⢸⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⡇;" +
+                        "⢸⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⡇;" +
+                        "⢸⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⡇;" +
+                        "⢸⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⡇;" +
+                        " ⢠⣤⣤⣤⣤⡄⠸⣿⣿⣿⣿⣿⣿⣿⣿⡇⢠⣤⣤⣤⣤⡄;" +
+                        " ⠈⠉⠉⠉⠉⠁⢠⣤⣤⣤⣤⣤⣤⣤⣤⡄⠈⠉⠉⠉⠉⠁;" +
+                        "⠀⢸⣿⣿⡇⠘⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠃⢸⣿⣿⡇;" +
+                        "⠀⢸⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⡇;" +
+                        "⠀⢸⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⡇;" +
+                        "⠀⢸⣿⣿⡇⠸⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠇⢸⣿⣿⡇;" +
+                        "⠀⠈⠛⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  ⠘⠛⠛⠁;" +
+                "Narrador: Eso... es todo...? Hasta está deformado!;" +
+                "Dev: Es el unico que teniamos...;" +
+                "Dev: Felicidades por ganar nuestro juego!;";
     }
 
     public static string ArmarRenglon(string datos, int cantEspacios)
