@@ -23,5 +23,18 @@ estes en la historia.
 'Deck of Cards', una API ocn varias funcionalidades para simular el uso de un mazo de cartas de poker
 
 En este caso se usaron:
+
 - [Una funcionalidad para generar un mazo nuevo:](http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1)
+Primero se utiliza esta funcionalidad para generar un nuevo mazo de cartas mezclado y obtener su ID para 
+poder tomar cartas de este.
+
 - [Una funcionalidad para extraer cartas de ese mazo:](https://deckofcardsapi.com/api/deck/<IdMazo>/draw/?count=2)
+Luego, utilizando ese ID se vuelve a llamar a la API para tomar cartas de a pares, presentarlas al jugador y tomar una decicion.
+
+## Otros recursos
+
+- [Text to ASCII](https://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20)
+Un sitio web para generar dibujos ASCII de varios textos.
+
+- [Archivo de dibujos ASCII](https://www.asciiart.eu/)
+Una biblioteca de donde copiar algunos dibujos ASCII creados por otros usuarios.

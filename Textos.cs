@@ -168,20 +168,19 @@ public static class Textos
                 "|_|                                                           ;";
     }
 
-    public static string[] MenuPrincipal()
+    public static string MenuPrincipal()
     {
-        string[] menu = {   "# ------------------------------- #",
-                            "|  # - #                  # - #   |",
-                            "|         MENU PRINCIPAL          |",
-                            "|                                 |",
-                            "|       1. Nueva Partida          |",
-                            "|       2. Cargar Partida         |",
-                            "|       3. Ganadores Anteriores   |",
-                            "|       4. Salir                  |",
-                            "|                                 |",
-                            "|  # - #                  # - #   |",
-                            "# ------------------------------- #",};
-        return menu;
+        return  "# ------------------------------- #;" +
+                "|  # - #                  # - #   |;" +
+                "|         MENU PRINCIPAL          |;" +
+                "|                                 |;" +
+                "|       1. Nueva Partida          |;" +
+                "|       2. Cargar Partida         |;" +
+                "|       3. Ganadores Anteriores   |;" +
+                "|       4. Salir                  |;" +
+                "|                                 |;" +
+                "|  # - #                  # - #   |;" +
+                "# ------------------------------- #;";
     }
 
     public static string MenuDeGuardado()

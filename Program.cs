@@ -13,7 +13,6 @@ using EspacioArchivos;
 using EspacioPersonajes;
 
 // Instancias de clases y herramientas
-Random rnd = new Random();
 FabricaDePersonajes HerramientaFabrica = new FabricaDePersonajes();
 FabricaDeArtefactos HerramientaFabricaArt = new FabricaDeArtefactos();
 
@@ -78,7 +77,7 @@ for (int indice = 0; indice < texto.Length; indice++)
 Thread.Sleep(1500);
 Console.WriteLine("");                         /* --- Fin de la intro --- */
 
-texto = Textos.MenuPrincipal();     /* --- Inicio del menú principal --- */
+texto = Textos.MenuPrincipal().Split(";");     /* --- Inicio del menú principal --- */
 foreach (string parte in texto)
 {
         Console.WriteLine(Textos.CentrarRenglon(espaciosAIzq,parte));

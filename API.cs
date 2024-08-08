@@ -9,7 +9,7 @@ public static class API
 {
     public static readonly HttpClient cliente = new HttpClient();      // nuevo cliente http
 
-// llamas un mazo al principio del juego, lo guardas? tarda bastante en conectar
+// llamas un mazo al principio del juego
     public static async Task<Mazo> ObtenerIdMazoAsync()
     {
         string urlMazo = $"http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1"; // count = n° de mazos
@@ -22,7 +22,7 @@ public static class API
         return nuevoMazo;
     }
 
-// pedis cartas cuando haga falta.... quiza sea mejor pedir todo junto, no necesitas tantas cartas
+// pedis cartas cuando haga falta
     public static async Task<List<Carta>> ObtenerCartasAsync(string idMazo)
     {
         string urlCartas = "https://deckofcardsapi.com/api/deck/" + idMazo + "/draw/?count=2"; // count = n° de cartas
